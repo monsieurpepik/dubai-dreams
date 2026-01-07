@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { Menu, X, Sun, Moon } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 
 const navLinks = [
@@ -13,7 +13,6 @@ const navLinks = [
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isDark, setIsDark] = useState(false);
   const [activeSection, setActiveSection] = useState("");
 
   const { scrollYProgress } = useScroll();
@@ -41,61 +40,54 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const stored = localStorage.getItem("theme");
-    const shouldBeDark = stored ? stored === "dark" : prefersDark;
-    setIsDark(shouldBeDark);
-    document.documentElement.classList.toggle("dark", shouldBeDark);
-  }, []);
-
-  const toggleTheme = () => {
-    const newIsDark = !isDark;
-    setIsDark(newIsDark);
-    document.documentElement.classList.toggle("dark", newIsDark);
-    localStorage.setItem("theme", newIsDark ? "dark" : "light");
-  };
-
   return (
     <>
       <motion.header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
           isScrolled 
-            ? "bg-background/80 backdrop-blur-2xl border-b border-border/50" 
+            ? "bg-background/60 backdrop-blur-2xl" 
             : "bg-transparent"
         }`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
       >
-        {/* Progress Bar */}
+        {/* Subtle border when scrolled */}
         <motion.div 
-          className="absolute bottom-0 left-0 h-[1px] bg-gold"
+          className="absolute bottom-0 left-0 right-0 h-px bg-border/30"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isScrolled ? 1 : 0 }}
+          transition={{ duration: 0.5 }}
+        />
+
+        {/* Progress Bar - Gold accent */}
+        <motion.div 
+          className="absolute bottom-0 left-0 h-px bg-gradient-to-r from-gold via-gold to-gold/50"
           style={{ width: progressWidth }}
         />
 
         <div className="container-custom">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            {/* Logo */}
+          <div className="flex items-center justify-between h-20 md:h-24">
+            {/* Logo - Minimal, all white with subtle shine */}
             <motion.a 
               href="/" 
               className="flex items-center gap-2 group"
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 400, damping: 17 }}
             >
-              <span className="text-xl md:text-2xl font-semibold tracking-tight">
-                <span className="text-gold">Owning</span>
-                <span>Dubai</span>
+              <span className="text-xl md:text-2xl font-light tracking-wider uppercase">
+                <span className="text-foreground">Owning</span>
+                <span className="text-metallic">Dubai</span>
               </span>
             </motion.a>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-1">
+            {/* Desktop Navigation - Wide tracking, uppercase */}
+            <nav className="hidden md:flex items-center gap-2">
               {navLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
-                  className={`relative px-4 py-2 text-sm font-medium transition-colors duration-300 ${
+                  className={`relative px-5 py-2 text-xs font-medium uppercase tracking-[0.2em] transition-all duration-500 ${
                     activeSection === link.href.replace("#", "")
                       ? "text-foreground"
                       : "text-muted-foreground hover:text-foreground"
@@ -104,7 +96,7 @@ export function Header() {
                   {link.label}
                   {activeSection === link.href.replace("#", "") && (
                     <motion.span
-                      className="absolute bottom-0 left-4 right-4 h-[2px] bg-gold"
+                      className="absolute inset-0 bg-gold/5 rounded-full -z-10"
                       layoutId="activeSection"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
@@ -114,25 +106,16 @@ export function Header() {
             </nav>
 
             {/* Desktop Actions */}
-            <div className="hidden md:flex items-center gap-4">
-              <motion.button
-                onClick={toggleTheme}
-                className="p-2.5 rounded-full hover:bg-secondary transition-colors duration-300"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                aria-label="Toggle theme"
-              >
-                {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-              </motion.button>
-              <MagneticButton className="bg-gold text-gold-foreground hover:bg-gold/90 rounded-full px-6 py-2.5 text-sm font-medium shadow-[0_0_20px_hsl(var(--gold)/0.3)] hover:shadow-[0_0_30px_hsl(var(--gold)/0.5)] transition-shadow duration-300">
-                Get Started
+            <div className="hidden md:flex items-center gap-6">
+              <MagneticButton className="btn-metallic text-xs uppercase tracking-[0.15em] px-8 py-3">
+                Discover
               </MagneticButton>
             </div>
 
             {/* Mobile Menu Button */}
             <motion.button
               onClick={() => setIsMobileMenuOpen(true)}
-              className="md:hidden p-2"
+              className="md:hidden p-2 text-foreground"
               whileTap={{ scale: 0.9 }}
               aria-label="Open menu"
             >
@@ -142,7 +125,7 @@ export function Header() {
         </div>
       </motion.header>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu Overlay - Full screen dark */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -151,18 +134,21 @@ export function Header() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            {/* Backdrop */}
+            {/* Backdrop - Deep black */}
             <motion.div
-              className="absolute inset-0 bg-background/95 backdrop-blur-2xl"
+              className="absolute inset-0 bg-background"
               onClick={() => setIsMobileMenuOpen(false)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             />
 
+            {/* Decorative line */}
+            <div className="absolute top-1/2 left-8 right-8 h-px bg-border/20 -translate-y-1/2" />
+
             {/* Menu Content */}
             <motion.div
-              className="relative h-full flex flex-col items-center justify-center gap-8 p-8"
+              className="relative h-full flex flex-col items-center justify-center gap-10 p-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -170,45 +156,38 @@ export function Header() {
               {/* Close Button */}
               <motion.button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="absolute top-4 right-4 p-2"
+                className="absolute top-6 right-6 p-2 text-muted-foreground hover:text-foreground transition-colors"
                 whileTap={{ scale: 0.9 }}
                 aria-label="Close menu"
               >
                 <X className="w-8 h-8" />
               </motion.button>
 
-              {/* Nav Links */}
+              {/* Nav Links - Fade in from center */}
               {navLinks.map((link, index) => (
                 <motion.a
                   key={link.label}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-4xl md:text-5xl font-extralight hover:text-gold transition-colors"
-                  initial={{ opacity: 0, y: 30 }}
+                  className="text-4xl md:text-5xl font-extralight tracking-wider uppercase text-foreground hover:text-gold transition-colors duration-500"
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -30 }}
+                  exit={{ opacity: 0, y: -20 }}
                   transition={{ delay: index * 0.1, duration: 0.5 }}
                 >
                   {link.label}
                 </motion.a>
               ))}
 
-              {/* Actions */}
+              {/* CTA */}
               <motion.div
-                className="flex items-center gap-4 mt-8"
+                className="mt-8"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
-                <button
-                  onClick={toggleTheme}
-                  className="p-3 rounded-full border border-border hover:bg-secondary transition-colors"
-                  aria-label="Toggle theme"
-                >
-                  {isDark ? <Sun className="w-6 h-6" /> : <Moon className="w-6 h-6" />}
-                </button>
-                <MagneticButton className="bg-gold text-gold-foreground rounded-full px-8 py-4 text-lg font-medium">
-                  Get Started
+                <MagneticButton className="btn-metallic px-10 py-4 text-sm uppercase tracking-[0.2em]">
+                  Discover
                 </MagneticButton>
               </motion.div>
             </motion.div>
