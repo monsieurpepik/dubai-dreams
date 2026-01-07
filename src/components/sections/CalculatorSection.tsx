@@ -1,9 +1,10 @@
-import { useState, useMemo } from "react";
-import { motion } from "framer-motion";
+import { useState, useMemo, useRef } from "react";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Slider } from "@/components/ui/slider";
-import { Check, Home, Calculator } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Check, Home, Sparkles, Building } from "lucide-react";
+import { MagneticButton } from "@/components/ui/MagneticButton";
+import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 
 const propertyMatches = [
   { 
@@ -56,13 +57,21 @@ function formatCurrency(value: number): string {
 }
 
 export function CalculatorSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [ref, inView] = useInView({
-    threshold: 0.2,
+    threshold: 0.1,
     triggerOnce: true,
   });
 
   const [investment, setInvestment] = useState([400000]);
   const [monthly, setMonthly] = useState([15000]);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
 
   const matchedProperty = useMemo(() => {
     return propertyMatches.find(
@@ -72,9 +81,9 @@ export function CalculatorSection() {
 
   const calculations = useMemo(() => {
     const propertyPrice = matchedProperty.price;
-    const downPayment = propertyPrice * 0.2; // 20% down payment
+    const downPayment = propertyPrice * 0.2;
     const mortgage = propertyPrice * 0.8;
-    const monthlyMortgage = Math.round((mortgage * 0.045) / 12 + mortgage / 300); // Rough estimate
+    const monthlyMortgage = Math.round((mortgage * 0.045) / 12 + mortgage / 300);
 
     return {
       propertyPrice,
@@ -85,47 +94,80 @@ export function CalculatorSection() {
     };
   }, [matchedProperty, investment, monthly]);
 
+  // Animated spring values
+  const springInvestment = useSpring(investment[0], { stiffness: 100, damping: 30 });
+  const springMonthly = useSpring(monthly[0], { stiffness: 100, damping: 30 });
+
   return (
-    <section id="calculator" ref={ref} className="section-padding-lg bg-background">
-      <div className="container-custom">
+    <section 
+      id="calculator" 
+      ref={containerRef}
+      className="relative section-padding-lg bg-background overflow-hidden"
+    >
+      {/* Ambient Background */}
+      <motion.div 
+        className="absolute bottom-0 left-0 w-[800px] h-[800px] rounded-full bg-gold/5 blur-[200px] pointer-events-none"
+        style={{ y: backgroundY }}
+      />
+
+      <div ref={ref} className="container-custom relative z-10">
         {/* Section Header */}
         <motion.div
-          className="text-center mb-16 md:mb-24"
-          initial={{ opacity: 0, y: 30 }}
+          className="text-center mb-20 md:mb-32"
+          initial={{ opacity: 0, y: 50 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 1 }}
         >
-          <h2 className="mb-4">See what you can afford</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Use our calculator to find properties that match your budget. 
-            Real-time matching based on your investment capacity.
+          <motion.p
+            className="text-gold text-sm uppercase tracking-[0.3em] mb-6"
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.2, duration: 0.8 }}
+          >
+            Investment Calculator
+          </motion.p>
+          <h2 className="mb-6">
+            See what you<br />
+            <span className="text-muted-foreground">can afford.</span>
+          </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+            Real-time matching based on your investment capacity. Find properties that fit your budget.
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start max-w-6xl mx-auto">
           {/* Calculator Inputs */}
           <motion.div
             className="space-y-12"
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: -60 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: 0.2, duration: 0.8 }}
+            transition={{ delay: 0.3, duration: 1 }}
           >
             {/* Investment Slider */}
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <label className="text-lg font-medium">Investment today</label>
-                <span className="text-2xl font-light text-gold">
+            <div className="space-y-8">
+              <div className="flex items-baseline justify-between">
+                <label className="text-xl font-light">Investment today</label>
+                <motion.span 
+                  className="text-4xl md:text-5xl font-extralight text-gold tabular-nums"
+                >
                   {formatCurrency(investment[0])}
-                </span>
+                </motion.span>
               </div>
-              <Slider
-                value={investment}
-                onValueChange={setInvestment}
-                min={100000}
-                max={2000000}
-                step={50000}
-                className="py-4"
-              />
+              <div className="relative py-4">
+                <Slider
+                  value={investment}
+                  onValueChange={setInvestment}
+                  min={100000}
+                  max={2000000}
+                  step={50000}
+                  className="py-4"
+                />
+                {/* Gradient track overlay */}
+                <div 
+                  className="absolute top-1/2 left-0 h-2 rounded-full bg-gradient-to-r from-gold/50 to-gold pointer-events-none -translate-y-1/2"
+                  style={{ width: `${((investment[0] - 100000) / (2000000 - 100000)) * 100}%` }}
+                />
+              </div>
               <div className="flex justify-between text-sm text-muted-foreground">
                 <span>AED 100K</span>
                 <span>AED 2M</span>
@@ -133,35 +175,42 @@ export function CalculatorSection() {
             </div>
 
             {/* Monthly Slider */}
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <label className="text-lg font-medium">Monthly comfort</label>
-                <span className="text-2xl font-light text-gold">
+            <div className="space-y-8">
+              <div className="flex items-baseline justify-between">
+                <label className="text-xl font-light">Monthly comfort</label>
+                <motion.span 
+                  className="text-4xl md:text-5xl font-extralight text-gold tabular-nums"
+                >
                   {formatCurrency(monthly[0])}
-                </span>
+                </motion.span>
               </div>
-              <Slider
-                value={monthly}
-                onValueChange={setMonthly}
-                min={5000}
-                max={50000}
-                step={1000}
-                className="py-4"
-              />
+              <div className="relative py-4">
+                <Slider
+                  value={monthly}
+                  onValueChange={setMonthly}
+                  min={5000}
+                  max={50000}
+                  step={1000}
+                  className="py-4"
+                />
+                <div 
+                  className="absolute top-1/2 left-0 h-2 rounded-full bg-gradient-to-r from-gold/50 to-gold pointer-events-none -translate-y-1/2"
+                  style={{ width: `${((monthly[0] - 5000) / (50000 - 5000)) * 100}%` }}
+                />
+              </div>
               <div className="flex justify-between text-sm text-muted-foreground">
                 <span>AED 5K</span>
                 <span>AED 50K</span>
               </div>
             </div>
 
-            {/* Info Box */}
-            <div className="flex items-start gap-4 p-6 bg-secondary rounded-2xl">
-              <Calculator className="w-6 h-6 text-gold flex-shrink-0 mt-1" />
+            {/* Info */}
+            <div className="flex items-start gap-4 p-6 bg-secondary/50 rounded-2xl backdrop-blur-sm">
+              <Sparkles className="w-6 h-6 text-gold flex-shrink-0 mt-1" />
               <div>
-                <p className="font-medium mb-1">How it works</p>
+                <p className="font-medium mb-1">Smart Matching</p>
                 <p className="text-sm text-muted-foreground">
-                  Your investment today covers the down payment and construction installments. 
-                  The monthly amount helps us match properties to your post-handover mortgage comfort.
+                  We analyze payment plans to match your down payment and post-handover mortgage capacity.
                 </p>
               </div>
             </div>
@@ -169,68 +218,80 @@ export function CalculatorSection() {
 
           {/* Results Panel */}
           <motion.div
-            className="bg-card rounded-3xl border border-border overflow-hidden"
-            initial={{ opacity: 0, x: 50 }}
+            className="relative bg-card rounded-[2rem] border border-border overflow-hidden shadow-2xl"
+            initial={{ opacity: 0, x: 60 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: 0.4, duration: 0.8 }}
+            transition={{ delay: 0.5, duration: 1 }}
           >
             {/* Property Preview */}
-            <div className="relative aspect-video">
-              <img
+            <div className="relative aspect-[16/10]">
+              <motion.img
+                key={matchedProperty.type}
                 src={matchedProperty.image}
                 alt={matchedProperty.type}
                 className="w-full h-full object-cover"
+                initial={{ opacity: 0, scale: 1.1 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-              <div className="absolute bottom-4 left-4 right-4 text-white">
+              <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
+              <div className="absolute bottom-6 left-6 right-6 text-white">
                 <p className="text-sm text-white/70 mb-1">You could own a</p>
-                <h3 className="text-2xl font-medium">
-                  {matchedProperty.type} in {matchedProperty.area}
-                </h3>
+                <motion.h3 
+                  key={matchedProperty.type}
+                  className="text-3xl font-light"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  {matchedProperty.type}
+                </motion.h3>
+                <p className="text-white/60">in {matchedProperty.area}</p>
               </div>
             </div>
 
             {/* Breakdown */}
             <div className="p-6 lg:p-8 space-y-6">
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-secondary rounded-xl">
-                  <p className="text-sm text-muted-foreground mb-1">Property</p>
-                  <p className="text-xl font-medium">
+                <div className="p-4 bg-secondary/50 rounded-xl">
+                  <p className="text-sm text-muted-foreground mb-1">Property Value</p>
+                  <p className="text-2xl font-light">
                     {formatCurrency(calculations.propertyPrice)}
                   </p>
                 </div>
-                <div className="p-4 bg-secondary rounded-xl">
-                  <p className="text-sm text-muted-foreground mb-1">Down payment</p>
-                  <p className="text-xl font-medium">
+                <div className="p-4 bg-secondary/50 rounded-xl">
+                  <p className="text-sm text-muted-foreground mb-1">Down Payment</p>
+                  <p className="text-2xl font-light">
                     {formatCurrency(calculations.downPayment)}
                   </p>
                 </div>
-                <div className="p-4 bg-secondary rounded-xl">
+                <div className="p-4 bg-secondary/50 rounded-xl">
                   <p className="text-sm text-muted-foreground mb-1">Mortgage</p>
-                  <p className="text-xl font-medium">
+                  <p className="text-2xl font-light">
                     {formatCurrency(calculations.mortgage)}
                   </p>
                 </div>
-                <div className="p-4 bg-secondary rounded-xl">
-                  <p className="text-sm text-muted-foreground mb-1">Monthly</p>
-                  <p className="text-xl font-medium">
+                <div className="p-4 bg-secondary/50 rounded-xl">
+                  <p className="text-sm text-muted-foreground mb-1">Monthly Est.</p>
+                  <p className="text-2xl font-light">
                     {formatCurrency(calculations.monthlyMortgage)}
                   </p>
                 </div>
               </div>
 
-              {/* Budget Fit Indicator */}
-              <div
-                className={`flex items-center gap-3 p-4 rounded-xl ${
+              {/* Budget Fit */}
+              <motion.div
+                className={`flex items-center gap-3 p-4 rounded-xl transition-colors duration-500 ${
                   calculations.fitsbudget
                     ? "bg-green-500/10 text-green-600 dark:text-green-400"
                     : "bg-amber-500/10 text-amber-600 dark:text-amber-400"
                 }`}
+                layout
               >
                 {calculations.fitsbudget ? (
                   <>
                     <Check className="w-5 h-5" />
-                    <span className="font-medium">This fits your budget</span>
+                    <span className="font-medium">This fits your budget perfectly</span>
                   </>
                 ) : (
                   <>
@@ -238,12 +299,12 @@ export function CalculatorSection() {
                     <span className="font-medium">Increase investment for this property</span>
                   </>
                 )}
-              </div>
+              </motion.div>
 
               {/* CTA */}
-              <Button className="w-full bg-gold text-gold-foreground hover:bg-gold/90 rounded-full py-6 text-lg">
-                See properties I can afford
-              </Button>
+              <MagneticButton className="w-full btn-magnetic text-lg">
+                View Matching Properties
+              </MagneticButton>
             </div>
           </motion.div>
         </div>

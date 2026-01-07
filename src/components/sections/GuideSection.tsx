@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { Check, FileText, BookOpen, Calculator, Shield, MapPin, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Check, FileText, BookOpen, Calculator, Shield, MapPin, Loader2, ArrowRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { MagneticButton } from "@/components/ui/MagneticButton";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -16,10 +16,19 @@ const features = [
 ];
 
 export function GuideSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [ref, inView] = useInView({
     threshold: 0.2,
     triggerOnce: true,
   });
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const bookRotateY = useTransform(scrollYProgress, [0, 0.5, 1], [-10, 0, 10]);
+  const bookRotateX = useTransform(scrollYProgress, [0, 0.5, 1], [5, 0, -5]);
 
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -48,7 +57,6 @@ export function GuideSection() {
 
       if (error) {
         if (error.code === "23505") {
-          // Duplicate email
           toast({
             title: "Already subscribed",
             description: "You've already downloaded the guide. Check your email!",
@@ -76,60 +84,91 @@ export function GuideSection() {
   };
 
   return (
-    <section id="guide" ref={ref} className="section-padding-lg bg-secondary">
-      <div className="container-custom">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* Book Mockup */}
+    <section 
+      id="guide" 
+      ref={containerRef}
+      className="relative section-padding-lg bg-secondary overflow-hidden"
+    >
+      {/* Ambient Background */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] rounded-full bg-gold/5 blur-[200px] pointer-events-none" />
+
+      <div ref={ref} className="container-custom relative z-10">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+          {/* Book Mockup - 3D Effect */}
           <motion.div
-            className="relative flex justify-center"
-            initial={{ opacity: 0, x: -50 }}
+            className="relative flex justify-center order-2 lg:order-1"
+            initial={{ opacity: 0, x: -60 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: 0.2, duration: 0.8 }}
+            transition={{ delay: 0.2, duration: 1 }}
           >
-            <div className="relative">
+            <div className="relative" style={{ perspective: "1000px" }}>
               {/* Book Shadow */}
-              <div className="absolute inset-0 bg-black/20 blur-3xl translate-y-8 scale-90" />
+              <div className="absolute inset-0 bg-black/30 blur-[60px] translate-y-10 scale-90" />
               
               {/* Book Cover */}
-              <div
-                className="relative bg-gradient-to-br from-foreground to-foreground/80 rounded-lg p-8 lg:p-12 shadow-2xl"
+              <motion.div
+                className="relative bg-gradient-to-br from-foreground via-foreground/95 to-foreground/80 rounded-xl p-10 lg:p-14 shadow-2xl"
                 style={{
-                  transform: "perspective(1000px) rotateY(-5deg) rotateX(5deg)",
+                  rotateY: bookRotateY,
+                  rotateX: bookRotateX,
+                  transformStyle: "preserve-3d",
                 }}
               >
-                <div className="w-56 lg:w-72 text-background">
-                  <div className="mb-8">
-                    <span className="text-gold text-sm font-medium">FREE GUIDE</span>
+                {/* Spine Effect */}
+                <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-black/20 to-transparent" />
+                
+                <div className="w-64 lg:w-80 text-background">
+                  <div className="mb-10">
+                    <span className="inline-block bg-gold text-gold-foreground text-xs font-medium px-3 py-1.5 rounded-full">
+                      FREE GUIDE
+                    </span>
                   </div>
-                  <h3 className="text-2xl lg:text-3xl font-light mb-4 leading-tight">
-                    Dubai Off-Plan Buyer's Guide
+                  <h3 className="text-3xl lg:text-4xl font-extralight mb-6 leading-tight tracking-tight">
+                    Dubai Off-Plan<br />Buyer's Guide
                   </h3>
-                  <p className="text-background/60 text-sm mb-8">
+                  <p className="text-background/50 text-sm mb-10 leading-relaxed">
                     Everything you need to know before investing in Dubai real estate
                   </p>
-                  <div className="flex items-center gap-2 text-xs text-background/40">
-                    <span>OwningDubai</span>
+                  <div className="flex items-center gap-3 text-xs text-background/30">
+                    <span className="font-medium">OwningDubai</span>
                     <span>•</span>
-                    <span>2025 Edition</span>
+                    <span>2026 Edition</span>
                   </div>
                 </div>
-              </div>
+
+                {/* Decorative Lines */}
+                <div className="absolute bottom-8 right-8 w-20 h-20">
+                  <div className="absolute bottom-0 right-0 w-full h-[1px] bg-background/10" />
+                  <div className="absolute bottom-0 right-0 w-[1px] h-full bg-background/10" />
+                </div>
+              </motion.div>
             </div>
           </motion.div>
 
           {/* Content */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            className="order-1 lg:order-2"
+            initial={{ opacity: 0, x: 60 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: 0.4, duration: 0.8 }}
+            transition={{ delay: 0.4, duration: 1 }}
           >
-            <h2 className="mb-6">
-              Dubai Off-Plan Buyer's Guide{" "}
-              <span className="text-gold">2025</span>
+            <motion.p
+              className="text-gold text-sm uppercase tracking-[0.3em] mb-6"
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              transition={{ delay: 0.2, duration: 0.8 }}
+            >
+              Free Download
+            </motion.p>
+            
+            <h2 className="mb-8">
+              Dubai Off-Plan<br />
+              <span className="text-muted-foreground">Buyer's Guide </span>
+              <span className="text-gold">2026</span>
             </h2>
-            <p className="text-muted-foreground text-lg mb-8">
-              Your comprehensive guide to navigating Dubai's off-plan property market. 
-              From choosing the right developer to understanding payment plans.
+            
+            <p className="text-muted-foreground text-lg mb-10 max-w-lg">
+              Your comprehensive guide to navigating Dubai's off-plan property market. From choosing developers to understanding payment plans.
             </p>
 
             {/* Features */}
@@ -137,12 +176,12 @@ export function GuideSection() {
               {features.map((feature, index) => (
                 <motion.li
                   key={feature.label}
-                  className="flex items-center gap-4"
+                  className="flex items-center gap-4 group"
                   initial={{ opacity: 0, x: 20 }}
                   animate={inView ? { opacity: 1, x: 0 } : {}}
                   transition={{ delay: 0.5 + index * 0.1, duration: 0.5 }}
                 >
-                  <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center">
+                  <div className="w-11 h-11 rounded-xl bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors duration-300">
                     <feature.icon className="w-5 h-5 text-gold" />
                   </div>
                   <span className="text-foreground">{feature.label}</span>
@@ -159,28 +198,30 @@ export function GuideSection() {
                     placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="flex-1 h-14 rounded-full px-6 text-lg"
+                    className="flex-1 h-14 rounded-full px-6 text-lg bg-background border-border focus:border-gold focus:ring-gold/20"
                     disabled={isSubmitting}
                   />
-                  <Button
-                    type="submit"
-                    className="bg-gold text-gold-foreground hover:bg-gold/90 rounded-full h-14 px-8 text-lg"
-                    disabled={isSubmitting}
+                  <MagneticButton
+                    className="btn-magnetic h-14 px-8 whitespace-nowrap"
+                    onClick={() => {}}
                   >
                     {isSubmitting ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
-                      "Download Free Guide"
+                      <>
+                        Download Free
+                        <ArrowRight className="w-5 h-5 ml-2 inline-block" />
+                      </>
                     )}
-                  </Button>
+                  </MagneticButton>
                 </div>
-                <p className="text-xs text-muted-foreground text-center sm:text-left">
+                <p className="text-xs text-muted-foreground">
                   No spam, ever. Unsubscribe anytime.
                 </p>
               </form>
             ) : (
               <motion.div
-                className="flex items-center gap-4 p-6 bg-green-500/10 rounded-2xl"
+                className="flex items-center gap-4 p-6 bg-green-500/10 rounded-2xl border border-green-500/20"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
               >

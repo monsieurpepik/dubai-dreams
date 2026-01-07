@@ -1,7 +1,8 @@
-import { motion } from "framer-motion";
+import { useRef, useState } from "react";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { MapPin, Calendar, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { MapPin, Calendar, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { MagneticButton } from "@/components/ui/MagneticButton";
 
 const properties = [
   {
@@ -9,164 +10,231 @@ const properties = [
     name: "Emaar Beachfront",
     developer: "Emaar Properties",
     location: "Dubai Harbour",
-    price: "From AED 2,450,000",
+    price: "2,450,000",
     paymentPlan: "20/80",
     completion: "Q4 2026",
     image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2000&auto=format&fit=crop",
     description: "Wake up to yachts. Sleep under stars.",
+    roi: "8.2%",
   },
   {
     id: 2,
     name: "Dubai Hills Estate",
     developer: "Emaar Properties",
     location: "Mohammed Bin Rashid City",
-    price: "From AED 1,200,000",
+    price: "1,200,000",
     paymentPlan: "40/60",
     completion: "Q2 2026",
     image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2000&auto=format&fit=crop",
     description: "Golf course views. City at your feet.",
+    roi: "7.5%",
   },
   {
     id: 3,
     name: "Damac Hills 2",
     developer: "Damac Properties",
     location: "Dubai South",
-    price: "From AED 650,000",
+    price: "650,000",
     paymentPlan: "20/80",
     completion: "Q1 2026",
     image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000&auto=format&fit=crop",
     description: "Where every day feels like vacation.",
+    roi: "9.1%",
   },
   {
     id: 4,
-    name: "Arabian Ranches 3",
-    developer: "Emaar Properties",
-    location: "Arabian Ranches",
-    price: "From AED 1,800,000",
+    name: "Palm Jumeirah Residences",
+    developer: "Nakheel",
+    location: "Palm Jumeirah",
+    price: "3,800,000",
     paymentPlan: "30/70",
     completion: "Q3 2026",
     image: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=2000&auto=format&fit=crop",
-    description: "Space to grow. Room to breathe.",
+    description: "Iconic address. Unrivaled prestige.",
+    roi: "6.8%",
   },
 ];
 
 export function PropertiesSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [ref, inView] = useInView({
     threshold: 0.1,
     triggerOnce: true,
   });
 
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+
+  const nextSlide = () => setActiveIndex((prev) => (prev + 1) % properties.length);
+  const prevSlide = () => setActiveIndex((prev) => (prev - 1 + properties.length) % properties.length);
+
   return (
-    <section id="properties" ref={ref} className="section-padding-lg bg-secondary">
-      <div className="container-custom">
+    <section 
+      id="properties" 
+      ref={containerRef}
+      className="relative min-h-screen bg-secondary overflow-hidden"
+    >
+      {/* Background Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-secondary to-secondary" />
+
+      <div ref={ref} className="relative z-10 py-24 md:py-32">
         {/* Section Header */}
-        <motion.div
-          className="text-center mb-16 md:mb-24"
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-        >
-          <h2 className="mb-4">Featured properties</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Handpicked developments from Dubai's most trusted developers. Premium locations, 
-            flexible payment plans, exceptional returns.
-          </p>
-        </motion.div>
+        <div className="container-custom mb-16 md:mb-24">
+          <motion.div
+            className="flex flex-col md:flex-row md:items-end md:justify-between gap-8"
+            initial={{ opacity: 0, y: 50 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 1 }}
+          >
+            <div>
+              <motion.p
+                className="text-gold text-sm uppercase tracking-[0.3em] mb-4"
+                initial={{ opacity: 0 }}
+                animate={inView ? { opacity: 1 } : {}}
+                transition={{ delay: 0.2, duration: 0.8 }}
+              >
+                Featured Properties
+              </motion.p>
+              <h2>
+                Curated for<br />
+                <span className="text-muted-foreground">discerning investors.</span>
+              </h2>
+            </div>
+            
+            {/* Navigation */}
+            <div className="flex items-center gap-4">
+              <button
+                onClick={prevSlide}
+                className="w-14 h-14 rounded-full border border-border flex items-center justify-center hover:bg-foreground hover:text-background transition-all duration-300"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={nextSlide}
+                className="w-14 h-14 rounded-full border border-border flex items-center justify-center hover:bg-foreground hover:text-background transition-all duration-300"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+              <span className="text-muted-foreground ml-4 tabular-nums">
+                {String(activeIndex + 1).padStart(2, '0')} / {String(properties.length).padStart(2, '0')}
+              </span>
+            </div>
+          </motion.div>
+        </div>
 
-        {/* Properties Grid */}
-        <div className="grid md:grid-cols-2 gap-8">
-          {properties.map((property, index) => (
+        {/* Property Showcase - Full Width */}
+        <div className="relative">
+          <AnimatePresence mode="wait">
             <motion.div
-              key={property.id}
-              className="group relative bg-card rounded-3xl overflow-hidden card-hover"
-              initial={{ opacity: 0, y: 50 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: index * 0.15, duration: 0.8 }}
+              key={activeIndex}
+              className="container-wide"
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -100 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
-              {/* Image */}
-              <div className="relative aspect-[16/10] overflow-hidden">
-                <img
-                  src={property.image}
-                  alt={property.name}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="image-overlay" />
+              <div className="grid lg:grid-cols-2 gap-8 lg:gap-0 items-center">
+                {/* Image */}
+                <div className="relative aspect-[4/3] lg:aspect-[16/12] rounded-[2rem] overflow-hidden">
+                  <motion.img
+                    src={properties[activeIndex].image}
+                    alt={properties[activeIndex].name}
+                    className="w-full h-full object-cover"
+                    initial={{ scale: 1.1 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.8 }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  
+                  {/* Payment Plan Badge */}
+                  <div className="absolute top-6 left-6 bg-gold text-gold-foreground text-sm font-medium px-4 py-2 rounded-full">
+                    {properties[activeIndex].paymentPlan} Payment Plan
+                  </div>
 
-                {/* Payment Plan Badge */}
-                <div className="absolute top-4 right-4 bg-gold text-gold-foreground text-xs font-medium px-3 py-1.5 rounded-full">
-                  {property.paymentPlan} Plan
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="p-6 lg:p-8">
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h3 className="text-xl lg:text-2xl font-medium mb-1">
-                      {property.name}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">{property.developer}</p>
+                  {/* ROI Badge */}
+                  <div className="absolute top-6 right-6 bg-black/60 backdrop-blur-xl text-white text-sm font-medium px-4 py-2 rounded-full">
+                    {properties[activeIndex].roi} ROI
                   </div>
                 </div>
 
-                <p className="text-lg text-muted-foreground mb-6 italic">
-                  "{property.description}"
-                </p>
-
-                <div className="flex items-center gap-6 mb-6 text-sm">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <MapPin className="w-4 h-4" />
-                    <span>{property.location}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Calendar className="w-4 h-4" />
-                    <span>{property.completion}</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Starting from</p>
-                    <p className="text-xl lg:text-2xl font-medium text-gold">
-                      {property.price.replace("From ", "")}
+                {/* Content */}
+                <div className="lg:pl-16 xl:pl-24">
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2, duration: 0.6 }}
+                  >
+                    <p className="text-muted-foreground text-sm mb-3">
+                      {properties[activeIndex].developer}
                     </p>
-                  </div>
+                    <h3 className="text-4xl md:text-5xl lg:text-6xl font-light mb-4">
+                      {properties[activeIndex].name}
+                    </h3>
+                    <p className="text-2xl text-muted-foreground font-light italic mb-8">
+                      "{properties[activeIndex].description}"
+                    </p>
 
-                  <div className="flex gap-3">
-                    <Button
-                      variant="outline"
-                      className="rounded-full px-5"
-                    >
-                      Details
-                    </Button>
-                    <Button
-                      className="bg-gold text-gold-foreground hover:bg-gold/90 rounded-full px-5 group/btn"
-                    >
-                      Explore
-                      <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover/btn:translate-x-1" />
-                    </Button>
-                  </div>
+                    <div className="flex flex-wrap gap-6 mb-10">
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <MapPin className="w-5 h-5 text-gold" />
+                        <span>{properties[activeIndex].location}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <Calendar className="w-5 h-5 text-gold" />
+                        <span>{properties[activeIndex].completion}</span>
+                      </div>
+                    </div>
+
+                    <div className="mb-10">
+                      <p className="text-muted-foreground text-sm mb-2">Starting from</p>
+                      <p className="text-4xl md:text-5xl font-light text-gold">
+                        AED {properties[activeIndex].price}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-4">
+                      <MagneticButton className="btn-magnetic">
+                        View Details
+                        <ArrowRight className="w-5 h-5 ml-2 inline-block" />
+                      </MagneticButton>
+                      <button className="btn-outline-premium">
+                        Schedule Tour
+                      </button>
+                    </div>
+                  </motion.div>
                 </div>
               </div>
             </motion.div>
-          ))}
+          </AnimatePresence>
         </div>
 
-        {/* View All CTA */}
-        <motion.div
-          className="text-center mt-12 md:mt-16"
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.8, duration: 0.6 }}
-        >
-          <Button
-            variant="outline"
-            className="rounded-full px-8 py-6 text-lg"
-          >
-            View all properties
-            <ArrowRight className="w-5 h-5 ml-2" />
-          </Button>
-        </motion.div>
+        {/* Property Thumbnails */}
+        <div className="container-custom mt-16">
+          <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-4">
+            {properties.map((property, index) => (
+              <button
+                key={property.id}
+                onClick={() => setActiveIndex(index)}
+                className={`relative flex-shrink-0 w-32 h-20 rounded-xl overflow-hidden transition-all duration-300 ${
+                  index === activeIndex 
+                    ? "ring-2 ring-gold ring-offset-2 ring-offset-secondary" 
+                    : "opacity-50 hover:opacity-80"
+                }`}
+              >
+                <img
+                  src={property.image}
+                  alt={property.name}
+                  className="w-full h-full object-cover"
+                />
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
