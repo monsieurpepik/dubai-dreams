@@ -2,9 +2,8 @@ import { useState, useMemo, useRef } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Slider } from "@/components/ui/slider";
-import { Check, Home, Sparkles, Building } from "lucide-react";
+import { Check, Home, Sparkles } from "lucide-react";
 import { MagneticButton } from "@/components/ui/MagneticButton";
-import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 
 const propertyMatches = [
   { 
@@ -94,20 +93,19 @@ export function CalculatorSection() {
     };
   }, [matchedProperty, investment, monthly]);
 
-  // Animated spring values
-  const springInvestment = useSpring(investment[0], { stiffness: 100, damping: 30 });
-  const springMonthly = useSpring(monthly[0], { stiffness: 100, damping: 30 });
-
   return (
     <section 
       id="calculator" 
       ref={containerRef}
       className="relative section-padding-lg bg-background overflow-hidden"
     >
-      {/* Ambient Background */}
+      {/* Ambient glow */}
       <motion.div 
-        className="absolute bottom-0 left-0 w-[800px] h-[800px] rounded-full bg-gold/5 blur-[200px] pointer-events-none"
-        style={{ y: backgroundY }}
+        className="absolute bottom-0 left-0 w-[800px] h-[800px] rounded-full opacity-30"
+        style={{ 
+          y: backgroundY,
+          background: "radial-gradient(circle, hsl(var(--gold) / 0.1) 0%, transparent 70%)"
+        }}
       />
 
       <div ref={ref} className="container-custom relative z-10">
@@ -119,7 +117,7 @@ export function CalculatorSection() {
           transition={{ duration: 1 }}
         >
           <motion.p
-            className="text-gold text-sm uppercase tracking-[0.3em] mb-6"
+            className="text-gold text-xs uppercase tracking-[0.3em] mb-6"
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
             transition={{ delay: 0.2, duration: 0.8 }}
@@ -130,13 +128,13 @@ export function CalculatorSection() {
             See what you<br />
             <span className="text-muted-foreground">can afford.</span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            Real-time matching based on your investment capacity. Find properties that fit your budget.
+          <p className="text-muted-foreground max-w-2xl mx-auto text-lg font-light">
+            Real-time matching based on your investment capacity.
           </p>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start max-w-6xl mx-auto">
-          {/* Calculator Inputs */}
+          {/* Calculator Inputs - Dark glassmorphic */}
           <motion.div
             className="space-y-12"
             initial={{ opacity: 0, x: -60 }}
@@ -146,9 +144,9 @@ export function CalculatorSection() {
             {/* Investment Slider */}
             <div className="space-y-8">
               <div className="flex items-baseline justify-between">
-                <label className="text-xl font-light">Investment today</label>
+                <label className="text-lg font-light tracking-wide">Investment today</label>
                 <motion.span 
-                  className="text-4xl md:text-5xl font-extralight text-gold tabular-nums"
+                  className="text-4xl md:text-5xl font-extralight text-gold tabular-nums drop-shadow-[0_0_20px_hsl(var(--gold)/0.3)]"
                 >
                   {formatCurrency(investment[0])}
                 </motion.span>
@@ -162,13 +160,8 @@ export function CalculatorSection() {
                   step={50000}
                   className="py-4"
                 />
-                {/* Gradient track overlay */}
-                <div 
-                  className="absolute top-1/2 left-0 h-2 rounded-full bg-gradient-to-r from-gold/50 to-gold pointer-events-none -translate-y-1/2"
-                  style={{ width: `${((investment[0] - 100000) / (2000000 - 100000)) * 100}%` }}
-                />
               </div>
-              <div className="flex justify-between text-sm text-muted-foreground">
+              <div className="flex justify-between text-xs text-metallic uppercase tracking-widest">
                 <span>AED 100K</span>
                 <span>AED 2M</span>
               </div>
@@ -177,9 +170,9 @@ export function CalculatorSection() {
             {/* Monthly Slider */}
             <div className="space-y-8">
               <div className="flex items-baseline justify-between">
-                <label className="text-xl font-light">Monthly comfort</label>
+                <label className="text-lg font-light tracking-wide">Monthly comfort</label>
                 <motion.span 
-                  className="text-4xl md:text-5xl font-extralight text-gold tabular-nums"
+                  className="text-4xl md:text-5xl font-extralight text-gold tabular-nums drop-shadow-[0_0_20px_hsl(var(--gold)/0.3)]"
                 >
                   {formatCurrency(monthly[0])}
                 </motion.span>
@@ -193,32 +186,28 @@ export function CalculatorSection() {
                   step={1000}
                   className="py-4"
                 />
-                <div 
-                  className="absolute top-1/2 left-0 h-2 rounded-full bg-gradient-to-r from-gold/50 to-gold pointer-events-none -translate-y-1/2"
-                  style={{ width: `${((monthly[0] - 5000) / (50000 - 5000)) * 100}%` }}
-                />
               </div>
-              <div className="flex justify-between text-sm text-muted-foreground">
+              <div className="flex justify-between text-xs text-metallic uppercase tracking-widest">
                 <span>AED 5K</span>
                 <span>AED 50K</span>
               </div>
             </div>
 
             {/* Info */}
-            <div className="flex items-start gap-4 p-6 bg-secondary/50 rounded-2xl backdrop-blur-sm">
-              <Sparkles className="w-6 h-6 text-gold flex-shrink-0 mt-1" />
+            <div className="flex items-start gap-4 p-6 bg-card/30 border border-border/30 backdrop-blur-sm">
+              <Sparkles className="w-5 h-5 text-gold flex-shrink-0 mt-1" />
               <div>
-                <p className="font-medium mb-1">Smart Matching</p>
+                <p className="font-medium mb-1 text-sm">Smart Matching</p>
                 <p className="text-sm text-muted-foreground">
-                  We analyze payment plans to match your down payment and post-handover mortgage capacity.
+                  We analyze payment plans to match your capacity.
                 </p>
               </div>
             </div>
           </motion.div>
 
-          {/* Results Panel */}
+          {/* Results Panel - Sharp corners, floating */}
           <motion.div
-            className="relative bg-card rounded-[2rem] border border-border overflow-hidden shadow-2xl"
+            className="relative bg-card/50 border border-border/30 overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)]"
             initial={{ opacity: 0, x: 60 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ delay: 0.5, duration: 1 }}
@@ -233,47 +222,48 @@ export function CalculatorSection() {
                 initial={{ opacity: 0, scale: 1.1 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.6 }}
+                style={{ filter: "brightness(0.8)" }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
               <div className="absolute bottom-6 left-6 right-6 text-white">
-                <p className="text-sm text-white/70 mb-1">You could own a</p>
+                <p className="text-xs text-white/60 uppercase tracking-widest mb-1">You could own a</p>
                 <motion.h3 
                   key={matchedProperty.type}
-                  className="text-3xl font-light"
+                  className="text-3xl font-extralight tracking-tight"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4 }}
                 >
                   {matchedProperty.type}
                 </motion.h3>
-                <p className="text-white/60">in {matchedProperty.area}</p>
+                <p className="text-white/50 text-sm">in {matchedProperty.area}</p>
               </div>
             </div>
 
             {/* Breakdown */}
             <div className="p-6 lg:p-8 space-y-6">
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-secondary/50 rounded-xl">
-                  <p className="text-sm text-muted-foreground mb-1">Property Value</p>
-                  <p className="text-2xl font-light">
+                <div className="p-4 bg-background/50 border border-border/20">
+                  <p className="text-xs text-metallic uppercase tracking-widest mb-1">Property Value</p>
+                  <p className="text-xl font-light">
                     {formatCurrency(calculations.propertyPrice)}
                   </p>
                 </div>
-                <div className="p-4 bg-secondary/50 rounded-xl">
-                  <p className="text-sm text-muted-foreground mb-1">Down Payment</p>
-                  <p className="text-2xl font-light">
+                <div className="p-4 bg-background/50 border border-border/20">
+                  <p className="text-xs text-metallic uppercase tracking-widest mb-1">Down Payment</p>
+                  <p className="text-xl font-light">
                     {formatCurrency(calculations.downPayment)}
                   </p>
                 </div>
-                <div className="p-4 bg-secondary/50 rounded-xl">
-                  <p className="text-sm text-muted-foreground mb-1">Mortgage</p>
-                  <p className="text-2xl font-light">
+                <div className="p-4 bg-background/50 border border-border/20">
+                  <p className="text-xs text-metallic uppercase tracking-widest mb-1">Mortgage</p>
+                  <p className="text-xl font-light">
                     {formatCurrency(calculations.mortgage)}
                   </p>
                 </div>
-                <div className="p-4 bg-secondary/50 rounded-xl">
-                  <p className="text-sm text-muted-foreground mb-1">Monthly Est.</p>
-                  <p className="text-2xl font-light">
+                <div className="p-4 bg-background/50 border border-border/20">
+                  <p className="text-xs text-metallic uppercase tracking-widest mb-1">Monthly Est.</p>
+                  <p className="text-xl font-light">
                     {formatCurrency(calculations.monthlyMortgage)}
                   </p>
                 </div>
@@ -281,28 +271,28 @@ export function CalculatorSection() {
 
               {/* Budget Fit */}
               <motion.div
-                className={`flex items-center gap-3 p-4 rounded-xl transition-colors duration-500 ${
+                className={`flex items-center gap-3 p-4 transition-colors duration-500 ${
                   calculations.fitsbudget
-                    ? "bg-green-500/10 text-green-600 dark:text-green-400"
-                    : "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                    ? "bg-green-500/10 border border-green-500/20 text-green-400"
+                    : "bg-amber-500/10 border border-amber-500/20 text-amber-400"
                 }`}
                 layout
               >
                 {calculations.fitsbudget ? (
                   <>
                     <Check className="w-5 h-5" />
-                    <span className="font-medium">This fits your budget perfectly</span>
+                    <span className="font-medium text-sm">This fits your budget perfectly</span>
                   </>
                 ) : (
                   <>
                     <Home className="w-5 h-5" />
-                    <span className="font-medium">Increase investment for this property</span>
+                    <span className="font-medium text-sm">Increase investment for this property</span>
                   </>
                 )}
               </motion.div>
 
               {/* CTA */}
-              <MagneticButton className="w-full btn-magnetic text-lg">
+              <MagneticButton className="w-full btn-metallic text-sm uppercase tracking-wider">
                 View Matching Properties
               </MagneticButton>
             </div>

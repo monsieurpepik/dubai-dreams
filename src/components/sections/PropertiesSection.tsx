@@ -77,10 +77,10 @@ export function PropertiesSection() {
     <section 
       id="properties" 
       ref={containerRef}
-      className="relative min-h-screen bg-secondary overflow-hidden"
+      className="relative min-h-screen bg-background overflow-hidden"
     >
-      {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-secondary to-secondary" />
+      {/* Gradient background - subtle shift */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-card/20 to-background" />
 
       <div ref={ref} className="relative z-10 py-24 md:py-32">
         {/* Section Header */}
@@ -93,7 +93,7 @@ export function PropertiesSection() {
           >
             <div>
               <motion.p
-                className="text-gold text-sm uppercase tracking-[0.3em] mb-4"
+                className="text-gold text-xs uppercase tracking-[0.3em] mb-4"
                 initial={{ opacity: 0 }}
                 animate={inView ? { opacity: 1 } : {}}
                 transition={{ delay: 0.2, duration: 0.8 }}
@@ -106,60 +106,72 @@ export function PropertiesSection() {
               </h2>
             </div>
             
-            {/* Navigation */}
+            {/* Navigation - Thin borders, minimal */}
             <div className="flex items-center gap-4">
               <button
                 onClick={prevSlide}
-                className="w-14 h-14 rounded-full border border-border flex items-center justify-center hover:bg-foreground hover:text-background transition-all duration-300"
+                className="w-14 h-14 border border-border/50 flex items-center justify-center hover:border-gold hover:text-gold transition-all duration-500"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
               <button
                 onClick={nextSlide}
-                className="w-14 h-14 rounded-full border border-border flex items-center justify-center hover:bg-foreground hover:text-background transition-all duration-300"
+                className="w-14 h-14 border border-border/50 flex items-center justify-center hover:border-gold hover:text-gold transition-all duration-500"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
-              <span className="text-muted-foreground ml-4 tabular-nums">
+              <span className="text-metallic ml-4 tabular-nums text-sm tracking-widest">
                 {String(activeIndex + 1).padStart(2, '0')} / {String(properties.length).padStart(2, '0')}
               </span>
             </div>
           </motion.div>
         </div>
 
-        {/* Property Showcase - Full Width */}
+        {/* Property Showcase - Floating in darkness */}
         <div className="relative">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeIndex}
               className="container-wide"
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
               <div className="grid lg:grid-cols-2 gap-8 lg:gap-0 items-center">
-                {/* Image */}
-                <div className="relative aspect-[4/3] lg:aspect-[16/12] rounded-[2rem] overflow-hidden">
+                {/* Image - Sharp corners, floating with shadow */}
+                <div className="relative aspect-[4/3] lg:aspect-[16/12] overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.8)]">
                   <motion.img
                     src={properties[activeIndex].image}
                     alt={properties[activeIndex].name}
                     className="w-full h-full object-cover"
-                    initial={{ scale: 1.1 }}
-                    animate={{ scale: 1 }}
-                    transition={{ duration: 0.8 }}
+                    initial={{ scale: 1.1, filter: "brightness(0.8)" }}
+                    animate={{ scale: 1, filter: "brightness(0.9)" }}
+                    transition={{ duration: 1 }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  {/* Gradient overlays */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-background/50 via-transparent to-transparent lg:hidden" />
                   
                   {/* Payment Plan Badge */}
-                  <div className="absolute top-6 left-6 bg-gold text-gold-foreground text-sm font-medium px-4 py-2 rounded-full">
-                    {properties[activeIndex].paymentPlan} Payment Plan
+                  <div className="absolute top-6 left-6 bg-gold text-gold-foreground text-xs font-medium px-4 py-2 uppercase tracking-wider">
+                    {properties[activeIndex].paymentPlan} Plan
                   </div>
 
                   {/* ROI Badge */}
-                  <div className="absolute top-6 right-6 bg-black/60 backdrop-blur-xl text-white text-sm font-medium px-4 py-2 rounded-full">
+                  <div className="absolute top-6 right-6 bg-background/80 backdrop-blur-xl text-foreground text-xs font-medium px-4 py-2 border border-border/30">
                     {properties[activeIndex].roi} ROI
                   </div>
+
+                  {/* Chrome border glow on active */}
+                  <motion.div 
+                    className="absolute inset-0 pointer-events-none"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    style={{
+                      boxShadow: "inset 0 0 0 1px hsl(var(--gold) / 0.2)"
+                    }}
+                  />
                 </div>
 
                 {/* Content */}
@@ -169,40 +181,40 @@ export function PropertiesSection() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2, duration: 0.6 }}
                   >
-                    <p className="text-muted-foreground text-sm mb-3">
+                    <p className="text-metallic text-xs uppercase tracking-[0.2em] mb-3">
                       {properties[activeIndex].developer}
                     </p>
-                    <h3 className="text-4xl md:text-5xl lg:text-6xl font-light mb-4">
+                    <h3 className="text-4xl md:text-5xl lg:text-6xl font-extralight tracking-tight mb-4">
                       {properties[activeIndex].name}
                     </h3>
-                    <p className="text-2xl text-muted-foreground font-light italic mb-8">
+                    <p className="text-2xl text-muted-foreground font-serif italic mb-8">
                       "{properties[activeIndex].description}"
                     </p>
 
                     <div className="flex flex-wrap gap-6 mb-10">
                       <div className="flex items-center gap-2 text-muted-foreground">
-                        <MapPin className="w-5 h-5 text-gold" />
-                        <span>{properties[activeIndex].location}</span>
+                        <MapPin className="w-4 h-4 text-gold" />
+                        <span className="text-sm">{properties[activeIndex].location}</span>
                       </div>
                       <div className="flex items-center gap-2 text-muted-foreground">
-                        <Calendar className="w-5 h-5 text-gold" />
-                        <span>{properties[activeIndex].completion}</span>
+                        <Calendar className="w-4 h-4 text-gold" />
+                        <span className="text-sm">{properties[activeIndex].completion}</span>
                       </div>
                     </div>
 
                     <div className="mb-10">
-                      <p className="text-muted-foreground text-sm mb-2">Starting from</p>
-                      <p className="text-4xl md:text-5xl font-light text-gold">
+                      <p className="text-metallic text-xs uppercase tracking-[0.2em] mb-2">Starting from</p>
+                      <p className="text-4xl md:text-5xl font-extralight text-gold drop-shadow-[0_0_20px_hsl(var(--gold)/0.3)]">
                         AED {properties[activeIndex].price}
                       </p>
                     </div>
 
                     <div className="flex flex-wrap gap-4">
-                      <MagneticButton className="btn-magnetic">
+                      <MagneticButton className="btn-metallic">
                         View Details
-                        <ArrowRight className="w-5 h-5 ml-2 inline-block" />
+                        <ArrowRight className="w-4 h-4 ml-2 inline-block" />
                       </MagneticButton>
-                      <button className="btn-outline-premium">
+                      <button className="px-8 py-3 border border-border/50 text-sm uppercase tracking-wider hover:border-gold hover:text-gold transition-all duration-500">
                         Schedule Tour
                       </button>
                     </div>
@@ -213,25 +225,19 @@ export function PropertiesSection() {
           </AnimatePresence>
         </div>
 
-        {/* Property Thumbnails */}
+        {/* Property Thumbnails - Minimal dots indicator */}
         <div className="container-custom mt-16">
-          <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-4">
-            {properties.map((property, index) => (
+          <div className="flex justify-center gap-3">
+            {properties.map((_, index) => (
               <button
-                key={property.id}
+                key={index}
                 onClick={() => setActiveIndex(index)}
-                className={`relative flex-shrink-0 w-32 h-20 rounded-xl overflow-hidden transition-all duration-300 ${
+                className={`w-2 h-2 transition-all duration-500 ${
                   index === activeIndex 
-                    ? "ring-2 ring-gold ring-offset-2 ring-offset-secondary" 
-                    : "opacity-50 hover:opacity-80"
+                    ? "bg-gold w-8" 
+                    : "bg-border/50 hover:bg-border"
                 }`}
-              >
-                <img
-                  src={property.image}
-                  alt={property.name}
-                  className="w-full h-full object-cover"
-                />
-              </button>
+              />
             ))}
           </div>
         </div>
