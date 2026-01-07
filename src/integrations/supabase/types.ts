@@ -102,16 +102,20 @@ export type Database = {
       }
       properties: {
         Row: {
+          architect: string | null
           area: string
           bedrooms: number[] | null
+          brochure_url: string | null
           community: string | null
           completion_date: string | null
           created_at: string
           description: string | null
           developer_id: string | null
+          exclusive_amenities: Json | null
           features: Json | null
           golden_visa_eligible: boolean | null
           id: string
+          lifestyle_description: string | null
           location: string
           name: string
           payment_plan: string | null
@@ -120,19 +124,26 @@ export type Database = {
           roi_estimate: number | null
           slug: string
           status: string | null
+          tagline: string | null
           updated_at: string
+          view_type: string[] | null
+          virtual_tour_url: string | null
         }
         Insert: {
+          architect?: string | null
           area: string
           bedrooms?: number[] | null
+          brochure_url?: string | null
           community?: string | null
           completion_date?: string | null
           created_at?: string
           description?: string | null
           developer_id?: string | null
+          exclusive_amenities?: Json | null
           features?: Json | null
           golden_visa_eligible?: boolean | null
           id?: string
+          lifestyle_description?: string | null
           location: string
           name: string
           payment_plan?: string | null
@@ -141,19 +152,26 @@ export type Database = {
           roi_estimate?: number | null
           slug: string
           status?: string | null
+          tagline?: string | null
           updated_at?: string
+          view_type?: string[] | null
+          virtual_tour_url?: string | null
         }
         Update: {
+          architect?: string | null
           area?: string
           bedrooms?: number[] | null
+          brochure_url?: string | null
           community?: string | null
           completion_date?: string | null
           created_at?: string
           description?: string | null
           developer_id?: string | null
+          exclusive_amenities?: Json | null
           features?: Json | null
           golden_visa_eligible?: boolean | null
           id?: string
+          lifestyle_description?: string | null
           location?: string
           name?: string
           payment_plan?: string | null
@@ -162,7 +180,10 @@ export type Database = {
           roi_estimate?: number | null
           slug?: string
           status?: string | null
+          tagline?: string | null
           updated_at?: string
+          view_type?: string[] | null
+          virtual_tour_url?: string | null
         }
         Relationships: [
           {
@@ -170,6 +191,44 @@ export type Database = {
             columns: ["developer_id"]
             isOneToOne: false
             referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_highlights: {
+        Row: {
+          created_at: string
+          description: string | null
+          display_order: number | null
+          icon: string
+          id: string
+          property_id: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          icon: string
+          id?: string
+          property_id: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          icon?: string
+          id?: string
+          property_id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_highlights_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
             referencedColumns: ["id"]
           },
         ]

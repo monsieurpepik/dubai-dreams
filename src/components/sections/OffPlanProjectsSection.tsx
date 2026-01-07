@@ -4,9 +4,8 @@ import { useInView } from 'react-intersection-observer';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { PropertyFilters } from '@/components/properties/PropertyFilters';
-import { PropertyGrid } from '@/components/properties/PropertyGrid';
+import { LuxuryPropertyGrid } from '@/components/properties/LuxuryPropertyGrid';
 import { SplitText } from '@/components/ui/SplitText';
-import { Building2 } from 'lucide-react';
 
 interface Filters {
   area: string;
@@ -131,35 +130,19 @@ export const OffPlanProjectsSection = () => {
       id="off-plan"
       className="relative py-24 md:py-32 bg-background overflow-hidden"
     >
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-[0.02]">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)`,
-            backgroundSize: '40px 40px',
-          }}
-        />
-      </div>
-
       <div className="container-wide relative z-10">
-        {/* Section Header */}
+        {/* Section Header - Editorial Style */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="mb-12"
+          className="mb-16 md:mb-20"
         >
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
-              <Building2 className="w-5 h-5 text-accent" />
-            </div>
-            <span className="text-sm font-medium text-accent uppercase tracking-widest">
-              Featured Projects
-            </span>
-          </div>
+          <span className="text-xs font-medium text-muted-foreground uppercase tracking-luxury mb-6 block">
+            Curated Collection
+          </span>
 
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6">
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-6">
             <SplitText delay={100}>Off-Plan Properties</SplitText>
           </h2>
 
@@ -170,7 +153,7 @@ export const OffPlanProjectsSection = () => {
         </motion.div>
 
         {/* Filters */}
-        <div className="mb-10">
+        <div className="mb-12">
           <PropertyFilters
             filters={filters}
             onFilterChange={handleFilterChange}
@@ -185,15 +168,15 @@ export const OffPlanProjectsSection = () => {
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="mb-6"
+          className="mb-10"
         >
-          <span className="text-sm text-muted-foreground">
-            Showing {filteredProperties.length} of {properties.length} properties
+          <span className="text-xs uppercase tracking-wider text-muted-foreground">
+            {filteredProperties.length} Properties
           </span>
         </motion.div>
 
-        {/* Property Grid */}
-        <PropertyGrid properties={filteredProperties} isLoading={isLoading} />
+        {/* Luxury Property Grid */}
+        <LuxuryPropertyGrid properties={filteredProperties} isLoading={isLoading} />
       </div>
     </section>
   );

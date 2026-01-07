@@ -2,107 +2,125 @@
 @tailwind components;
 @tailwind utilities;
 
-/* OwningDubai Design System - Apple × Bugatti (Electric Blue) */
+/* OwningDubai Design System - JamesEdition × LuxuryProperty.com Inspired */
 
 @layer base {
   :root {
-    /* Core colors - Deep blacks with electric blue accent */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 5%;
+    /* Core colors - Warm, sophisticated palette */
+    --background: 40 20% 99%;
+    --foreground: 30 10% 10%;
     
-    /* Electric Blue - Bugatti accent */
-    --accent: 216 100% 50%;
+    /* Electric Blue - Refined accent */
+    --accent: 216 80% 45%;
     --accent-foreground: 0 0% 100%;
-    --accent-muted: 216 60% 35%;
-    --accent-glow: 216 100% 60%;
+    --accent-muted: 216 50% 35%;
+    --accent-glow: 216 90% 55%;
     
-    /* Metallic Silver */
-    --silver: 0 0% 55%;
-    --silver-muted: 0 0% 35%;
+    /* Warm Gold - Luxury tier accent */
+    --gold: 42 90% 50%;
+    --gold-muted: 42 60% 40%;
+    --gold-glow: 42 100% 60%;
+    
+    /* Champagne - Soft highlight */
+    --champagne: 40 30% 93%;
+    --champagne-foreground: 30 10% 20%;
+    
+    /* Metallic Silver - Warmer tone */
+    --silver: 30 5% 55%;
+    --silver-muted: 30 5% 40%;
     
     /* Card & Surfaces */
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 5%;
+    --card: 40 20% 99%;
+    --card-foreground: 30 10% 10%;
     
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 5%;
+    --popover: 40 20% 99%;
+    --popover-foreground: 30 10% 10%;
     
-    /* Primary - Deep black */
-    --primary: 0 0% 5%;
-    --primary-foreground: 0 0% 100%;
+    /* Primary - Rich charcoal */
+    --primary: 30 10% 8%;
+    --primary-foreground: 40 20% 98%;
     
-    /* Secondary - Light gray */
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 5%;
+    /* Secondary - Warm light gray */
+    --secondary: 40 15% 96%;
+    --secondary-foreground: 30 10% 10%;
     
-    /* Muted */
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    /* Muted - Warm undertone */
+    --muted: 40 15% 95%;
+    --muted-foreground: 30 8% 45%;
     
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 216 100% 50%;
+    --border: 40 15% 88%;
+    --input: 40 15% 88%;
+    --ring: 216 80% 45%;
     
     --radius: 0rem;
     
     /* Sidebar */
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 40 15% 98%;
+    --sidebar-foreground: 30 10% 26%;
+    --sidebar-primary: 30 10% 10%;
+    --sidebar-primary-foreground: 40 15% 98%;
+    --sidebar-accent: 40 15% 95%;
+    --sidebar-accent-foreground: 30 10% 10%;
+    --sidebar-border: 40 15% 91%;
+    --sidebar-ring: 216 80% 50%;
   }
 
-  .dark {
-    --background: 0 0% 3%;
-    --foreground: 0 0% 98%;
+.dark {
+    --background: 20 10% 4%;
+    --foreground: 40 15% 95%;
     
-    /* Electric Blue - Bugatti accent */
-    --accent: 216 100% 50%;
+    /* Electric Blue - Refined accent */
+    --accent: 216 80% 55%;
     --accent-foreground: 0 0% 100%;
-    --accent-muted: 216 60% 35%;
-    --accent-glow: 216 100% 60%;
+    --accent-muted: 216 50% 40%;
+    --accent-glow: 216 90% 65%;
     
-    /* Metallic Silver */
-    --silver: 0 0% 55%;
-    --silver-muted: 0 0% 35%;
+    /* Warm Gold - Luxury tier accent */
+    --gold: 42 90% 55%;
+    --gold-muted: 42 60% 45%;
+    --gold-glow: 42 100% 65%;
     
-    --card: 0 0% 6%;
-    --card-foreground: 0 0% 98%;
+    /* Champagne - Soft highlight */
+    --champagne: 30 15% 15%;
+    --champagne-foreground: 40 20% 90%;
     
-    --popover: 0 0% 6%;
-    --popover-foreground: 0 0% 98%;
+    /* Metallic Silver - Warmer tone */
+    --silver: 30 5% 60%;
+    --silver-muted: 30 5% 45%;
     
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 3%;
+    --card: 20 10% 7%;
+    --card-foreground: 40 15% 95%;
     
-    --secondary: 0 0% 10%;
-    --secondary-foreground: 0 0% 98%;
+    --popover: 20 10% 7%;
+    --popover-foreground: 40 15% 95%;
     
-    --muted: 0 0% 10%;
-    --muted-foreground: 0 0% 55%;
+    --primary: 40 15% 95%;
+    --primary-foreground: 20 10% 4%;
     
-    --destructive: 0 62% 30%;
+    --secondary: 20 10% 12%;
+    --secondary-foreground: 40 15% 95%;
+    
+    --muted: 20 10% 12%;
+    --muted-foreground: 30 8% 55%;
+    
+    --destructive: 0 62% 35%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 0 0% 14%;
-    --input: 0 0% 14%;
-    --ring: 216 100% 50%;
+    --border: 20 10% 16%;
+    --input: 20 10% 16%;
+    --ring: 216 80% 55%;
     
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-background: 20 10% 8%;
+    --sidebar-foreground: 40 15% 90%;
+    --sidebar-primary: 216 70% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 20 10% 15%;
+    --sidebar-accent-foreground: 40 15% 90%;
+    --sidebar-border: 20 10% 16%;
+    --sidebar-ring: 216 80% 55%;
   }
 }
 

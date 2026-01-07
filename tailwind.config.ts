@@ -15,7 +15,12 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-        serif: ['Playfair Display', 'Georgia', 'serif'],
+        serif: ['Playfair Display', 'Georgia', 'Cambria', 'serif'],
+        display: ['Playfair Display', 'Georgia', 'serif'],
+      },
+      letterSpacing: {
+        'luxury': '0.25em',
+        'editorial': '0.15em',
       },
       colors: {
         border: "hsl(var(--border))",
@@ -28,6 +33,15 @@ export default {
           foreground: "hsl(var(--accent-foreground))",
           muted: "hsl(var(--accent-muted))",
           glow: "hsl(var(--accent-glow))",
+        },
+        gold: {
+          DEFAULT: "hsl(var(--gold))",
+          muted: "hsl(var(--gold-muted))",
+          glow: "hsl(var(--gold-glow))",
+        },
+        champagne: {
+          DEFAULT: "hsl(var(--champagne))",
+          foreground: "hsl(var(--champagne-foreground))",
         },
         silver: {
           DEFAULT: "hsl(var(--silver))",
