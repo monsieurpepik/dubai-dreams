@@ -9,6 +9,7 @@ import { PropertyGallery } from '@/components/properties/PropertyGallery';
 import { PaymentPlanBreakdown } from '@/components/properties/PaymentPlanBreakdown';
 import { PropertyMortgageCalculator } from '@/components/properties/PropertyMortgageCalculator';
 import { FloorPlans } from '@/components/properties/FloorPlans';
+import { PropertyInquiryForm } from '@/components/properties/PropertyInquiryForm';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -313,6 +314,13 @@ const PropertyDetail = () => {
 
             {/* Sidebar */}
             <div className="space-y-6">
+              {/* Inquiry Form */}
+              <PropertyInquiryForm
+                propertyId={property.id}
+                propertyName={property.name}
+                goldenVisaEligible={property.golden_visa_eligible}
+              />
+
               {/* Payment Plan */}
               <PaymentPlanBreakdown
                 paymentPlan={property.payment_plan}
