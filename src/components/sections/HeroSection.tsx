@@ -1,190 +1,105 @@
-import { useRef, useEffect } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { MagneticButton } from "@/components/ui/MagneticButton";
+import { motion } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 
 export function HeroSection() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"]
-  });
-
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const y = useTransform(scrollYProgress, [0, 1], [0, 100]);
-
-  const springConfig = { stiffness: 100, damping: 30, restDelta: 0.001 };
-  const mouseX = useSpring(0, springConfig);
-  const mouseY = useSpring(0, springConfig);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const { clientX, clientY } = e;
-      const { innerWidth, innerHeight } = window;
-      const x = (clientX / innerWidth - 0.5) * 15;
-      const y = (clientY / innerHeight - 0.5) * 15;
-      mouseX.set(x);
-      mouseY.set(y);
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [mouseX, mouseY]);
+  const scrollToProperties = () => {
+    const element = document.getElementById('properties');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
-    <section 
-      ref={containerRef}
-      className="relative h-[100svh] flex items-center justify-center overflow-hidden bg-background"
-    >
-      {/* Single dramatic light source - top right (Electric blue chiaroscuro) */}
-      <div 
-        className="absolute -top-40 -right-40 w-[800px] h-[800px] pointer-events-none"
-        style={{ 
-          background: "radial-gradient(ellipse at center, hsl(216 100% 50% / 0.08) 0%, transparent 60%)" 
-        }}
-      />
-
-      {/* Background Image with Parallax - Heavily darkened */}
-      <motion.div 
-        className="absolute inset-0"
-        style={{ scale }}
-      >
+    <section className="relative h-screen w-full overflow-hidden">
+      {/* Background Image with subtle zoom */}
+      <div className="absolute inset-0">
         <motion.div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=2000&auto=format&fit=crop')`,
-            x: mouseX,
-            y: mouseY,
-          }}
-        />
-        {/* Heavy dark overlay - image barely visible */}
-        <div className="absolute inset-0 bg-black/85" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/60" />
-      </motion.div>
-
-      {/* Vignette - stronger */}
-      <div 
-        className="absolute inset-0 pointer-events-none" 
-        style={{ 
-          background: "radial-gradient(ellipse at center, transparent 0%, transparent 30%, hsl(0 0% 0% / 0.7) 100%)" 
-        }} 
-      />
-
-      {/* Noise Texture */}
-      <div 
-        className="absolute inset-0 opacity-[0.015] pointer-events-none"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-        }}
-      />
-
-      {/* Badge - minimal */}
-      <motion.div
-        className="absolute top-24 right-6 md:top-28 md:right-12 z-20"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.5, duration: 1 }}
-      >
-        <span className="text-silver-muted text-[10px] tracking-[0.3em] uppercase">
-          OwningDubai
-        </span>
-      </motion.div>
-
-      {/* Content */}
-      <motion.div 
-        className="relative z-10 text-center text-foreground px-6"
-        style={{ opacity, y }}
-      >
-        {/* Serif Taglines - faster animations */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 1 }}
+          className="h-full w-full"
+          initial={{ scale: 1.05 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 20, ease: "easeOut" }}
         >
-          <motion.p
-            className="font-serif text-xl md:text-2xl lg:text-3xl italic text-silver mb-2 tracking-wide leading-relaxed"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15, duration: 0.6 }}
-          >
-            Not just a home.
-          </motion.p>
-          
-          <motion.p
-            className="font-serif text-xl md:text-2xl lg:text-3xl italic text-silver mb-10 leading-relaxed"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35, duration: 0.6 }}
-          >
-            A new horizon.
-          </motion.p>
-        </motion.div>
-        
-        {/* Main Title - with text shadow for depth */}
-        <div className="overflow-hidden mb-8">
-          <motion.h1
-            className="text-chrome"
-            initial={{ y: "100%", opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            style={{
-              textShadow: '0 4px 30px rgba(0,0,0,0.5), 0 0 80px hsl(216 100% 50% / 0.15)',
-            }}
-          >
-            Dubai<span className="text-accent">.</span>
-          </motion.h1>
-        </div>
-
-        <motion.p
-          className="text-lg md:text-xl text-silver mb-14 max-w-md mx-auto leading-relaxed"
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.6 }}
-        >
-          Off-plan properties from <span className="text-foreground font-medium">AED 480,000</span>
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.85, duration: 0.6 }}
-        >
-          <MagneticButton
-            className="btn-metallic hover:shadow-[0_0_40px_hsl(216_100%_50%/0.4)]"
-            onClick={() => {
-              document.getElementById('opportunity')?.scrollIntoView({ behavior: 'smooth' });
-            }}
-          >
-            Discover
-          </MagneticButton>
-        </motion.div>
-      </motion.div>
-
-      {/* Scroll Indicator - with pulse */}
-      <motion.div
-        className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 0.6 }}
-      >
-        <motion.div
-          className="flex flex-col items-center gap-4 relative"
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <div className="w-[1px] h-12 bg-gradient-to-b from-silver/50 to-transparent" />
-          <motion.div
-            className="absolute -inset-4 rounded-full border border-accent/20"
-            animate={{ scale: [1, 1.5, 1], opacity: [0.4, 0, 0.4] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          <img
+            src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=2000&q=85"
+            alt="Dubai skyline"
+            className="h-full w-full object-cover"
           />
         </motion.div>
-      </motion.div>
+        {/* Dark overlay - JamesEdition style */}
+        <div className="absolute inset-0 bg-black/65" />
+      </div>
 
-      {/* Bottom Gradient Fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background to-transparent z-10" />
+      {/* Content - Centered, minimal */}
+      <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
+        {/* Label */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.3 }}
+          className="mb-6 text-[10px] font-medium uppercase tracking-[0.3em] text-white/50"
+        >
+          Dubai Off-Plan
+        </motion.p>
+
+        {/* Divider */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="mb-10 h-px w-16 bg-white/25"
+        />
+
+        {/* Main Headline */}
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.6 }}
+          className="mb-6 max-w-3xl font-serif text-4xl font-light leading-[1.15] tracking-tight text-white md:text-5xl lg:text-6xl"
+        >
+          Curated residences from the world's most ambitious city
+        </motion.h1>
+
+        {/* Subline */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.9 }}
+          className="mb-14 max-w-lg text-sm leading-relaxed text-white/45 md:text-base"
+        >
+          A collection of exceptional off-plan properties, 
+          selected for discerning investors.
+        </motion.p>
+
+        {/* CTA */}
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 1.2 }}
+          onClick={scrollToProperties}
+          className="border border-white/25 px-10 py-4 text-[11px] font-medium uppercase tracking-[0.2em] text-white transition-all duration-300 hover:border-white/50 hover:bg-white/5"
+        >
+          View Collection
+        </motion.button>
+      </div>
+
+      {/* Scroll Indicator - Minimal */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1.5 }}
+        className="absolute bottom-12 left-1/2 -translate-x-1/2"
+      >
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          className="flex flex-col items-center gap-3"
+        >
+          <span className="text-[9px] uppercase tracking-[0.2em] text-white/35">
+            Scroll
+          </span>
+          <ChevronDown className="h-4 w-4 text-white/35" />
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

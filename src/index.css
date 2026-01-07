@@ -1,126 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* OwningDubai Design System - JamesEdition × LuxuryProperty.com Inspired */
+/* OwningDubai Design System - JamesEdition Premium Aesthetic */
 
 @layer base {
   :root {
-    /* Core colors - Warm, sophisticated palette */
-    --background: 40 20% 99%;
-    --foreground: 30 10% 10%;
+    /* Core colors - Light mode (rarely used) */
+    --background: 0 0% 98%;
+    --foreground: 0 0% 10%;
     
-    /* Electric Blue - Refined accent */
-    --accent: 216 80% 45%;
-    --accent-foreground: 0 0% 100%;
-    --accent-muted: 216 50% 35%;
-    --accent-glow: 216 90% 55%;
+    /* Champagne/Gold accent - signature luxury */
+    --accent: 40 35% 55%;
+    --accent-foreground: 0 0% 5%;
+    --accent-muted: 40 25% 45%;
     
-    /* Warm Gold - Luxury tier accent */
-    --gold: 42 90% 50%;
-    --gold-muted: 42 60% 40%;
-    --gold-glow: 42 100% 60%;
+    /* Warm neutrals */
+    --gold: 42 45% 50%;
+    --gold-muted: 42 30% 40%;
     
-    /* Champagne - Soft highlight */
-    --champagne: 40 30% 93%;
+    --champagne: 40 20% 90%;
     --champagne-foreground: 30 10% 20%;
     
-    /* Metallic Silver - Warmer tone */
-    --silver: 30 5% 55%;
-    --silver-muted: 30 5% 40%;
+    --silver: 30 5% 50%;
+    --silver-muted: 30 5% 35%;
     
-    /* Card & Surfaces */
-    --card: 40 20% 99%;
-    --card-foreground: 30 10% 10%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 10%;
     
-    --popover: 40 20% 99%;
-    --popover-foreground: 30 10% 10%;
+    --popover: 0 0% 98%;
+    --popover-foreground: 0 0% 10%;
     
-    /* Primary - Rich charcoal */
-    --primary: 30 10% 8%;
-    --primary-foreground: 40 20% 98%;
+    --primary: 0 0% 8%;
+    --primary-foreground: 0 0% 98%;
     
-    /* Secondary - Warm light gray */
-    --secondary: 40 15% 96%;
-    --secondary-foreground: 30 10% 10%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 10%;
     
-    /* Muted - Warm undertone */
-    --muted: 40 15% 95%;
-    --muted-foreground: 30 8% 45%;
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 45%;
     
-    --destructive: 0 84% 60%;
+    --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 40 15% 88%;
-    --input: 40 15% 88%;
-    --ring: 216 80% 45%;
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
+    --ring: 40 35% 55%;
     
     --radius: 0rem;
     
-    /* Sidebar */
-    --sidebar-background: 40 15% 98%;
-    --sidebar-foreground: 30 10% 26%;
-    --sidebar-primary: 30 10% 10%;
-    --sidebar-primary-foreground: 40 15% 98%;
-    --sidebar-accent: 40 15% 95%;
-    --sidebar-accent-foreground: 30 10% 10%;
-    --sidebar-border: 40 15% 91%;
-    --sidebar-ring: 216 80% 50%;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 30%;
+    --sidebar-primary: 0 0% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 0 0% 95%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 40 35% 55%;
   }
 
-.dark {
-    --background: 20 10% 4%;
-    --foreground: 40 15% 95%;
+  .dark {
+    /* Deep, warm black - not pure black */
+    --background: 30 10% 4%;
+    --foreground: 40 10% 92%;
     
-    /* Electric Blue - Refined accent */
-    --accent: 216 80% 55%;
-    --accent-foreground: 0 0% 100%;
-    --accent-muted: 216 50% 40%;
-    --accent-glow: 216 90% 65%;
+    /* Champagne/Gold accent - warm and restrained */
+    --accent: 40 30% 60%;
+    --accent-foreground: 30 10% 5%;
+    --accent-muted: 40 20% 50%;
     
-    /* Warm Gold - Luxury tier accent */
-    --gold: 42 90% 55%;
-    --gold-muted: 42 60% 45%;
-    --gold-glow: 42 100% 65%;
+    /* Warm gold tones */
+    --gold: 42 40% 55%;
+    --gold-muted: 42 25% 45%;
     
-    /* Champagne - Soft highlight */
-    --champagne: 30 15% 15%;
-    --champagne-foreground: 40 20% 90%;
+    /* Champagne for highlights */
+    --champagne: 40 15% 20%;
+    --champagne-foreground: 40 15% 90%;
     
-    /* Metallic Silver - Warmer tone */
-    --silver: 30 5% 60%;
-    --silver-muted: 30 5% 45%;
+    /* Silver/neutral tones */
+    --silver: 30 5% 55%;
+    --silver-muted: 30 5% 40%;
     
-    --card: 20 10% 7%;
-    --card-foreground: 40 15% 95%;
+    --card: 30 10% 6%;
+    --card-foreground: 40 10% 92%;
     
-    --popover: 20 10% 7%;
-    --popover-foreground: 40 15% 95%;
+    --popover: 30 10% 6%;
+    --popover-foreground: 40 10% 92%;
     
-    --primary: 40 15% 95%;
-    --primary-foreground: 20 10% 4%;
+    --primary: 40 10% 92%;
+    --primary-foreground: 30 10% 4%;
     
-    --secondary: 20 10% 12%;
-    --secondary-foreground: 40 15% 95%;
+    --secondary: 30 10% 10%;
+    --secondary-foreground: 40 10% 92%;
     
-    --muted: 20 10% 12%;
-    --muted-foreground: 30 8% 55%;
+    --muted: 30 10% 12%;
+    --muted-foreground: 30 5% 50%;
     
-    --destructive: 0 62% 35%;
+    --destructive: 0 50% 40%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 20 10% 16%;
-    --input: 20 10% 16%;
-    --ring: 216 80% 55%;
+    --border: 30 10% 14%;
+    --input: 30 10% 14%;
+    --ring: 40 30% 60%;
     
-    --sidebar-background: 20 10% 8%;
-    --sidebar-foreground: 40 15% 90%;
-    --sidebar-primary: 216 70% 50%;
+    --sidebar-background: 30 10% 5%;
+    --sidebar-foreground: 40 10% 85%;
+    --sidebar-primary: 40 30% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 20 10% 15%;
-    --sidebar-accent-foreground: 40 15% 90%;
-    --sidebar-border: 20 10% 16%;
-    --sidebar-ring: 216 80% 55%;
+    --sidebar-accent: 30 10% 12%;
+    --sidebar-accent-foreground: 40 10% 85%;
+    --sidebar-border: 30 10% 14%;
+    --sidebar-ring: 40 30% 60%;
   }
 }
 
@@ -130,174 +122,116 @@
   }
 
   html {
-    scroll-behavior: auto; /* Lenis handles smooth scroll */
+    scroll-behavior: auto;
   }
   
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     overflow-x: hidden;
   }
 
-  /* 2026 Cinematic Typography */
+  /* JamesEdition Typography - Editorial, Restrained */
   h1 {
-    @apply text-6xl md:text-8xl lg:text-[10rem] font-extralight tracking-tighter leading-[0.9];
-    letter-spacing: -0.04em;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    @apply text-5xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[1.1];
   }
   
   h2 {
-    @apply text-4xl md:text-6xl lg:text-7xl font-light tracking-tight leading-[1.1];
-    letter-spacing: -0.03em;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    @apply text-3xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.15];
   }
   
   h3 {
-    @apply text-2xl md:text-3xl lg:text-4xl font-light tracking-tight;
-    letter-spacing: -0.02em;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    @apply text-2xl md:text-3xl font-light tracking-tight;
   }
   
   p {
-    @apply text-lg md:text-xl leading-relaxed;
+    @apply text-base md:text-lg leading-relaxed;
+    line-height: 1.75;
   }
 
-  /* Selection color - Electric blue */
+  /* Subtle selection */
   ::selection {
-    background: hsl(var(--accent) / 0.3);
+    background: hsl(var(--accent) / 0.2);
   }
 }
 
 @layer components {
-  /* Premium magnetic button */
-  .btn-magnetic {
-    @apply relative bg-accent text-accent-foreground px-10 py-5 font-medium 
-           transition-all duration-500 hover:scale-105 active:scale-[0.98]
-           shadow-[0_0_40px_hsl(var(--accent)/0.3)] hover:shadow-[0_0_60px_hsl(var(--accent)/0.5)];
+  /* JamesEdition Primary CTA - Restrained elegance */
+  .btn-primary {
+    @apply relative bg-foreground text-background px-8 py-4 
+           text-xs font-medium uppercase tracking-[0.2em]
+           transition-all duration-300 
+           hover:opacity-80 active:opacity-70;
   }
   
-  .btn-outline-premium {
-    @apply relative border border-current px-10 py-5 font-medium 
-           transition-all duration-500 overflow-hidden
-           hover:bg-foreground hover:text-background active:scale-[0.98];
+  /* Outline button - editorial style */
+  .btn-outline {
+    @apply relative border border-foreground/30 text-foreground px-8 py-4 
+           text-xs font-medium uppercase tracking-[0.2em]
+           transition-all duration-300 
+           hover:border-foreground hover:bg-foreground/5;
   }
   
-  .btn-outline-accent {
-    @apply border border-accent text-accent px-10 py-5 font-medium 
-           transition-all duration-500 
-           hover:bg-accent hover:text-accent-foreground hover:shadow-[0_0_40px_hsl(var(--accent)/0.3)]
-           active:scale-[0.98];
+  /* Ghost button - minimal */
+  .btn-ghost {
+    @apply text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground
+           transition-opacity duration-300 hover:opacity-60;
   }
 
-  /* Metallic button - Chrome/silver with blue glow */
-  .btn-metallic {
-    @apply relative px-8 py-4 bg-white text-black font-medium uppercase tracking-wider
-           transition-all duration-500 hover:shadow-[0_0_40px_hsl(var(--accent)/0.4)]
-           active:scale-[0.98];
-  }
-
-  /* Section spacing - More dramatic */
+  /* Section spacing - generous */
   .section-padding {
-    @apply py-24 md:py-36 lg:py-48;
+    @apply py-20 md:py-28 lg:py-36;
   }
   
   .section-padding-lg {
-    @apply py-32 md:py-48 lg:py-64;
+    @apply py-28 md:py-40 lg:py-52;
   }
 
   /* Container */
   .container-custom {
-    @apply max-w-7xl mx-auto px-6 md:px-8 lg:px-12;
+    @apply max-w-6xl mx-auto px-6 md:px-8 lg:px-12;
   }
 
   .container-wide {
-    @apply max-w-[1600px] mx-auto px-6 md:px-8 lg:px-16;
+    @apply max-w-[1400px] mx-auto px-6 md:px-8 lg:px-12;
   }
 
-  /* Premium card with glow */
+  /* Premium card - no glow, just subtle elevation */
   .card-premium {
-    @apply bg-card overflow-hidden transition-all duration-700
-           hover:shadow-[0_30px_100px_-20px_hsl(var(--accent)/0.2)]
-           hover:-translate-y-2;
+    @apply bg-card overflow-hidden transition-all duration-500
+           hover:opacity-95;
   }
 
-  /* Glassmorphism 2026 */
+  /* Glass effect - subtle */
   .glass {
-    @apply bg-background/60 backdrop-blur-2xl;
+    @apply bg-background/80 backdrop-blur-xl;
   }
 
   .glass-dark {
-    @apply bg-black/40 backdrop-blur-2xl;
+    @apply bg-black/60 backdrop-blur-xl;
   }
 
-  .glass-accent {
-    @apply bg-accent/10 backdrop-blur-xl border border-accent/20;
+  /* Label styling - JamesEdition signature */
+  .label-editorial {
+    @apply text-[10px] font-medium uppercase tracking-[0.25em] text-muted-foreground;
   }
 
-  /* Gradient text */
-  .text-gradient-accent {
-    @apply bg-gradient-to-r from-accent via-[hsl(216,100%,65%)] to-accent bg-clip-text text-transparent;
+  /* Divider line */
+  .divider {
+    @apply w-12 h-px bg-foreground/20;
   }
 
-  /* Chrome/Metallic text */
-  .text-chrome {
-    @apply text-foreground;
-    text-shadow: 0 2px 10px hsl(0 0% 100% / 0.1);
-  }
-
-  .text-metallic {
-    color: hsl(var(--silver));
-  }
-
-  .text-silver-muted {
-    color: hsl(var(--silver-muted));
-  }
-
-  /* Floating ambient shapes */
-  .ambient-glow {
-    @apply absolute rounded-full blur-[100px] opacity-30 pointer-events-none;
-  }
-
-  /* Image treatment */
+  /* Image cinematic overlay - darker, more dramatic */
   .image-cinematic {
     @apply relative overflow-hidden;
   }
 
   .image-cinematic::after {
     content: '';
-    @apply absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent;
-  }
-
-  /* Premium slider track */
-  .slider-premium [data-orientation="horizontal"] {
-    @apply h-2 bg-gradient-to-r from-muted to-muted-foreground/20;
-  }
-
-  /* Animated border */
-  .border-glow {
-    @apply relative;
-  }
-
-  .border-glow::before {
-    content: '';
-    @apply absolute -inset-[1px] bg-gradient-to-r from-accent via-accent-glow to-accent opacity-0 transition-opacity duration-500;
-    z-index: -1;
-  }
-
-  .border-glow:hover::before {
-    @apply opacity-100;
-  }
-
-  /* Noise texture overlay */
-  .noise-overlay {
-    position: relative;
-  }
-
-  .noise-overlay::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    opacity: 0.03;
-    pointer-events: none;
-    z-index: 1;
+    @apply absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10;
   }
 
   /* Vignette effect */
@@ -308,7 +242,7 @@
   .vignette::after {
     content: '';
     @apply absolute inset-0 pointer-events-none;
-    background: radial-gradient(ellipse at center, transparent 0%, transparent 50%, hsl(0 0% 0% / 0.4) 100%);
+    background: radial-gradient(ellipse at center, transparent 0%, transparent 60%, hsl(0 0% 0% / 0.3) 100%);
   }
 }
 
@@ -323,80 +257,27 @@
     display: none;
   }
 
-  /* Cinematic zoom */
+  /* Slow zoom for hero images */
   .animate-slow-zoom {
     animation: slow-zoom 30s ease-in-out infinite alternate;
   }
 
   @keyframes slow-zoom {
-    from {
-      transform: scale(1);
-    }
-    to {
-      transform: scale(1.15);
-    }
+    from { transform: scale(1); }
+    to { transform: scale(1.08); }
   }
 
-  /* Float animation */
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
+  /* Fade in animation */
+  .animate-fade-in {
+    animation: fade-in 0.8s ease-out forwards;
   }
 
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-20px);
-    }
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
-  /* Pulse glow - Electric blue */
-  .animate-pulse-glow {
-    animation: pulse-glow 3s ease-in-out infinite;
-  }
-
-  @keyframes pulse-glow {
-    0%, 100% {
-      box-shadow: 0 0 40px hsl(var(--accent) / 0.3);
-    }
-    50% {
-      box-shadow: 0 0 80px hsl(var(--accent) / 0.5);
-    }
-  }
-
-  /* Shimmer effect */
-  .animate-shimmer {
-    animation: shimmer 3s linear infinite;
-    background-size: 200% 100%;
-  }
-
-  @keyframes shimmer {
-    0% {
-      background-position: 200% 0;
-    }
-    100% {
-      background-position: -200% 0;
-    }
-  }
-
-  /* Reveal animation */
-  .animate-reveal {
-    animation: reveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  }
-
-  @keyframes reveal {
-    from {
-      opacity: 0;
-      transform: translateY(60px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Accent utilities */
+  /* Color utilities */
   .text-accent {
     color: hsl(var(--accent));
   }
@@ -409,22 +290,11 @@
     border-color: hsl(var(--accent));
   }
 
-  /* Silver utilities */
   .text-silver {
     color: hsl(var(--silver));
   }
 
   .text-silver-muted {
     color: hsl(var(--silver-muted));
-  }
-
-  /* Gradient backgrounds */
-  .bg-gradient-radial {
-    background: radial-gradient(ellipse at center, var(--tw-gradient-from), var(--tw-gradient-to));
-  }
-
-  /* Text shadow for depth */
-  .text-shadow-lg {
-    text-shadow: 0 4px 30px hsl(0 0% 0% / 0.3);
   }
 }

@@ -14,13 +14,14 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-        serif: ['Playfair Display', 'Georgia', 'Cambria', 'serif'],
-        display: ['Playfair Display', 'Georgia', 'serif'],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+        display: ['Cormorant Garamond', 'Georgia', 'serif'],
       },
       letterSpacing: {
         'luxury': '0.25em',
         'editorial': '0.15em',
+        'wide': '0.1em',
       },
       colors: {
         border: "hsl(var(--border))",
