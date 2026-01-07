@@ -97,59 +97,62 @@ export function HeroSection() {
         className="relative z-10 text-center text-foreground px-6"
         style={{ opacity, y }}
       >
-        {/* Serif Taglines - Playfair Display */}
+        {/* Serif Taglines - faster animations */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.5, duration: 1.5 }}
+          transition={{ delay: 0.3, duration: 1 }}
         >
           <motion.p
-            className="font-serif text-xl md:text-2xl lg:text-3xl italic text-silver mb-2 tracking-wide"
-            initial={{ opacity: 0, y: 20 }}
+            className="font-serif text-xl md:text-2xl lg:text-3xl italic text-silver mb-2 tracking-wide leading-relaxed"
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 1 }}
+            transition={{ delay: 0.15, duration: 0.6 }}
           >
             Not just a home.
           </motion.p>
           
           <motion.p
-            className="font-serif text-xl md:text-2xl lg:text-3xl italic text-silver mb-10"
-            initial={{ opacity: 0, y: 20 }}
+            className="font-serif text-xl md:text-2xl lg:text-3xl italic text-silver mb-10 leading-relaxed"
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 1 }}
+            transition={{ delay: 0.35, duration: 0.6 }}
           >
             A new horizon.
           </motion.p>
         </motion.div>
         
-        {/* Main Title - Chrome/Metallic treatment */}
+        {/* Main Title - with text shadow for depth */}
         <div className="overflow-hidden mb-8">
           <motion.h1
             className="text-chrome"
             initial={{ y: "100%", opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.9, duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ delay: 0.5, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              textShadow: '0 4px 30px rgba(0,0,0,0.5), 0 0 80px hsl(216 100% 50% / 0.15)',
+            }}
           >
             Dubai<span className="text-accent">.</span>
           </motion.h1>
         </div>
 
         <motion.p
-          className="text-lg md:text-xl text-silver mb-14 max-w-md mx-auto"
-          initial={{ opacity: 0, y: 20 }}
+          className="text-lg md:text-xl text-silver mb-14 max-w-md mx-auto leading-relaxed"
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.4, duration: 0.8 }}
+          transition={{ delay: 0.7, duration: 0.6 }}
         >
           Off-plan properties from <span className="text-foreground font-medium">AED 480,000</span>
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.7, duration: 0.6 }}
+          transition={{ delay: 0.85, duration: 0.6 }}
         >
           <MagneticButton
-            className="btn-metallic"
+            className="btn-metallic hover:shadow-[0_0_40px_hsl(216_100%_50%/0.4)]"
             onClick={() => {
               document.getElementById('opportunity')?.scrollIntoView({ behavior: 'smooth' });
             }}
@@ -159,19 +162,24 @@ export function HeroSection() {
         </motion.div>
       </motion.div>
 
-      {/* Scroll Indicator - Minimal */}
+      {/* Scroll Indicator - with pulse */}
       <motion.div
         className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2.5, duration: 0.6 }}
+        transition={{ delay: 1.2, duration: 0.6 }}
       >
         <motion.div
-          className="flex flex-col items-center gap-4"
+          className="flex flex-col items-center gap-4 relative"
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
         >
           <div className="w-[1px] h-12 bg-gradient-to-b from-silver/50 to-transparent" />
+          <motion.div
+            className="absolute -inset-4 rounded-full border border-accent/20"
+            animate={{ scale: [1, 1.5, 1], opacity: [0.4, 0, 0.4] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          />
         </motion.div>
       </motion.div>
 
