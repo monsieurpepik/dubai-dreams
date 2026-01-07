@@ -57,6 +57,7 @@ export type Database = {
           mortgage_data: Json | null
           name: string | null
           phone: string | null
+          property_id: string | null
           quiz_responses: Json | null
           source: string | null
           updated_at: string
@@ -70,6 +71,7 @@ export type Database = {
           mortgage_data?: Json | null
           name?: string | null
           phone?: string | null
+          property_id?: string | null
           quiz_responses?: Json | null
           source?: string | null
           updated_at?: string
@@ -83,11 +85,20 @@ export type Database = {
           mortgage_data?: Json | null
           name?: string | null
           phone?: string | null
+          property_id?: string | null
           quiz_responses?: Json | null
           source?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "leads_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       properties: {
         Row: {
