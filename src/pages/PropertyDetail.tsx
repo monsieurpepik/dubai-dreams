@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Share2, Heart, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Share2, Heart, CheckCircle2, Waves, Utensils, Sparkles, ConciergeBell, Car, Theater } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -13,6 +13,25 @@ import { FloorPlans } from '@/components/properties/FloorPlans';
 import { PrivateConsultationForm } from '@/components/properties/PrivateConsultationForm';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+
+interface ExclusiveAmenity {
+  icon: string;
+  title: string;
+  description: string;
+}
+
+// Simple icon mapping for amenities
+const getAmenityIcon = (iconName: string) => {
+  const iconMap: Record<string, React.ElementType> = {
+    waves: Waves,
+    utensils: Utensils,
+    spa: Sparkles,
+    'concierge-bell': ConciergeBell,
+    car: Car,
+    theater: Theater,
+  };
+  return iconMap[iconName] || CheckCircle2;
+};
 
 const PropertyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -125,8 +144,18 @@ const PropertyDetail = () => {
                   {property.name}
                 </h1>
                 
+                {/* Tagline */}
+                {property.tagline && (
+                  <p className="text-xl md:text-2xl text-muted-foreground italic mb-4">
+                    "{property.tagline}"
+                  </p>
+                )}
+                
                 <p className="text-lg text-muted-foreground">
                   {property.area}, {property.location}
+                  {property.architect && (
+                    <span className="text-muted-foreground/70"> · Designed by {property.architect}</span>
+                  )}
                 </p>
 
                 {/* Actions */}
@@ -155,13 +184,31 @@ const PropertyDetail = () => {
                 developer={property.developer?.name}
               />
 
-              {/* Description */}
-              {property.description && (
+              {/* Lifestyle Description */}
+              {property.lifestyle_description && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="prose prose-lg max-w-none"
+                  className="relative"
+                >
+                  <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-6">
+                    The Residence
+                  </h2>
+                  <div className="pl-6 border-l-2 border-accent/30">
+                    <p className="text-muted-foreground leading-relaxed text-lg">
+                      {property.lifestyle_description}
+                    </p>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Standard Description (fallback) */}
+              {!property.lifestyle_description && property.description && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
                 >
                   <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-6">
                     The Residence
@@ -169,6 +216,42 @@ const PropertyDetail = () => {
                   <p className="text-muted-foreground leading-relaxed text-lg">
                     {property.description}
                   </p>
+                </motion.div>
+              )}
+
+              {/* Exclusive Amenities */}
+              {property.exclusive_amenities && Array.isArray(property.exclusive_amenities) && property.exclusive_amenities.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                >
+                  <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-8">
+                    Exclusive Amenities
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {(property.exclusive_amenities as unknown as ExclusiveAmenity[]).map((amenity, index) => {
+                      const IconComponent = getAmenityIcon(amenity.icon);
+                      return (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, y: 10 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: index * 0.1 }}
+                          className="flex gap-4 p-5 bg-champagne/30 border border-border/30"
+                        >
+                          <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+                            <IconComponent className="w-5 h-5 text-accent" />
+                          </div>
+                          <div>
+                            <h3 className="font-medium text-foreground mb-1">{amenity.title}</h3>
+                            <p className="text-sm text-muted-foreground">{amenity.description}</p>
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
                 </motion.div>
               )}
 
