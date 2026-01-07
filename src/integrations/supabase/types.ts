@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      developers: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          logo_url: string | null
+          name: string
+          slug: string
+          total_projects: number | null
+          years_active: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          name: string
+          slug: string
+          total_projects?: number | null
+          years_active?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          slug?: string
+          total_projects?: number | null
+          years_active?: number | null
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           created_at: string
@@ -55,6 +88,118 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      properties: {
+        Row: {
+          area: string
+          bedrooms: number[] | null
+          community: string | null
+          completion_date: string | null
+          created_at: string
+          description: string | null
+          developer_id: string | null
+          features: Json | null
+          golden_visa_eligible: boolean | null
+          id: string
+          location: string
+          name: string
+          payment_plan: string | null
+          price_from: number
+          price_to: number | null
+          roi_estimate: number | null
+          slug: string
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          area: string
+          bedrooms?: number[] | null
+          community?: string | null
+          completion_date?: string | null
+          created_at?: string
+          description?: string | null
+          developer_id?: string | null
+          features?: Json | null
+          golden_visa_eligible?: boolean | null
+          id?: string
+          location: string
+          name: string
+          payment_plan?: string | null
+          price_from: number
+          price_to?: number | null
+          roi_estimate?: number | null
+          slug: string
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          area?: string
+          bedrooms?: number[] | null
+          community?: string | null
+          completion_date?: string | null
+          created_at?: string
+          description?: string | null
+          developer_id?: string | null
+          features?: Json | null
+          golden_visa_eligible?: boolean | null
+          id?: string
+          location?: string
+          name?: string
+          payment_plan?: string | null
+          price_from?: number
+          price_to?: number | null
+          roi_estimate?: number | null
+          slug?: string
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "properties_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_images: {
+        Row: {
+          alt_text: string | null
+          created_at: string
+          display_order: number | null
+          id: string
+          is_primary: boolean | null
+          property_id: string
+          url: string
+        }
+        Insert: {
+          alt_text?: string | null
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_primary?: boolean | null
+          property_id: string
+          url: string
+        }
+        Update: {
+          alt_text?: string | null
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_primary?: boolean | null
+          property_id?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_images_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
