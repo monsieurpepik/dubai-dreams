@@ -41,33 +41,32 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="bg-foreground text-background">
+    <footer className="bg-black text-white border-t border-white/10">
       <div className="container-custom section-padding">
         {/* Main Footer */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-12">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 lg:gap-16">
           {/* Brand Column */}
-          <div className="col-span-2 md:col-span-3 lg:col-span-1 mb-8 lg:mb-0">
-            <a href="/" className="inline-flex items-center gap-2 mb-6">
-              <span className="text-2xl font-semibold">
-                <span className="text-gold">Owning</span>
-                <span>Dubai</span>
+          <div className="col-span-2 md:col-span-3 lg:col-span-1 mb-10 lg:mb-0">
+            <a href="/" className="inline-flex items-center gap-2 mb-8">
+              <span className="text-2xl font-light tracking-tight">
+                Owning<span className="font-medium">Dubai</span>
               </span>
             </a>
-            <p className="text-background/60 text-sm mb-6 max-w-xs">
+            <p className="text-silver text-sm mb-8 max-w-xs font-light leading-relaxed">
               Your gateway to premium Dubai real estate. Off-plan properties, 
               Golden Visa opportunities, and expert guidance.
             </p>
-            <div className="space-y-3 text-sm text-background/60">
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4" />
+            <div className="space-y-4 text-sm text-silver">
+              <div className="flex items-center gap-3">
+                <MapPin className="w-4 h-4 text-gold" />
                 <span>Dubai, United Arab Emirates</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4" />
+              <div className="flex items-center gap-3">
+                <Phone className="w-4 h-4 text-gold" />
                 <span>+971 4 XXX XXXX</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4" />
+              <div className="flex items-center gap-3">
+                <Mail className="w-4 h-4 text-gold" />
                 <span>hello@owningdubai.com</span>
               </div>
             </div>
@@ -76,13 +75,13 @@ export function Footer() {
           {/* Link Columns */}
           {Object.entries(footerLinks).map(([key, section]) => (
             <div key={key}>
-              <h4 className="font-medium text-sm mb-4">{section.title}</h4>
-              <ul className="space-y-3">
+              <h4 className="text-xs font-medium uppercase tracking-[0.2em] mb-6 text-white">{section.title}</h4>
+              <ul className="space-y-4">
                 {section.links.map((link) => (
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      className="text-sm text-background/60 hover:text-gold transition-colors"
+                      className="text-sm text-silver hover:text-gold transition-colors duration-300"
                     >
                       {link.label}
                     </a>
@@ -94,18 +93,20 @@ export function Footer() {
         </div>
 
         {/* OwningX Network */}
-        <div className="mt-16 pt-8 border-t border-background/10">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <Building2 className="w-8 h-8 text-gold" />
+        <div className="mt-20 pt-10 border-t border-white/10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="flex items-center gap-5">
+              <div className="w-12 h-12 border border-gold/30 flex items-center justify-center">
+                <Building2 className="w-5 h-5 text-gold" />
+              </div>
               <div>
                 <p className="font-medium text-sm">Part of OwningX Global</p>
-                <p className="text-xs text-background/60">500+ platforms, 190 countries</p>
+                <p className="text-xs text-silver">500+ platforms, 190 countries</p>
               </div>
             </div>
             <a
               href="#"
-              className="text-sm text-gold hover:underline"
+              className="text-sm text-gold hover:underline transition-all"
             >
               Explore other markets →
             </a>
@@ -113,18 +114,18 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-background/10">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-background/40">
-            <div className="flex items-center gap-6">
-              <span>© 2025 OwningDubai. All rights reserved.</span>
-              <a href="#" className="hover:text-background/60">Privacy Policy</a>
-              <a href="#" className="hover:text-background/60">Terms of Service</a>
+        <div className="mt-16 pt-10 border-t border-white/10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-silver">
+            <div className="flex items-center gap-8">
+              <span>© 2026 OwningDubai. All rights reserved.</span>
+              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="px-2 py-1 border border-background/20 rounded text-[10px]">
+            <div className="flex items-center gap-3">
+              <span className="px-3 py-1.5 border border-white/20 text-[10px] uppercase tracking-wider">
                 RERA Certified
               </span>
-              <span className="px-2 py-1 border border-background/20 rounded text-[10px]">
+              <span className="px-3 py-1.5 border border-white/20 text-[10px] uppercase tracking-wider">
                 DLD Registered
               </span>
             </div>
