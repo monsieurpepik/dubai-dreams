@@ -1,1 +1,4 @@
 project_id = "mmmlhwqxzxfrsmkigdbj"
+
+[functions.calculate-mortgage]
+verify_jwt = false

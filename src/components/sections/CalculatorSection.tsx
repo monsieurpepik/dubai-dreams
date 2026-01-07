@@ -1,9 +1,10 @@
 import { useState, useMemo, useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Slider } from "@/components/ui/slider";
-import { Check, Home, Sparkles } from "lucide-react";
+import { Check, Home, Sparkles, Building2, Percent, Calendar, TrendingUp } from "lucide-react";
 import { MagneticButton } from "@/components/ui/MagneticButton";
+import { supabase } from "@/integrations/supabase/client";
 
 const propertyMatches = [
   { 
@@ -48,11 +49,32 @@ const propertyMatches = [
   },
 ];
 
+// UAE Bank rates (2025)
+const UAE_BANKS = [
+  { name: 'Emirates NBD', rate: 4.49, logo: '🏦' },
+  { name: 'Mashreq Bank', rate: 4.74, logo: '🏛️' },
+  { name: 'FAB', rate: 4.69, logo: '🏢' },
+  { name: 'ADCB', rate: 4.99, logo: '🏦' },
+  { name: 'RAK Bank', rate: 5.25, logo: '🏛️' },
+];
+
 function formatCurrency(value: number): string {
   if (value >= 1000000) {
     return `AED ${(value / 1000000).toFixed(1)}M`;
   }
   return `AED ${(value / 1000).toFixed(0)}K`;
+}
+
+function calculateMonthlyPayment(principal: number, annualRate: number, termYears: number): number {
+  const monthlyRate = annualRate / 100 / 12;
+  const numPayments = termYears * 12;
+  
+  if (monthlyRate === 0) return principal / numPayments;
+  
+  const payment = principal * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / 
+                  (Math.pow(1 + monthlyRate, numPayments) - 1);
+  
+  return Math.round(payment);
 }
 
 export function CalculatorSection() {
@@ -64,6 +86,10 @@ export function CalculatorSection() {
 
   const [investment, setInvestment] = useState([400000]);
   const [monthly, setMonthly] = useState([15000]);
+  const [isResident, setIsResident] = useState(true);
+  const [termYears, setTermYears] = useState([25]);
+  const [downPaymentPercent, setDownPaymentPercent] = useState([20]);
+  const [selectedBank, setSelectedBank] = useState(UAE_BANKS[0]);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -78,20 +104,37 @@ export function CalculatorSection() {
     ) || propertyMatches[propertyMatches.length - 1];
   }, [investment]);
 
+  // Calculate mortgage with real bank rates
   const calculations = useMemo(() => {
     const propertyPrice = matchedProperty.price;
-    const downPayment = propertyPrice * 0.2;
-    const mortgage = propertyPrice * 0.8;
-    const monthlyMortgage = Math.round((mortgage * 0.045) / 12 + mortgage / 300);
+    const maxLTV = isResident ? 80 : 75;
+    const actualDownPayment = Math.max(downPaymentPercent[0], 100 - maxLTV);
+    const downPayment = propertyPrice * (actualDownPayment / 100);
+    const loanAmount = propertyPrice - downPayment;
+    
+    const monthlyMortgage = calculateMonthlyPayment(loanAmount, selectedBank.rate, termYears[0]);
+    const totalPayment = monthlyMortgage * termYears[0] * 12;
+    const totalInterest = totalPayment - loanAmount;
+
+    // Calculate for all banks
+    const bankComparison = UAE_BANKS.map(bank => ({
+      ...bank,
+      monthlyPayment: calculateMonthlyPayment(loanAmount, bank.rate, termYears[0]),
+    })).sort((a, b) => a.monthlyPayment - b.monthlyPayment);
 
     return {
       propertyPrice,
       downPayment,
-      mortgage,
+      loanAmount,
       monthlyMortgage,
+      totalPayment,
+      totalInterest,
+      maxLTV,
       fitsbudget: investment[0] >= downPayment && monthly[0] >= monthlyMortgage,
+      bankComparison,
+      isGoldenVisaEligible: propertyPrice >= 2000000,
     };
-  }, [matchedProperty, investment, monthly]);
+  }, [matchedProperty, investment, monthly, isResident, termYears, downPaymentPercent, selectedBank]);
 
   return (
     <section 
@@ -122,90 +165,151 @@ export function CalculatorSection() {
             animate={inView ? { opacity: 1 } : {}}
             transition={{ delay: 0.2, duration: 0.8 }}
           >
-            Investment Calculator
+            Mortgage Calculator
           </motion.p>
           <h2 className="mb-6">
-            See what you<br />
-            <span className="text-muted-foreground">can afford.</span>
+            Real UAE<br />
+            <span className="text-muted-foreground">bank rates.</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg font-light">
-            Real-time matching based on your investment capacity.
+            Calculate your mortgage with live rates from Emirates NBD, Mashreq, FAB, and more.
           </p>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start max-w-6xl mx-auto">
-          {/* Calculator Inputs - Dark glassmorphic */}
+          {/* Calculator Inputs */}
           <motion.div
-            className="space-y-12"
+            className="space-y-10"
             initial={{ opacity: 0, x: -60 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ delay: 0.3, duration: 1 }}
           >
             {/* Investment Slider */}
-            <div className="space-y-8">
+            <div className="space-y-6">
               <div className="flex items-baseline justify-between">
-                <label className="text-lg font-light tracking-wide">Investment today</label>
+                <label className="text-lg font-light tracking-wide">Down Payment Available</label>
                 <motion.span 
-                  className="text-4xl md:text-5xl font-extralight text-foreground tabular-nums drop-shadow-[0_0_20px_hsl(var(--accent)/0.3)]"
+                  className="text-3xl md:text-4xl font-extralight text-foreground tabular-nums drop-shadow-[0_0_20px_hsl(var(--accent)/0.3)]"
                 >
                   {formatCurrency(investment[0])}
                 </motion.span>
               </div>
-              <div className="relative py-4">
-                <Slider
-                  value={investment}
-                  onValueChange={setInvestment}
-                  min={100000}
-                  max={2000000}
-                  step={50000}
-                  className="py-4"
-                />
-              </div>
+              <Slider
+                value={investment}
+                onValueChange={setInvestment}
+                min={100000}
+                max={2000000}
+                step={50000}
+                className="py-4"
+              />
               <div className="flex justify-between text-xs text-metallic uppercase tracking-widest">
                 <span>AED 100K</span>
                 <span>AED 2M</span>
               </div>
             </div>
 
-            {/* Monthly Slider */}
-            <div className="space-y-8">
+            {/* Residency Status */}
+            <div className="flex gap-4">
+              <button
+                onClick={() => setIsResident(true)}
+                className={`flex-1 py-3 px-4 border transition-all duration-300 ${
+                  isResident 
+                    ? 'border-accent bg-accent/10 text-accent' 
+                    : 'border-border/30 text-muted-foreground hover:border-border'
+                }`}
+              >
+                <span className="text-sm font-medium">UAE Resident</span>
+                <span className="block text-xs opacity-60 mt-1">Max 80% LTV</span>
+              </button>
+              <button
+                onClick={() => setIsResident(false)}
+                className={`flex-1 py-3 px-4 border transition-all duration-300 ${
+                  !isResident 
+                    ? 'border-accent bg-accent/10 text-accent' 
+                    : 'border-border/30 text-muted-foreground hover:border-border'
+                }`}
+              >
+                <span className="text-sm font-medium">Non-Resident</span>
+                <span className="block text-xs opacity-60 mt-1">Max 75% LTV</span>
+              </button>
+            </div>
+
+            {/* Loan Term Slider */}
+            <div className="space-y-6">
               <div className="flex items-baseline justify-between">
-                <label className="text-lg font-light tracking-wide">Monthly comfort</label>
+                <label className="text-lg font-light tracking-wide flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-accent" />
+                  Loan Term
+                </label>
+                <span className="text-2xl font-extralight text-foreground tabular-nums">
+                  {termYears[0]} years
+                </span>
+              </div>
+              <Slider
+                value={termYears}
+                onValueChange={setTermYears}
+                min={10}
+                max={25}
+                step={1}
+                className="py-4"
+              />
+              <div className="flex justify-between text-xs text-metallic uppercase tracking-widest">
+                <span>10 Years</span>
+                <span>25 Years</span>
+              </div>
+            </div>
+
+            {/* Down Payment % Slider */}
+            <div className="space-y-6">
+              <div className="flex items-baseline justify-between">
+                <label className="text-lg font-light tracking-wide flex items-center gap-2">
+                  <Percent className="w-4 h-4 text-accent" />
+                  Down Payment
+                </label>
+                <span className="text-2xl font-extralight text-foreground tabular-nums">
+                  {downPaymentPercent[0]}%
+                </span>
+              </div>
+              <Slider
+                value={downPaymentPercent}
+                onValueChange={setDownPaymentPercent}
+                min={isResident ? 20 : 25}
+                max={50}
+                step={5}
+                className="py-4"
+              />
+              <div className="flex justify-between text-xs text-metallic uppercase tracking-widest">
+                <span>{isResident ? '20%' : '25%'} Min</span>
+                <span>50%</span>
+              </div>
+            </div>
+
+            {/* Monthly Budget */}
+            <div className="space-y-6">
+              <div className="flex items-baseline justify-between">
+                <label className="text-lg font-light tracking-wide">Monthly Budget</label>
                 <motion.span 
-                  className="text-4xl md:text-5xl font-extralight text-foreground tabular-nums drop-shadow-[0_0_20px_hsl(var(--accent)/0.3)]"
+                  className="text-3xl md:text-4xl font-extralight text-foreground tabular-nums drop-shadow-[0_0_20px_hsl(var(--accent)/0.3)]"
                 >
                   {formatCurrency(monthly[0])}
                 </motion.span>
               </div>
-              <div className="relative py-4">
-                <Slider
-                  value={monthly}
-                  onValueChange={setMonthly}
-                  min={5000}
-                  max={50000}
-                  step={1000}
-                  className="py-4"
-                />
-              </div>
+              <Slider
+                value={monthly}
+                onValueChange={setMonthly}
+                min={5000}
+                max={50000}
+                step={1000}
+                className="py-4"
+              />
               <div className="flex justify-between text-xs text-metallic uppercase tracking-widest">
                 <span>AED 5K</span>
                 <span>AED 50K</span>
               </div>
             </div>
-
-            {/* Info */}
-            <div className="flex items-start gap-4 p-6 bg-card/30 border border-border/30 backdrop-blur-sm">
-              <Sparkles className="w-5 h-5 text-accent flex-shrink-0 mt-1" />
-              <div>
-                <p className="font-medium mb-1 text-sm">Smart Matching</p>
-                <p className="text-sm text-muted-foreground">
-                  We analyze payment plans to match your capacity.
-                </p>
-              </div>
-            </div>
           </motion.div>
 
-          {/* Results Panel - Sharp corners, floating */}
+          {/* Results Panel */}
           <motion.div
             className="relative bg-card/50 border border-border/30 overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)]"
             initial={{ opacity: 0, x: 60 }}
@@ -225,6 +329,18 @@ export function CalculatorSection() {
                 style={{ filter: "brightness(0.8)" }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
+              
+              {/* Golden Visa Badge */}
+              {calculations.isGoldenVisaEligible && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="absolute top-4 right-4 px-3 py-1.5 bg-accent/90 text-background text-xs font-medium rounded-full flex items-center gap-1.5"
+                >
+                  <span>✦</span> Golden Visa Eligible
+                </motion.div>
+              )}
+              
               <div className="absolute bottom-6 left-6 right-6 text-white">
                 <p className="text-xs text-white/60 uppercase tracking-widest mb-1">You could own a</p>
                 <motion.h3 
@@ -240,7 +356,7 @@ export function CalculatorSection() {
               </div>
             </div>
 
-            {/* Breakdown */}
+            {/* Mortgage Breakdown */}
             <div className="p-6 lg:p-8 space-y-6">
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 bg-background/50 border border-border/20">
@@ -256,16 +372,57 @@ export function CalculatorSection() {
                   </p>
                 </div>
                 <div className="p-4 bg-background/50 border border-border/20">
-                  <p className="text-xs text-metallic uppercase tracking-widest mb-1">Mortgage</p>
+                  <p className="text-xs text-metallic uppercase tracking-widest mb-1">Loan Amount</p>
                   <p className="text-xl font-light">
-                    {formatCurrency(calculations.mortgage)}
+                    {formatCurrency(calculations.loanAmount)}
                   </p>
                 </div>
                 <div className="p-4 bg-background/50 border border-border/20">
-                  <p className="text-xs text-metallic uppercase tracking-widest mb-1">Monthly Est.</p>
+                  <p className="text-xs text-metallic uppercase tracking-widest mb-1">Total Interest</p>
                   <p className="text-xl font-light">
-                    {formatCurrency(calculations.monthlyMortgage)}
+                    {formatCurrency(calculations.totalInterest)}
                   </p>
+                </div>
+              </div>
+
+              {/* Monthly Payment Highlight */}
+              <div className="p-5 bg-accent/10 border border-accent/30">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-sm text-accent uppercase tracking-widest">Monthly Payment</p>
+                  <p className="text-xs text-muted-foreground">{selectedBank.name} @ {selectedBank.rate}%</p>
+                </div>
+                <p className="text-4xl font-extralight text-foreground">
+                  {formatCurrency(calculations.monthlyMortgage)}
+                  <span className="text-lg text-muted-foreground">/month</span>
+                </p>
+              </div>
+
+              {/* Bank Comparison */}
+              <div className="space-y-3">
+                <p className="text-xs text-metallic uppercase tracking-widest flex items-center gap-2">
+                  <Building2 className="w-3 h-3" /> Compare UAE Banks
+                </p>
+                <div className="space-y-2 max-h-40 overflow-y-auto">
+                  {calculations.bankComparison.map((bank) => (
+                    <button
+                      key={bank.name}
+                      onClick={() => setSelectedBank(bank)}
+                      className={`w-full flex items-center justify-between p-3 border transition-all duration-300 ${
+                        selectedBank.name === bank.name
+                          ? 'border-accent bg-accent/5'
+                          : 'border-border/20 hover:border-border/40'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg">{bank.logo}</span>
+                        <div className="text-left">
+                          <p className="text-sm font-medium">{bank.name}</p>
+                          <p className="text-xs text-muted-foreground">{bank.rate}% APR</p>
+                        </div>
+                      </div>
+                      <p className="text-sm font-medium">{formatCurrency(bank.monthlyPayment)}/mo</p>
+                    </button>
+                  ))}
                 </div>
               </div>
 
@@ -293,7 +450,7 @@ export function CalculatorSection() {
 
               {/* CTA */}
               <MagneticButton className="w-full btn-metallic text-sm uppercase tracking-wider">
-                View Matching Properties
+                Get Pre-Approved
               </MagneticButton>
             </div>
           </motion.div>

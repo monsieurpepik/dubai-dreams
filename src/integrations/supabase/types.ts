@@ -18,7 +18,10 @@ export type Database = {
         Row: {
           created_at: string
           email: string
+          golden_visa_interest: boolean | null
           id: string
+          investment_capacity: number | null
+          mortgage_data: Json | null
           name: string | null
           phone: string | null
           quiz_responses: Json | null
@@ -28,7 +31,10 @@ export type Database = {
         Insert: {
           created_at?: string
           email: string
+          golden_visa_interest?: boolean | null
           id?: string
+          investment_capacity?: number | null
+          mortgage_data?: Json | null
           name?: string | null
           phone?: string | null
           quiz_responses?: Json | null
@@ -38,7 +44,10 @@ export type Database = {
         Update: {
           created_at?: string
           email?: string
+          golden_visa_interest?: boolean | null
           id?: string
+          investment_capacity?: number | null
+          mortgage_data?: Json | null
           name?: string | null
           phone?: string | null
           quiz_responses?: Json | null
