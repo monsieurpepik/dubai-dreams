@@ -3,7 +3,7 @@ import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { OpportunitySection } from "@/components/sections/OpportunitySection";
 import { MathematicsSection } from "@/components/sections/MathematicsSection";
-import { PropertiesSection } from "@/components/sections/PropertiesSection";
+import { OffPlanProjectsSection } from "@/components/sections/OffPlanProjectsSection";
 import { CalculatorSection } from "@/components/sections/CalculatorSection";
 import { GoldenVisaSection } from "@/components/sections/GoldenVisaSection";
 import { GuideSection } from "@/components/sections/GuideSection";
@@ -20,7 +20,7 @@ const Index = () => {
         <HeroSection />
         <OpportunitySection />
         <MathematicsSection />
-        <PropertiesSection />
+        <OffPlanProjectsSection />
         <CalculatorSection />
         <GoldenVisaSection />
         <GuideSection />
