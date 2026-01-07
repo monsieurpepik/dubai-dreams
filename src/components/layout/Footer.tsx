@@ -58,15 +58,15 @@ export function Footer() {
             </p>
             <div className="space-y-4 text-sm text-silver">
               <div className="flex items-center gap-3">
-                <MapPin className="w-4 h-4 text-gold" />
+                <MapPin className="w-4 h-4 text-accent" />
                 <span>Dubai, United Arab Emirates</span>
               </div>
               <div className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-gold" />
+                <Phone className="w-4 h-4 text-accent" />
                 <span>+971 4 XXX XXXX</span>
               </div>
               <div className="flex items-center gap-3">
-                <Mail className="w-4 h-4 text-gold" />
+                <Mail className="w-4 h-4 text-accent" />
                 <span>hello@owningdubai.com</span>
               </div>
             </div>
@@ -81,7 +81,7 @@ export function Footer() {
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      className="text-sm text-silver hover:text-gold transition-colors duration-300"
+                      className="text-sm text-silver hover:text-accent transition-colors duration-300"
                     >
                       {link.label}
                     </a>
@@ -96,8 +96,8 @@ export function Footer() {
         <div className="mt-20 pt-10 border-t border-white/10">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex items-center gap-5">
-              <div className="w-12 h-12 border border-gold/30 flex items-center justify-center">
-                <Building2 className="w-5 h-5 text-gold" />
+              <div className="w-12 h-12 border border-accent/30 flex items-center justify-center">
+                <Building2 className="w-5 h-5 text-accent" />
               </div>
               <div>
                 <p className="font-medium text-sm">Part of OwningX Global</p>
@@ -106,7 +106,7 @@ export function Footer() {
             </div>
             <a
               href="#"
-              className="text-sm text-gold hover:underline transition-all"
+              className="text-sm text-accent hover:underline transition-all"
             >
               Explore other markets →
             </a>

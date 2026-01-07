@@ -60,9 +60,9 @@ export function Header() {
           transition={{ duration: 0.5 }}
         />
 
-        {/* Progress Bar - Gold accent */}
+        {/* Progress Bar - Electric blue accent */}
         <motion.div 
-          className="absolute bottom-0 left-0 h-px bg-gradient-to-r from-gold via-gold to-gold/50"
+          className="absolute bottom-0 left-0 h-px bg-gradient-to-r from-accent via-accent to-accent/50"
           style={{ width: progressWidth }}
         />
 
@@ -96,7 +96,7 @@ export function Header() {
                   {link.label}
                   {activeSection === link.href.replace("#", "") && (
                     <motion.span
-                      className="absolute inset-0 bg-gold/5 rounded-full -z-10"
+                      className="absolute inset-0 bg-accent/5 -z-10"
                       layoutId="activeSection"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
@@ -169,7 +169,7 @@ export function Header() {
                   key={link.label}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-4xl md:text-5xl font-extralight tracking-wider uppercase text-foreground hover:text-gold transition-colors duration-500"
+                  className="text-4xl md:text-5xl font-extralight tracking-wider uppercase text-foreground hover:text-accent transition-colors duration-500"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}

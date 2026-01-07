@@ -93,7 +93,7 @@ export function PropertiesSection() {
           >
             <div>
               <motion.p
-                className="text-gold text-xs uppercase tracking-[0.3em] mb-4"
+                className="text-accent text-xs uppercase tracking-[0.3em] mb-4"
                 initial={{ opacity: 0 }}
                 animate={inView ? { opacity: 1 } : {}}
                 transition={{ delay: 0.2, duration: 0.8 }}
@@ -110,13 +110,13 @@ export function PropertiesSection() {
             <div className="flex items-center gap-4">
               <button
                 onClick={prevSlide}
-                className="w-14 h-14 border border-border/50 flex items-center justify-center hover:border-gold hover:text-gold transition-all duration-500"
+                className="w-14 h-14 border border-border/50 flex items-center justify-center hover:border-accent hover:text-accent transition-all duration-500"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
               <button
                 onClick={nextSlide}
-                className="w-14 h-14 border border-border/50 flex items-center justify-center hover:border-gold hover:text-gold transition-all duration-500"
+                className="w-14 h-14 border border-border/50 flex items-center justify-center hover:border-accent hover:text-accent transition-all duration-500"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -154,7 +154,7 @@ export function PropertiesSection() {
                   <div className="absolute inset-0 bg-gradient-to-r from-background/50 via-transparent to-transparent lg:hidden" />
                   
                   {/* Payment Plan Badge */}
-                  <div className="absolute top-6 left-6 bg-gold text-gold-foreground text-xs font-medium px-4 py-2 uppercase tracking-wider">
+                  <div className="absolute top-6 left-6 bg-accent text-accent-foreground text-xs font-medium px-4 py-2 uppercase tracking-wider">
                     {properties[activeIndex].paymentPlan} Plan
                   </div>
 
@@ -169,7 +169,7 @@ export function PropertiesSection() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     style={{
-                      boxShadow: "inset 0 0 0 1px hsl(var(--gold) / 0.2)"
+                      boxShadow: "inset 0 0 0 1px hsl(var(--accent) / 0.2)"
                     }}
                   />
                 </div>
@@ -193,18 +193,18 @@ export function PropertiesSection() {
 
                     <div className="flex flex-wrap gap-6 mb-10">
                       <div className="flex items-center gap-2 text-muted-foreground">
-                        <MapPin className="w-4 h-4 text-gold" />
+                        <MapPin className="w-4 h-4 text-accent" />
                         <span className="text-sm">{properties[activeIndex].location}</span>
                       </div>
                       <div className="flex items-center gap-2 text-muted-foreground">
-                        <Calendar className="w-4 h-4 text-gold" />
+                        <Calendar className="w-4 h-4 text-accent" />
                         <span className="text-sm">{properties[activeIndex].completion}</span>
                       </div>
                     </div>
 
                     <div className="mb-10">
                       <p className="text-metallic text-xs uppercase tracking-[0.2em] mb-2">Starting from</p>
-                      <p className="text-4xl md:text-5xl font-extralight text-gold drop-shadow-[0_0_20px_hsl(var(--gold)/0.3)]">
+                      <p className="text-4xl md:text-5xl font-extralight text-foreground drop-shadow-[0_0_20px_hsl(var(--accent)/0.3)]">
                         AED {properties[activeIndex].price}
                       </p>
                     </div>
@@ -214,7 +214,7 @@ export function PropertiesSection() {
                         View Details
                         <ArrowRight className="w-4 h-4 ml-2 inline-block" />
                       </MagneticButton>
-                      <button className="px-8 py-3 border border-border/50 text-sm uppercase tracking-wider hover:border-gold hover:text-gold transition-all duration-500">
+                      <button className="px-8 py-3 border border-border/50 text-sm uppercase tracking-wider hover:border-accent hover:text-accent transition-all duration-500">
                         Schedule Tour
                       </button>
                     </div>
@@ -234,7 +234,7 @@ export function PropertiesSection() {
                 onClick={() => setActiveIndex(index)}
                 className={`w-2 h-2 transition-all duration-500 ${
                   index === activeIndex 
-                    ? "bg-gold w-8" 
+                    ? "bg-accent w-8" 
                     : "bg-border/50 hover:bg-border"
                 }`}
               />
