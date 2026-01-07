@@ -99,12 +99,12 @@ export function CalculatorSection() {
       ref={containerRef}
       className="relative section-padding-lg bg-background overflow-hidden"
     >
-      {/* Ambient glow */}
+      {/* Ambient glow - Electric blue */}
       <motion.div 
         className="absolute bottom-0 left-0 w-[800px] h-[800px] rounded-full opacity-30"
         style={{ 
           y: backgroundY,
-          background: "radial-gradient(circle, hsl(var(--gold) / 0.1) 0%, transparent 70%)"
+          background: "radial-gradient(circle, hsl(var(--accent) / 0.1) 0%, transparent 70%)"
         }}
       />
 
@@ -117,7 +117,7 @@ export function CalculatorSection() {
           transition={{ duration: 1 }}
         >
           <motion.p
-            className="text-gold text-xs uppercase tracking-[0.3em] mb-6"
+            className="text-accent text-xs uppercase tracking-[0.3em] mb-6"
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
             transition={{ delay: 0.2, duration: 0.8 }}
@@ -146,7 +146,7 @@ export function CalculatorSection() {
               <div className="flex items-baseline justify-between">
                 <label className="text-lg font-light tracking-wide">Investment today</label>
                 <motion.span 
-                  className="text-4xl md:text-5xl font-extralight text-gold tabular-nums drop-shadow-[0_0_20px_hsl(var(--gold)/0.3)]"
+                  className="text-4xl md:text-5xl font-extralight text-foreground tabular-nums drop-shadow-[0_0_20px_hsl(var(--accent)/0.3)]"
                 >
                   {formatCurrency(investment[0])}
                 </motion.span>
@@ -172,7 +172,7 @@ export function CalculatorSection() {
               <div className="flex items-baseline justify-between">
                 <label className="text-lg font-light tracking-wide">Monthly comfort</label>
                 <motion.span 
-                  className="text-4xl md:text-5xl font-extralight text-gold tabular-nums drop-shadow-[0_0_20px_hsl(var(--gold)/0.3)]"
+                  className="text-4xl md:text-5xl font-extralight text-foreground tabular-nums drop-shadow-[0_0_20px_hsl(var(--accent)/0.3)]"
                 >
                   {formatCurrency(monthly[0])}
                 </motion.span>
@@ -195,7 +195,7 @@ export function CalculatorSection() {
 
             {/* Info */}
             <div className="flex items-start gap-4 p-6 bg-card/30 border border-border/30 backdrop-blur-sm">
-              <Sparkles className="w-5 h-5 text-gold flex-shrink-0 mt-1" />
+              <Sparkles className="w-5 h-5 text-accent flex-shrink-0 mt-1" />
               <div>
                 <p className="font-medium mb-1 text-sm">Smart Matching</p>
                 <p className="text-sm text-muted-foreground">

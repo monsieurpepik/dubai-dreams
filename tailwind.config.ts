@@ -15,6 +15,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        serif: ['Playfair Display', 'Georgia', 'serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -22,11 +23,15 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        gold: {
-          DEFAULT: "hsl(var(--gold))",
-          foreground: "hsl(var(--gold-foreground))",
-          muted: "hsl(var(--gold-muted))",
-          glow: "hsl(var(--gold-glow))",
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+          muted: "hsl(var(--accent-muted))",
+          glow: "hsl(var(--accent-glow))",
+        },
+        silver: {
+          DEFAULT: "hsl(var(--silver))",
+          muted: "hsl(var(--silver-muted))",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -43,10 +48,6 @@ export default {
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -122,10 +123,10 @@ export default {
         },
         "glow-pulse": {
           "0%, 100%": { 
-            boxShadow: "0 0 40px hsl(var(--gold) / 0.3)",
+            boxShadow: "0 0 40px hsl(var(--accent) / 0.3)",
           },
           "50%": { 
-            boxShadow: "0 0 80px hsl(var(--gold) / 0.6)",
+            boxShadow: "0 0 80px hsl(var(--accent) / 0.6)",
           },
         },
         "float": {

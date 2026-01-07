@@ -89,9 +89,9 @@ export function GuideSection() {
       ref={containerRef}
       className="relative section-padding-lg bg-background overflow-hidden"
     >
-      {/* Spotlight effect */}
+      {/* Spotlight effect - Electric blue */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-20"
-        style={{ background: "radial-gradient(circle, hsl(var(--gold) / 0.15) 0%, transparent 60%)" }}
+        style={{ background: "radial-gradient(circle, hsl(var(--accent) / 0.15) 0%, transparent 60%)" }}
       />
 
       <div ref={ref} className="container-custom relative z-10">
@@ -117,14 +117,14 @@ export function GuideSection() {
                 }}
               >
                 {/* Chrome edge effect */}
-                <div className="absolute inset-0 pointer-events-none" style={{ boxShadow: "inset 0 0 0 1px hsl(var(--gold) / 0.2)" }} />
+                <div className="absolute inset-0 pointer-events-none" style={{ boxShadow: "inset 0 0 0 1px hsl(var(--accent) / 0.2)" }} />
                 
                 {/* Spine Effect */}
                 <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-black/30 to-transparent" />
                 
                 <div className="w-64 lg:w-80 text-background">
                   <div className="mb-10">
-                    <span className="inline-block bg-gold text-gold-foreground text-xs font-medium px-3 py-1.5 uppercase tracking-widest">
+                    <span className="inline-block bg-accent text-accent-foreground text-xs font-medium px-3 py-1.5 uppercase tracking-widest">
                       Free Guide
                     </span>
                   </div>
@@ -158,7 +158,7 @@ export function GuideSection() {
             transition={{ delay: 0.4, duration: 1 }}
           >
             <motion.p
-              className="text-gold text-xs uppercase tracking-[0.3em] mb-6"
+              className="text-accent text-xs uppercase tracking-[0.3em] mb-6"
               initial={{ opacity: 0 }}
               animate={inView ? { opacity: 1 } : {}}
               transition={{ delay: 0.2, duration: 0.8 }}
@@ -169,7 +169,7 @@ export function GuideSection() {
             <h2 className="mb-8">
               Dubai Off-Plan<br />
               <span className="text-muted-foreground">Buyer's Guide </span>
-              <span className="text-gold">2026</span>
+              <span className="text-accent">2026</span>
             </h2>
             
             <p className="text-muted-foreground text-lg mb-10 max-w-lg font-light">
@@ -186,8 +186,8 @@ export function GuideSection() {
                   animate={inView ? { opacity: 1, x: 0 } : {}}
                   transition={{ delay: 0.5 + index * 0.1, duration: 0.5 }}
                 >
-                  <div className="w-10 h-10 bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors duration-500">
-                    <feature.icon className="w-4 h-4 text-gold" />
+                  <div className="w-10 h-10 bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors duration-500">
+                    <feature.icon className="w-4 h-4 text-accent" />
                   </div>
                   <span className="text-foreground text-sm">{feature.label}</span>
                 </motion.li>
@@ -203,7 +203,7 @@ export function GuideSection() {
                     placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="flex-1 h-14 px-6 text-base bg-card/50 border-border/30 focus:border-gold focus:ring-gold/20 placeholder:text-muted-foreground/50"
+                    className="flex-1 h-14 px-6 text-base bg-card/50 border-border/30 focus:border-accent focus:ring-accent/20 placeholder:text-muted-foreground/50"
                     disabled={isSubmitting}
                   />
                   <MagneticButton

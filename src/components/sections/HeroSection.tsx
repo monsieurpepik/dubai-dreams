@@ -37,11 +37,11 @@ export function HeroSection() {
       ref={containerRef}
       className="relative h-[100svh] flex items-center justify-center overflow-hidden bg-background"
     >
-      {/* Single dramatic light source - top right (Bugatti chiaroscuro) */}
+      {/* Single dramatic light source - top right (Electric blue chiaroscuro) */}
       <div 
         className="absolute -top-40 -right-40 w-[800px] h-[800px] pointer-events-none"
         style={{ 
-          background: "radial-gradient(ellipse at center, hsl(45 100% 50% / 0.08) 0%, transparent 60%)" 
+          background: "radial-gradient(ellipse at center, hsl(216 100% 50% / 0.08) 0%, transparent 60%)" 
         }}
       />
 
@@ -130,7 +130,7 @@ export function HeroSection() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.9, duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
           >
-            Dubai<span className="text-gold">.</span>
+            Dubai<span className="text-accent">.</span>
           </motion.h1>
         </div>
 
@@ -140,7 +140,7 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.4, duration: 0.8 }}
         >
-          Off-plan properties from <span className="text-gold font-medium">AED 480,000</span>
+          Off-plan properties from <span className="text-foreground font-medium">AED 480,000</span>
         </motion.p>
 
         <motion.div
