@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -17,6 +18,7 @@ import { ROIBadge } from '@/components/properties/ROIBadge';
 import { MortgageTimelineExplainer } from '@/components/properties/MortgageTimelineExplainer';
 import { DocumentDownload } from '@/components/properties/DocumentDownload';
 import { WhatsAppButton } from '@/components/properties/WhatsAppButton';
+import { MobileCTABar } from '@/components/properties/MobileCTABar';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 const formatPrice = (price: number): string => {
@@ -45,6 +47,7 @@ const formatDate = (dateString: string | null): string => {
 
 const PropertyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
+  const inquiryFormRef = useRef<HTMLDivElement>(null);
 
   const { data: property, isLoading, error } = useQuery({
     queryKey: ['property', slug],
@@ -283,10 +286,12 @@ const PropertyDetail = () => {
 
             {/* Sidebar */}
             <div className="space-y-6">
-              <InquiryForm
-                propertyId={property.id}
-                propertyName={property.name}
-              />
+              <div ref={inquiryFormRef}>
+                <InquiryForm
+                  propertyId={property.id}
+                  propertyName={property.name}
+                />
+              </div>
 
               {/* Developer Trust Card */}
               {property.developer && (
@@ -329,6 +334,15 @@ const PropertyDetail = () => {
       </main>
       <Footer />
       <WhatsAppButton propertyName={property.name} />
+      <MobileCTABar
+        propertyName={property.name}
+        priceFrom={property.price_from}
+        onInquireClick={() => {
+          inquiryFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }}
+      />
+      {/* Add bottom padding on mobile to prevent content hiding behind sticky CTA */}
+      <div className="h-32 md:hidden" />
     </div>
   );
 };
