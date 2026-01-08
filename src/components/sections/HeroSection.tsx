@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import heroImage from '@/assets/hero-dubai-skyline.jpeg';
 
 const lifestyleHeadlines = [
   {
@@ -45,8 +46,8 @@ export function HeroSection() {
       <div className="absolute inset-0">
         <motion.img
           key="hero-bg"
-          src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=2000&q=85"
-          alt="Dubai skyline"
+          src={heroImage}
+          alt="Dubai skyline at golden hour with Burj Al Arab"
           className="h-full w-full object-cover"
           initial={{ scale: 1 }}
           animate={{ scale: 1.08 }}
