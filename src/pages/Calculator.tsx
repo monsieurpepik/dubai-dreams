@@ -43,20 +43,20 @@ const verdictConfig = {
   comfortable: {
     label: 'Comfortable',
     description: 'This payment fits well within typical budget guidelines.',
-    color: 'text-emerald-500',
-    bgColor: 'bg-emerald-500/10',
+    color: 'text-[hsl(142_35%_55%)]',
+    bgColor: 'bg-[hsl(142_35%_55%/0.08)]',
   },
   stretch: {
     label: 'Stretch',
     description: 'This payment is manageable but may limit other spending.',
-    color: 'text-amber-500',
-    bgColor: 'bg-amber-500/10',
+    color: 'text-[hsl(38_45%_60%)]',
+    bgColor: 'bg-[hsl(38_45%_60%/0.08)]',
   },
   risky: {
     label: 'Risky',
     description: 'This payment may be challenging. Consider a larger down payment.',
-    color: 'text-red-500',
-    bgColor: 'bg-red-500/10',
+    color: 'text-[hsl(0_40%_55%)]',
+    bgColor: 'bg-[hsl(0_40%_55%/0.08)]',
   },
 };
 

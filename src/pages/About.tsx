@@ -45,7 +45,7 @@ const About = () => {
               transition={{ duration: 0.6 }}
               className="max-w-3xl"
             >
-              <p className="text-xs font-medium uppercase tracking-luxury text-accent mb-4">
+              <p className="text-xs font-medium uppercase tracking-luxury text-muted-foreground mb-4">
                 About Us
               </p>
               <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-6">
@@ -69,8 +69,8 @@ const About = () => {
                 transition={{ duration: 0.6 }}
               >
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
-                    <Target className="w-5 h-5 text-accent" />
+                  <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+                    <Target className="w-5 h-5 text-foreground" />
                   </div>
                   <span className="text-xs font-medium uppercase tracking-luxury text-muted-foreground">
                     Our Mission
@@ -141,8 +141,8 @@ const About = () => {
               className="max-w-3xl mx-auto text-center mb-16"
             >
               <div className="flex items-center justify-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-accent" />
+                <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-foreground" />
                 </div>
               </div>
               <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
@@ -201,8 +201,8 @@ const About = () => {
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                   className="bg-background border border-border/50 p-8"
                 >
-                  <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center mb-6">
-                    <value.icon className="w-6 h-6 text-accent" />
+                  <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-6">
+                    <value.icon className="w-6 h-6 text-foreground" />
                   </div>
                   <h3 className="font-serif text-xl text-foreground mb-3">
                     {value.title}
@@ -225,7 +225,7 @@ const About = () => {
               viewport={{ once: true }}
               className="text-center mb-12"
             >
-              <p className="text-xs font-medium uppercase tracking-luxury text-accent mb-4">
+              <p className="text-xs font-medium uppercase tracking-luxury text-muted-foreground mb-4">
                 The Team
               </p>
               <h2 className="font-serif text-3xl md:text-4xl text-foreground">
@@ -253,7 +253,7 @@ const About = () => {
                   <h3 className="font-serif text-xl text-foreground mb-1">
                     {member.name}
                   </h3>
-                  <p className="text-xs font-medium uppercase tracking-luxury text-accent mb-3">
+                  <p className="text-xs font-medium uppercase tracking-luxury text-muted-foreground mb-3">
                     {member.role}
                   </p>
                   <p className="text-sm text-muted-foreground">
