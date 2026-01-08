@@ -6,6 +6,7 @@ import { useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { SEO } from '@/components/SEO';
 import { ImmersiveGallery } from '@/components/properties/ImmersiveGallery';
 import { InquiryForm } from '@/components/properties/InquiryForm';
 import { AffordabilityCTA } from '@/components/properties/AffordabilityCTA';
@@ -129,9 +130,18 @@ const PropertyDetail = () => {
   }
 
   const features = Array.isArray(property.features) ? property.features : [];
+  const primaryImage = property.property_images?.find((img: { is_primary?: boolean }) => img.is_primary)?.url || 
+    property.property_images?.[0]?.url || 
+    'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&h=630&fit=crop';
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title={`${property.name} | ${property.area}`}
+        description={`${property.name} in ${property.area}, ${property.location}. Starting from ${formatPrice(property.price_from)}. ${property.tagline || property.description?.slice(0, 100) || 'Premium off-plan property in Dubai.'}`}
+        image={primaryImage}
+        url={`https://owningdubai.com/properties/${property.slug}`}
+      />
       <Header />
       <main className="pt-20">
         {/* Back Navigation */}

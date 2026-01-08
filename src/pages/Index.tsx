@@ -4,6 +4,7 @@ import { HeroSection } from "@/components/sections/HeroSection";
 import { WhyDubaiSection } from "@/components/sections/WhyDubaiSection";
 import { OffPlanProjectsSection } from "@/components/sections/OffPlanProjectsSection";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
+import { SEO } from "@/components/SEO";
 
 const Index = () => {
   // Initialize smooth scroll
@@ -11,6 +12,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO />
       <Header />
       <main>
         <HeroSection />

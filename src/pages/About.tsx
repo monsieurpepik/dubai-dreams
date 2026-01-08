@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Target, Users, Award, TrendingUp } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { SEO } from '@/components/SEO';
 
 const teamMembers = [
   {
@@ -34,6 +35,11 @@ const stats = [
 const About = () => {
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="About Us"
+        description="Meet the OwningDubai team. 12+ years helping international investors navigate Dubai's off-plan property market with transparency and expertise."
+        url="https://owningdubai.com/about"
+      />
       <Header />
       <main className="pt-20">
         {/* Hero */}
