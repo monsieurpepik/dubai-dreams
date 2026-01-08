@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      area_market_data: {
+        Row: {
+          area: string
+          avg_price_sqft: number
+          created_at: string
+          id: string
+          offplan_vs_ready_delta: number | null
+          trend_12m: string
+          trend_percentage: number
+          updated_at: string
+        }
+        Insert: {
+          area: string
+          avg_price_sqft: number
+          created_at?: string
+          id?: string
+          offplan_vs_ready_delta?: number | null
+          trend_12m: string
+          trend_percentage?: number
+          updated_at?: string
+        }
+        Update: {
+          area?: string
+          avg_price_sqft?: number
+          created_at?: string
+          id?: string
+          offplan_vs_ready_delta?: number | null
+          trend_12m?: string
+          trend_percentage?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       developers: {
         Row: {
           created_at: string
