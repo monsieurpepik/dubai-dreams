@@ -53,7 +53,7 @@ export function Header() {
           {/* Logo */}
           <Link 
             to="/" 
-            className="text-[11px] font-medium uppercase tracking-[0.25em] text-foreground transition-opacity hover:opacity-60"
+            className="text-[11px] font-medium uppercase tracking-[0.25em] text-foreground transition-all duration-300 hover:opacity-70"
           >
             Owning Dubai
           </Link>
@@ -64,7 +64,7 @@ export function Header() {
               <button
                 key={item.label}
                 onClick={() => handleNavClick(item)}
-                className="text-[11px] font-medium uppercase tracking-[0.15em] text-muted-foreground transition-colors duration-300 hover:text-foreground"
+                className="text-[11px] font-medium uppercase tracking-[0.15em] text-muted-foreground transition-all duration-300 hover:text-foreground hover:opacity-80"
               >
                 {item.label}
               </button>
@@ -74,7 +74,7 @@ export function Header() {
           {/* Mobile Menu Toggle */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2 text-foreground md:hidden"
+            className="p-2 text-foreground md:hidden transition-opacity duration-300 hover:opacity-70 active:opacity-50"
           >
             {isMobileMenuOpen ? (
               <X className="h-5 w-5" />

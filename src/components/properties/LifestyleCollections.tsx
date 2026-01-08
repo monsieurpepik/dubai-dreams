@@ -64,14 +64,14 @@ export const LifestyleCollections = ({ activeFilter, onFilterChange }: Lifestyle
               whileTap={{ scale: 0.98 }}
               className={`
                 group relative flex items-center gap-2 px-5 py-3 text-xs font-medium uppercase tracking-[0.15em]
-                transition-all duration-300 border
+                transition-all duration-300 ease-out border
                 ${isActive 
                   ? 'bg-foreground text-background border-foreground' 
-                  : 'bg-transparent text-muted-foreground border-border hover:border-foreground/50 hover:text-foreground'
+                  : 'bg-transparent text-muted-foreground border-border hover:border-foreground/40 hover:text-foreground hover:bg-foreground/5'
                 }
               `}
             >
-              {Icon && <Icon className="w-4 h-4" strokeWidth={1.5} />}
+              {Icon && <Icon className="w-4 h-4 transition-transform duration-300 group-hover:scale-110" strokeWidth={1.5} />}
               {collection.label}
             </motion.button>
           );

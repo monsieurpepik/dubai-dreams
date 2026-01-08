@@ -77,7 +77,8 @@ export const LuxuryPropertyCard = ({ property, index, featured = false }: Luxury
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
         transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-        className={`${featured ? 'col-span-full' : ''} transition-transform duration-300 group-hover:-translate-y-1`}
+        whileHover={{ y: -4 }}
+        className={`${featured ? 'col-span-full' : ''} transition-all duration-500 ease-out`}
       >
         {/* Image Container - with hover effect */}
         <div className={`relative mb-6 overflow-hidden bg-muted ${featured ? 'aspect-[21/9]' : 'aspect-[16/10]'}`}>
@@ -85,7 +86,7 @@ export const LuxuryPropertyCard = ({ property, index, featured = false }: Luxury
             <img
               src={primaryImage.url}
               alt={primaryImage.alt_text || property.name}
-              className="h-full w-full object-cover transition-all duration-500 group-hover:scale-[1.02] group-hover:brightness-105"
+              className="h-full w-full object-cover transition-all duration-700 ease-out group-hover:scale-[1.03] group-hover:opacity-95"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center">
