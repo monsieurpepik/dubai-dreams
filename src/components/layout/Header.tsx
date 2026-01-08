@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
 const navItems = [
-  { label: 'Residences', href: '#properties' },
-  { label: 'About', href: '#about' },
-  { label: 'Guide', href: '#guide' },
+  { label: 'Residences', href: '#properties', isRoute: false },
+  { label: 'Calculator', href: '/calculator', isRoute: true },
 ];
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,12 +21,17 @@ export function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (href: string) => {
+  const handleNavClick = (item: typeof navItems[0]) => {
     setIsMobileMenuOpen(false);
-    const id = href.replace('#', '');
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    
+    if (item.isRoute) {
+      navigate(item.href);
+    } else {
+      const id = item.href.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 
@@ -56,7 +61,7 @@ export function Header() {
             {navItems.map((item) => (
               <button
                 key={item.label}
-                onClick={() => handleNavClick(item.href)}
+                onClick={() => handleNavClick(item)}
                 className="text-[11px] font-medium uppercase tracking-[0.15em] text-muted-foreground transition-colors duration-300 hover:text-foreground"
               >
                 {item.label}
@@ -96,7 +101,7 @@ export function Header() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 20 }}
                   transition={{ delay: index * 0.1 }}
-                  onClick={() => handleNavClick(item.href)}
+                  onClick={() => handleNavClick(item)}
                   className="font-serif text-3xl font-light text-foreground"
                 >
                   {item.label}

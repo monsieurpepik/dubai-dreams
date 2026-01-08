@@ -1,12 +1,7 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
-import { OpportunitySection } from "@/components/sections/OpportunitySection";
-import { MathematicsSection } from "@/components/sections/MathematicsSection";
 import { OffPlanProjectsSection } from "@/components/sections/OffPlanProjectsSection";
-import { CalculatorSection } from "@/components/sections/CalculatorSection";
-import { GoldenVisaSection } from "@/components/sections/GoldenVisaSection";
-import { GuideSection } from "@/components/sections/GuideSection";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 
 const Index = () => {
@@ -18,12 +13,7 @@ const Index = () => {
       <Header />
       <main>
         <HeroSection />
-        <OpportunitySection />
-        <MathematicsSection />
         <OffPlanProjectsSection />
-        <CalculatorSection />
-        <GoldenVisaSection />
-        <GuideSection />
       </main>
       <Footer />
     </div>
