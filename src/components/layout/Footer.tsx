@@ -41,6 +41,14 @@ export function Footer() {
                   Payment Estimator
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/contact"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Contact Us
+                </Link>
+              </li>
             </ul>
           </div>
 
