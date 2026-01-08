@@ -80,6 +80,44 @@ export type Database = {
         }
         Relationships: []
       }
+      document_requests: {
+        Row: {
+          created_at: string | null
+          document_type: string | null
+          email: string
+          id: string
+          name: string | null
+          phone: string | null
+          property_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          document_type?: string | null
+          email: string
+          id?: string
+          name?: string | null
+          phone?: string | null
+          property_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          document_type?: string | null
+          email?: string
+          id?: string
+          name?: string | null
+          phone?: string | null
+          property_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_requests_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leads: {
         Row: {
           created_at: string
@@ -149,6 +187,7 @@ export type Database = {
           golden_visa_eligible: boolean | null
           id: string
           lifestyle_description: string | null
+          lifestyle_tags: string[] | null
           location: string
           name: string
           payment_plan: string | null
@@ -177,6 +216,7 @@ export type Database = {
           golden_visa_eligible?: boolean | null
           id?: string
           lifestyle_description?: string | null
+          lifestyle_tags?: string[] | null
           location: string
           name: string
           payment_plan?: string | null
@@ -205,6 +245,7 @@ export type Database = {
           golden_visa_eligible?: boolean | null
           id?: string
           lifestyle_description?: string | null
+          lifestyle_tags?: string[] | null
           location?: string
           name?: string
           payment_plan?: string | null
