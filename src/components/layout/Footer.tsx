@@ -67,11 +67,11 @@ export function Footer() {
             </h4>
             <ul className="space-y-4 text-sm text-muted-foreground">
               <li className="flex items-center gap-3">
-                <MapPin className="w-4 h-4 text-accent" />
+                <MapPin className="w-4 h-4 text-muted-foreground" />
                 <span>Dubai, United Arab Emirates</span>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="w-4 h-4 text-accent" />
+                <Mail className="w-4 h-4 text-muted-foreground" />
                 <span>hello@owningdubai.com</span>
               </li>
             </ul>

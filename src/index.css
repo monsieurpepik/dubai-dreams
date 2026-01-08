@@ -62,57 +62,57 @@
   }
 
   .dark {
-    /* Deep, warm black - not pure black */
-    --background: 30 10% 4%;
-    --foreground: 40 10% 92%;
+    /* Pure near-black - Apple style */
+    --background: 0 0% 3%;
+    --foreground: 0 0% 98%;
     
-    /* Champagne/Gold accent - warm and restrained */
-    --accent: 40 30% 60%;
-    --accent-foreground: 30 10% 5%;
-    --accent-muted: 40 20% 50%;
+    /* Cool neutral accent - reserved for brand moments */
+    --accent: 40 15% 65%;
+    --accent-foreground: 0 0% 5%;
+    --accent-muted: 40 10% 55%;
     
-    /* Warm gold tones */
-    --gold: 42 40% 55%;
-    --gold-muted: 42 25% 45%;
+    /* Subtle warm tones - only for Golden Visa badge */
+    --gold: 42 30% 55%;
+    --gold-muted: 42 20% 45%;
     
-    /* Champagne for highlights */
-    --champagne: 40 15% 20%;
-    --champagne-foreground: 40 15% 90%;
+    /* Neutral champagne */
+    --champagne: 0 0% 15%;
+    --champagne-foreground: 0 0% 90%;
     
     /* Silver/neutral tones */
-    --silver: 30 5% 55%;
-    --silver-muted: 30 5% 40%;
+    --silver: 0 0% 60%;
+    --silver-muted: 0 0% 45%;
     
-    --card: 30 10% 6%;
-    --card-foreground: 40 10% 92%;
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 98%;
     
-    --popover: 30 10% 6%;
-    --popover-foreground: 40 10% 92%;
+    --popover: 0 0% 6%;
+    --popover-foreground: 0 0% 98%;
     
-    --primary: 40 10% 92%;
-    --primary-foreground: 30 10% 4%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 3%;
     
-    --secondary: 30 10% 10%;
-    --secondary-foreground: 40 10% 92%;
+    --secondary: 0 0% 8%;
+    --secondary-foreground: 0 0% 98%;
     
-    --muted: 30 10% 12%;
-    --muted-foreground: 30 5% 50%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 55%;
     
-    --destructive: 0 50% 40%;
+    --destructive: 0 45% 45%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 30 10% 14%;
-    --input: 30 10% 14%;
-    --ring: 40 30% 60%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 0 0% 40%;
     
-    --sidebar-background: 30 10% 5%;
-    --sidebar-foreground: 40 10% 85%;
-    --sidebar-primary: 40 30% 55%;
+    --sidebar-background: 0 0% 4%;
+    --sidebar-foreground: 0 0% 85%;
+    --sidebar-primary: 0 0% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 30 10% 12%;
-    --sidebar-accent-foreground: 40 10% 85%;
-    --sidebar-border: 30 10% 14%;
-    --sidebar-ring: 40 30% 60%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 85%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 0 0% 40%;
   }
 }
 

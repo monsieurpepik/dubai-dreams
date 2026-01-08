@@ -47,7 +47,7 @@ export const WhyDubaiSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16 md:mb-20"
         >
-          <span className="label-editorial text-accent mb-4 block">
+          <span className="label-editorial text-muted-foreground mb-4 block">
             For Global Investors
           </span>
           <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-foreground mb-6">
@@ -68,10 +68,10 @@ export const WhyDubaiSection = () => {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               className="group relative"
             >
-              <div className="p-8 md:p-6 lg:p-8 bg-card border border-border/50 h-full transition-all duration-500 hover:border-accent/30">
+              <div className="p-8 md:p-6 lg:p-8 bg-card border border-border/50 h-full transition-all duration-500 hover:border-foreground/30">
                 {/* Icon */}
                 <div className="mb-6">
-                  <benefit.icon className="w-6 h-6 text-accent" strokeWidth={1.5} />
+                  <benefit.icon className="w-6 h-6 text-foreground" strokeWidth={1.5} />
                 </div>
                 
                 {/* Stat */}
@@ -102,7 +102,7 @@ export const WhyDubaiSection = () => {
         >
           <a 
             href="/about" 
-            className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-accent hover:text-accent-muted transition-colors"
+            className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
           >
             Learn More About Investing in Dubai
             <span className="text-lg">→</span>
