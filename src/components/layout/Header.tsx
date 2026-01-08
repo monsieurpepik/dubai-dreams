@@ -6,6 +6,7 @@ import { Menu, X } from 'lucide-react';
 const navItems = [
   { label: 'Properties', href: '#properties', isRoute: false },
   { label: 'Calculator', href: '/calculator', isRoute: true },
+  { label: 'Contact', href: '/contact', isRoute: true },
 ];
 
 export function Header() {
