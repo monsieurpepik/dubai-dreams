@@ -4,6 +4,7 @@ import { CheckCircle2, MapPin, Mail, Clock } from 'lucide-react';
 import { z } from 'zod';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { SEO } from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -90,6 +91,11 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Contact Us"
+        description="Get in touch with OwningDubai. Our Dubai Marina team is ready to help you find your perfect off-plan property investment."
+        url="https://owningdubai.com/contact"
+      />
       <Header />
       <main className="pt-20">
         {/* Hero */}

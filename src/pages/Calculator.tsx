@@ -5,6 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Slider } from '@/components/ui/slider';
+import { SEO } from '@/components/SEO';
 
 const formatCurrency = (value: number): string => {
   if (value >= 1000000) {
@@ -88,6 +89,11 @@ const Calculator = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Mortgage Calculator"
+        description="Calculate your Dubai property mortgage payments. Estimate monthly costs based on property price, down payment, and residency status with UAE-specific rates."
+        url="https://owningdubai.com/calculator"
+      />
       <Header />
       <main className="pt-24 pb-20">
         <div className="container-wide max-w-2xl">
