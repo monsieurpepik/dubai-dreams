@@ -10,10 +10,15 @@ import { InquiryForm } from '@/components/properties/InquiryForm';
 import { AffordabilityCTA } from '@/components/properties/AffordabilityCTA';
 import { MarketContextCard } from '@/components/properties/MarketContextCard';
 import { DeveloperTrustCard } from '@/components/properties/DeveloperTrustCard';
+import { ConstructionProgress } from '@/components/properties/ConstructionProgress';
+import { InvestmentProjectionCard } from '@/components/properties/InvestmentProjectionCard';
+import { OffPlanSavingsBadge } from '@/components/properties/OffPlanSavingsBadge';
+import { ROIBadge } from '@/components/properties/ROIBadge';
+import { MortgageTimelineExplainer } from '@/components/properties/MortgageTimelineExplainer';
+import { DocumentDownload } from '@/components/properties/DocumentDownload';
 import { WhatsAppButton } from '@/components/properties/WhatsAppButton';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-
 const formatPrice = (price: number): string => {
   if (price >= 1000000) {
     return `AED ${(price / 1000000).toFixed(1)}M`;
@@ -58,6 +63,20 @@ const PropertyDetail = () => {
       return data;
     },
     enabled: !!slug,
+  });
+
+  // Fetch area market data for off-plan savings
+  const { data: areaData } = useQuery({
+    queryKey: ['area-market', property?.area],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('area_market_data')
+        .select('*')
+        .eq('area', property!.area)
+        .maybeSingle();
+      return data;
+    },
+    enabled: !!property?.area,
   });
 
   if (isLoading) {
@@ -153,12 +172,20 @@ const PropertyDetail = () => {
                   {property.area}, {property.location}
                 </p>
 
-                {/* Golden Visa - Subtle mention */}
-                {property.golden_visa_eligible && (
-                  <p className="text-sm text-accent mt-4">
-                    Golden Visa Eligible
-                  </p>
-                )}
+                {/* Investment Badges */}
+                <div className="flex flex-wrap gap-3 mt-4">
+                  {areaData?.offplan_vs_ready_delta && areaData.offplan_vs_ready_delta > 0 && (
+                    <OffPlanSavingsBadge savingsPercent={areaData.offplan_vs_ready_delta} size="md" />
+                  )}
+                  {property.roi_estimate && (
+                    <ROIBadge roiPercent={property.roi_estimate} size="md" />
+                  )}
+                  {property.golden_visa_eligible && (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-accent/10 text-accent text-xs font-medium uppercase tracking-wider">
+                      Golden Visa Eligible
+                    </span>
+                  )}
+                </div>
               </motion.div>
 
               {/* Specs Grid - Clean */}
@@ -243,6 +270,15 @@ const PropertyDetail = () => {
                   </div>
                 </motion.div>
               )}
+
+              {/* Construction Progress - Show for off-plan properties */}
+              {property.status !== 'ready' && (
+                <ConstructionProgress
+                  stage={(property.construction_stage as 'pre-launch' | 'foundation' | 'structure' | 'finishing' | 'ready') || 'pre-launch'}
+                  percentComplete={property.construction_percent || 0}
+                  completionDate={property.completion_date}
+                />
+              )}
             </div>
 
             {/* Sidebar */}
@@ -260,6 +296,30 @@ const PropertyDetail = () => {
               <MarketContextCard
                 area={property.area}
                 propertyPriceFrom={property.price_from}
+              />
+
+              {/* Investment Projection Card */}
+              <InvestmentProjectionCard
+                priceFrom={property.price_from}
+                roiEstimate={property.roi_estimate}
+                areaAppreciation={areaData?.trend_percentage || 5}
+                completionDate={property.completion_date}
+              />
+
+              {/* Mortgage Timeline - for off-plan */}
+              {property.status !== 'ready' && (
+                <MortgageTimelineExplainer
+                  priceFrom={property.price_from}
+                  paymentPlan={property.payment_plan}
+                  completionDate={property.completion_date}
+                />
+              )}
+
+              {/* Document Downloads */}
+              <DocumentDownload
+                propertyId={property.id}
+                propertyName={property.name}
+                brochureUrl={property.brochure_url}
               />
 
               <AffordabilityCTA priceFrom={property.price_from} />

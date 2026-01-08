@@ -179,6 +179,8 @@ export type Database = {
           brochure_url: string | null
           community: string | null
           completion_date: string | null
+          construction_percent: number | null
+          construction_stage: string | null
           created_at: string
           description: string | null
           developer_id: string | null
@@ -191,6 +193,8 @@ export type Database = {
           location: string
           name: string
           payment_plan: string | null
+          post_handover_percent: number | null
+          post_handover_years: number | null
           price_from: number
           price_to: number | null
           roi_estimate: number | null
@@ -208,6 +212,8 @@ export type Database = {
           brochure_url?: string | null
           community?: string | null
           completion_date?: string | null
+          construction_percent?: number | null
+          construction_stage?: string | null
           created_at?: string
           description?: string | null
           developer_id?: string | null
@@ -220,6 +226,8 @@ export type Database = {
           location: string
           name: string
           payment_plan?: string | null
+          post_handover_percent?: number | null
+          post_handover_years?: number | null
           price_from: number
           price_to?: number | null
           roi_estimate?: number | null
@@ -237,6 +245,8 @@ export type Database = {
           brochure_url?: string | null
           community?: string | null
           completion_date?: string | null
+          construction_percent?: number | null
+          construction_stage?: string | null
           created_at?: string
           description?: string | null
           developer_id?: string | null
@@ -249,6 +259,8 @@ export type Database = {
           location?: string
           name?: string
           payment_plan?: string | null
+          post_handover_percent?: number | null
+          post_handover_years?: number | null
           price_from?: number
           price_to?: number | null
           roi_estimate?: number | null
