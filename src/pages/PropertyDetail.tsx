@@ -8,6 +8,7 @@ import { Footer } from '@/components/layout/Footer';
 import { ImmersiveGallery } from '@/components/properties/ImmersiveGallery';
 import { InquiryForm } from '@/components/properties/InquiryForm';
 import { AffordabilityCTA } from '@/components/properties/AffordabilityCTA';
+import { MarketContextCard } from '@/components/properties/MarketContextCard';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -242,11 +243,16 @@ const PropertyDetail = () => {
               )}
             </div>
 
-            {/* Sidebar - Simplified */}
+            {/* Sidebar */}
             <div className="space-y-6">
               <InquiryForm
                 propertyId={property.id}
                 propertyName={property.name}
+              />
+
+              <MarketContextCard
+                area={property.area}
+                propertyPriceFrom={property.price_from}
               />
 
               <AffordabilityCTA priceFrom={property.price_from} />
