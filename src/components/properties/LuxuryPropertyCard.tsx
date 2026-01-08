@@ -76,15 +76,15 @@ export const LuxuryPropertyCard = ({ property, index, featured = false }: Luxury
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
         transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-        className={`${featured ? 'col-span-full' : ''}`}
+        className={`${featured ? 'col-span-full' : ''} transition-transform duration-300 group-hover:-translate-y-1`}
       >
-        {/* Image Container - Clean, no overlay */}
+        {/* Image Container - with hover effect */}
         <div className={`relative mb-6 overflow-hidden bg-muted ${featured ? 'aspect-[21/9]' : 'aspect-[16/10]'}`}>
           {primaryImage ? (
             <img
               src={primaryImage.url}
               alt={primaryImage.alt_text || property.name}
-              className="h-full w-full object-cover transition-opacity duration-500 group-hover:opacity-90"
+              className="h-full w-full object-cover transition-all duration-500 group-hover:scale-[1.02] group-hover:brightness-105"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center">
@@ -114,11 +114,17 @@ export const LuxuryPropertyCard = ({ property, index, featured = false }: Luxury
             {property.area}, {property.location}
           </p>
 
-          {/* Details Row */}
+          {/* Details Row - Now includes payment plan */}
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-2 text-sm text-muted-foreground">
             <span>{formatBedrooms(property.bedrooms)}</span>
             <span className="text-border">·</span>
             <span>{formatDate(property.completion_date)}</span>
+            {property.payment_plan && (
+              <>
+                <span className="text-border">·</span>
+                <span>{property.payment_plan}</span>
+              </>
+            )}
             <span className="text-border">·</span>
             <span className="text-foreground">From {formatPrice(property.price_from)}</span>
           </div>

@@ -92,7 +92,7 @@ export const InquiryForm = ({ propertyId, propertyName }: InquiryFormProps) => {
         Inquire
       </h3>
       <p className="text-sm text-muted-foreground mb-6">
-        For availability and pricing details.
+        Request floor plans and current availability.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
