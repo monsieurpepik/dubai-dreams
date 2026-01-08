@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export function Footer() {
@@ -38,16 +38,8 @@ export function Footer() {
                   to="/calculator"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Affordability Calculator
+                  Payment Estimator
                 </Link>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Buyer's Guide
-                </a>
               </li>
             </ul>
           </div>
@@ -63,10 +55,6 @@ export function Footer() {
                 <span>Dubai, United Arab Emirates</span>
               </li>
               <li className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-accent" />
-                <span>+971 4 XXX XXXX</span>
-              </li>
-              <li className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-accent" />
                 <span>hello@owningdubai.com</span>
               </li>
@@ -77,7 +65,11 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-20 pt-8 border-t border-border/30">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-            <span>© 2026 OwningDubai. All rights reserved.</span>
+            <div className="flex flex-col md:flex-row items-center gap-4">
+              <span>© 2026 OwningDubai. All rights reserved.</span>
+              <span className="hidden md:inline text-border">·</span>
+              <span>RERA Registered Broker</span>
+            </div>
             <div className="flex items-center gap-6">
               <a href="#" className="hover:text-foreground transition-colors">
                 Privacy

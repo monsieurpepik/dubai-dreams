@@ -9,6 +9,7 @@ import { ImmersiveGallery } from '@/components/properties/ImmersiveGallery';
 import { InquiryForm } from '@/components/properties/InquiryForm';
 import { AffordabilityCTA } from '@/components/properties/AffordabilityCTA';
 import { MarketContextCard } from '@/components/properties/MarketContextCard';
+import { WhatsAppButton } from '@/components/properties/WhatsAppButton';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -261,6 +262,7 @@ const PropertyDetail = () => {
         </div>
       </main>
       <Footer />
+      <WhatsAppButton propertyName={property.name} />
     </div>
   );
 };
