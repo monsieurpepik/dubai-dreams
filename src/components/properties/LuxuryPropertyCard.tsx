@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { TrendingUp } from 'lucide-react';
 
 interface PropertyImage {
   id: string;
@@ -129,12 +130,20 @@ export const LuxuryPropertyCard = ({ property, index, featured = false }: Luxury
             <span className="text-foreground">From {formatPrice(property.price_from)}</span>
           </div>
 
-          {/* Golden Visa - Subtle text */}
-          {property.golden_visa_eligible && (
-            <p className="pt-2 text-[10px] font-medium uppercase tracking-[0.15em] text-accent">
-              Golden Visa Eligible
-            </p>
-          )}
+          {/* Investment Badges Row */}
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            {property.roi_estimate && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-medium uppercase tracking-[0.15em] text-muted-foreground">
+                <TrendingUp className="w-3 h-3" />
+                Est. ROI {property.roi_estimate.toFixed(1)}%
+              </span>
+            )}
+            {property.golden_visa_eligible && (
+              <span className="text-[10px] font-medium uppercase tracking-[0.15em] text-accent">
+                Golden Visa
+              </span>
+            )}
+          </div>
         </div>
       </motion.article>
     </Link>
