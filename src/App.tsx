@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import PropertyDetail from "./pages/PropertyDetail";
 import Calculator from "./pages/Calculator";
 import Contact from "./pages/Contact";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,6 +23,7 @@ const App = () => (
           <Route path="/properties/:slug" element={<PropertyDetail />} />
           <Route path="/calculator" element={<Calculator />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
