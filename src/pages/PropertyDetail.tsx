@@ -9,6 +9,7 @@ import { ImmersiveGallery } from '@/components/properties/ImmersiveGallery';
 import { InquiryForm } from '@/components/properties/InquiryForm';
 import { AffordabilityCTA } from '@/components/properties/AffordabilityCTA';
 import { MarketContextCard } from '@/components/properties/MarketContextCard';
+import { DeveloperTrustCard } from '@/components/properties/DeveloperTrustCard';
 import { WhatsAppButton } from '@/components/properties/WhatsAppButton';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -250,6 +251,11 @@ const PropertyDetail = () => {
                 propertyId={property.id}
                 propertyName={property.name}
               />
+
+              {/* Developer Trust Card */}
+              {property.developer && (
+                <DeveloperTrustCard developer={property.developer} />
+              )}
 
               <MarketContextCard
                 area={property.area}
