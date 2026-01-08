@@ -121,6 +121,11 @@
     @apply border-border;
   }
 
+  /* Apple-style smooth transitions for all interactive elements */
+  a, button, [role="button"] {
+    @apply transition-all duration-300 ease-out;
+  }
+
   html {
     scroll-behavior: auto;
   }

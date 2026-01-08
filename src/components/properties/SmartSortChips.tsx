@@ -23,19 +23,21 @@ export const SmartSortChips = ({ activeSort, onSortChange }: SmartSortChipsProps
       className="flex flex-wrap gap-2"
     >
       {sortOptions.map((option) => (
-        <button
+        <motion.button
           key={option.value}
           onClick={() => onSortChange(option.value)}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
           className={`
-            px-5 py-2.5 text-xs uppercase tracking-luxury transition-all duration-300
+            px-5 py-2.5 text-xs uppercase tracking-luxury transition-all duration-300 ease-out
             ${activeSort === option.value
               ? 'bg-foreground text-background'
-              : 'bg-transparent border border-border/50 text-muted-foreground hover:border-foreground/50 hover:text-foreground'
+              : 'bg-transparent border border-border/50 text-muted-foreground hover:border-foreground/40 hover:text-foreground hover:bg-foreground/5'
             }
           `}
         >
           {option.label}
-        </button>
+        </motion.button>
       ))}
     </motion.div>
   );

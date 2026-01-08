@@ -85,10 +85,10 @@ export function HeroSection() {
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`h-0.5 transition-all duration-500 ${
+              className={`h-0.5 transition-all duration-500 ease-out ${
                 index === currentIndex 
                   ? 'w-8 bg-white' 
-                  : 'w-4 bg-white/30 hover:bg-white/50'
+                  : 'w-4 bg-white/30 hover:bg-white/60 hover:w-6'
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />
@@ -100,8 +100,10 @@ export function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.5 }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
           onClick={scrollToProperties}
-          className="border border-white/40 bg-white/5 backdrop-blur-sm px-10 py-4 text-xs font-medium uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-white hover:text-black"
+          className="border border-white/40 bg-white/5 backdrop-blur-sm px-10 py-4 text-xs font-medium uppercase tracking-[0.2em] text-white transition-all duration-500 ease-out hover:bg-white/95 hover:text-black hover:border-white"
         >
           Explore Residences
         </motion.button>
