@@ -87,4 +87,12 @@ export const analytics = {
       property_id: propertyId,
     });
   },
+
+  // Newsletter
+  newsletterSignup: (interests: string[]) => {
+    trackEvent('newsletter_signup', {
+      interests,
+      source: 'website',
+    });
+  },
 };
