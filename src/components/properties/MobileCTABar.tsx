@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import { MessageCircle, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { getPropertyWhatsAppUrl } from '@/config/contact';
+import { analytics } from '@/lib/analytics';
 
 interface MobileCTABarProps {
   propertyName: string;
@@ -16,8 +18,11 @@ const formatPrice = (price: number): string => {
 };
 
 export const MobileCTABar = ({ propertyName, priceFrom, onInquireClick }: MobileCTABarProps) => {
-  const whatsappMessage = `Hi, I'm interested in ${propertyName}. Can you provide more details?`;
-  const whatsappUrl = `https://wa.me/971000000000?text=${encodeURIComponent(whatsappMessage)}`;
+  const whatsappUrl = getPropertyWhatsAppUrl(propertyName);
+
+  const handleWhatsAppClick = () => {
+    analytics.clickWhatsApp(propertyName);
+  };
 
   return (
     <motion.div
@@ -47,6 +52,7 @@ export const MobileCTABar = ({ propertyName, priceFrom, onInquireClick }: Mobile
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1"
+            onClick={handleWhatsAppClick}
           >
             <Button 
               variant="outline" 

@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
+import { analytics } from '@/lib/analytics';
 import {
   Form,
   FormControl,
@@ -75,6 +76,30 @@ export const PrivateConsultationForm = ({
       });
 
       if (error) throw error;
+
+      // Send notification email
+      try {
+        await supabase.functions.invoke('send-lead-notification', {
+          body: {
+            leadName: data.name,
+            leadEmail: data.email,
+            leadPhone: data.phone || null,
+            propertyName,
+            propertyId,
+            source: 'private_consultation',
+            message: data.message,
+            goldenVisaInterest: data.goldenVisaInterest,
+          },
+        });
+      } catch (notifyError) {
+        console.error('Failed to send notification:', notifyError);
+      }
+
+      // Track analytics
+      analytics.submitInquiry(propertyId, propertyName);
+      if (data.goldenVisaInterest) {
+        analytics.expressGoldenVisaInterest(propertyId);
+      }
 
       setIsSuccess(true);
       toast({

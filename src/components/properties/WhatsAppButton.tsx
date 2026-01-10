@@ -1,22 +1,27 @@
 import { motion } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
+import { getWhatsAppUrl, getPropertyWhatsAppUrl } from '@/config/contact';
+import { analytics } from '@/lib/analytics';
 
 interface WhatsAppButtonProps {
   propertyName?: string;
 }
 
 export const WhatsAppButton = ({ propertyName }: WhatsAppButtonProps) => {
-  const message = propertyName 
-    ? `Hi, I'm interested in ${propertyName}. Can you provide more details?`
-    : `Hi, I'm interested in Dubai off-plan properties.`;
-  
-  const whatsappUrl = `https://wa.me/971000000000?text=${encodeURIComponent(message)}`;
+  const whatsappUrl = propertyName 
+    ? getPropertyWhatsAppUrl(propertyName)
+    : getWhatsAppUrl();
+
+  const handleClick = () => {
+    analytics.clickWhatsApp(propertyName);
+  };
 
   return (
     <motion.a
       href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={handleClick}
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       whileHover={{ scale: 1.05, opacity: 0.95 }}

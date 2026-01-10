@@ -20,6 +20,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PLACEHOLDER"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      // Will be configured dynamically via VITE_GA_MEASUREMENT_ID
+      const gaMeasurementId = '%VITE_GA_MEASUREMENT_ID%' || 'G-PLACEHOLDER';
+      if (gaMeasurementId && gaMeasurementId !== 'G-PLACEHOLDER' && !gaMeasurementId.includes('VITE_')) {
+        gtag('config', gaMeasurementId);
+      }
+    </script>
   </head>
 
   <body>

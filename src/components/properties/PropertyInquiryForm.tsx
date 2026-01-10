@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
+import { analytics } from '@/lib/analytics';
 
 const inquirySchema = z.object({
   name: z.string().trim().min(2, 'Name must be at least 2 characters').max(100, 'Name is too long'),
@@ -90,6 +91,30 @@ export const PropertyInquiryForm = ({
       });
 
       if (error) throw error;
+
+      // Send notification email
+      try {
+        await supabase.functions.invoke('send-lead-notification', {
+          body: {
+            leadName: result.data.name,
+            leadEmail: result.data.email,
+            leadPhone: result.data.phone || null,
+            propertyName,
+            propertyId,
+            source: 'property_inquiry',
+            message: result.data.message,
+            goldenVisaInterest: result.data.goldenVisaInterest,
+          },
+        });
+      } catch (notifyError) {
+        console.error('Failed to send notification:', notifyError);
+      }
+
+      // Track analytics
+      analytics.submitInquiry(propertyId, propertyName);
+      if (result.data.goldenVisaInterest) {
+        analytics.expressGoldenVisaInterest(propertyId);
+      }
 
       setIsSubmitted(true);
       toast.success('Inquiry submitted successfully!');
