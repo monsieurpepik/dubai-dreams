@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { analytics } from '@/lib/analytics';
 
 interface InquiryFormProps {
   propertyId: string;
@@ -43,6 +44,26 @@ export const InquiryForm = ({ propertyId, propertyName }: InquiryFormProps) => {
       });
 
       if (error) throw error;
+
+      // Send notification email
+      try {
+        await supabase.functions.invoke('send-lead-notification', {
+          body: {
+            leadName: null,
+            leadEmail: email,
+            leadPhone: phone || null,
+            propertyName,
+            propertyId,
+            source: 'property_inquiry',
+          },
+        });
+      } catch (notifyError) {
+        console.error('Failed to send notification:', notifyError);
+        // Don't fail the submission if notification fails
+      }
+
+      // Track analytics
+      analytics.submitInquiry(propertyId, propertyName);
 
       setIsSuccess(true);
       toast({

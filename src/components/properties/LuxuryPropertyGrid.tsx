@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { LuxuryPropertyCard } from './LuxuryPropertyCard';
-import { Skeleton } from '@/components/ui/skeleton';
+import { PropertyGridSkeleton } from './PropertyCardSkeleton';
 
 interface PropertyImage {
   id: string;
@@ -43,19 +43,7 @@ interface LuxuryPropertyGridProps {
 
 export const LuxuryPropertyGrid = ({ properties, isLoading }: LuxuryPropertyGridProps) => {
   if (isLoading) {
-    return (
-      <div className="space-y-8">
-        {/* Featured skeleton */}
-        <Skeleton className="aspect-[21/9] w-full" />
-        
-        {/* Grid skeletons */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {[...Array(4)].map((_, i) => (
-            <Skeleton key={i} className="aspect-[16/9]" />
-          ))}
-        </div>
-      </div>
-    );
+    return <PropertyGridSkeleton />;
   }
 
   if (properties.length === 0) {

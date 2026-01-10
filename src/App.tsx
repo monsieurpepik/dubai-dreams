@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
+import { usePageTracking } from "@/hooks/usePageTracking";
 import Index from "./pages/Index";
 import PropertyDetail from "./pages/PropertyDetail";
 import Calculator from "./pages/Calculator";
@@ -13,6 +14,12 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+// Analytics wrapper component
+const AnalyticsWrapper = ({ children }: { children: React.ReactNode }) => {
+  usePageTracking();
+  return <>{children}</>;
+};
+
 const App = () => (
   <HelmetProvider>
   <QueryClientProvider client={queryClient}>
@@ -20,15 +27,17 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/properties/:slug" element={<PropertyDetail />} />
-          <Route path="/calculator" element={<Calculator />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/about" element={<About />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AnalyticsWrapper>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/properties/:slug" element={<PropertyDetail />} />
+            <Route path="/calculator" element={<Calculator />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/about" element={<About />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AnalyticsWrapper>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

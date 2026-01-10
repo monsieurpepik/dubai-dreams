@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { analytics } from '@/lib/analytics';
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, 'Name is required').max(100, 'Name must be less than 100 characters'),
@@ -71,6 +72,26 @@ const Contact = () => {
       });
 
       if (error) throw error;
+
+      // Send notification email
+      try {
+        await supabase.functions.invoke('send-lead-notification', {
+          body: {
+            leadName: result.data.name,
+            leadEmail: result.data.email,
+            leadPhone: result.data.phone || null,
+            propertyName: null,
+            propertyId: null,
+            source: 'contact_page',
+            message: result.data.message,
+          },
+        });
+      } catch (notifyError) {
+        console.error('Failed to send notification:', notifyError);
+      }
+
+      // Track analytics
+      analytics.submitContactForm();
 
       setIsSuccess(true);
       toast({
