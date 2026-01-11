@@ -6,33 +6,26 @@ interface PropertyCardSkeletonProps {
 
 export const PropertyCardSkeleton = ({ featured = false }: PropertyCardSkeletonProps) => {
   return (
-    <div className={`relative overflow-hidden bg-card border border-border/30 ${featured ? 'aspect-[21/9]' : 'aspect-[16/9]'}`}>
-      {/* Image skeleton with shimmer */}
-      <Skeleton className="absolute inset-0" />
-      
-      {/* Gradient overlay simulation */}
-      <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
-      
-      {/* Content skeleton */}
-      <div className="absolute inset-0 p-6 flex flex-col justify-end">
-        {/* Badges row */}
-        <div className="flex gap-2 mb-4">
-          <Skeleton className="h-6 w-20 rounded-full" />
-          <Skeleton className="h-6 w-24 rounded-full" />
+    <div className="animate-pulse rounded-2xl overflow-hidden bg-card">
+      <div className={`relative bg-muted ${featured ? 'aspect-[21/9]' : 'aspect-[4/3]'}`}>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer" />
+      </div>
+      <div className="p-5 space-y-3">
+        <div className="h-2 w-20 bg-muted rounded-full" />
+        <div className={`bg-muted rounded ${featured ? 'h-7 w-2/3' : 'h-6 w-1/2'}`} />
+        <div className="h-3 w-36 bg-muted rounded" />
+        <div className="flex gap-3 pt-1">
+          <div className="h-3 w-14 bg-muted rounded" />
+          <div className="h-3 w-16 bg-muted rounded" />
         </div>
-        
-        {/* Title */}
-        <Skeleton className={`h-8 mb-2 ${featured ? 'w-2/3' : 'w-3/4'}`} />
-        
-        {/* Location */}
-        <Skeleton className="h-4 w-1/2 mb-4" />
-        
-        {/* Price and specs */}
-        <div className="flex items-center justify-between">
-          <Skeleton className="h-6 w-32" />
-          <div className="flex gap-4">
-            <Skeleton className="h-4 w-16" />
-            <Skeleton className="h-4 w-20" />
+        <div className="flex justify-between items-end pt-3 border-t border-border/50">
+          <div className="space-y-1">
+            <div className="h-2 w-16 bg-muted rounded" />
+            <div className="h-5 w-24 bg-muted rounded" />
+          </div>
+          <div className="space-y-1">
+            <div className="h-2 w-20 bg-muted rounded ml-auto" />
+            <div className="h-4 w-16 bg-muted rounded ml-auto" />
           </div>
         </div>
       </div>
@@ -43,22 +36,9 @@ export const PropertyCardSkeleton = ({ featured = false }: PropertyCardSkeletonP
 export const PropertyGridSkeleton = () => {
   return (
     <div className="space-y-8">
-      {/* Featured skeleton */}
       <PropertyCardSkeleton featured />
-      
-      {/* Grid skeletons */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <PropertyCardSkeleton />
-        <PropertyCardSkeleton />
-      </div>
-      
-      {/* Another featured */}
-      <PropertyCardSkeleton featured />
-      
-      {/* More grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <PropertyCardSkeleton />
-        <PropertyCardSkeleton />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[...Array(6)].map((_, i) => <PropertyCardSkeleton key={i} />)}
       </div>
     </div>
   );

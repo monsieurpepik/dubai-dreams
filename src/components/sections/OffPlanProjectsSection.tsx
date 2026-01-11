@@ -3,9 +3,8 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { SmartSortChips, SortOption } from '@/components/properties/SmartSortChips';
 import { LuxuryPropertyGrid } from '@/components/properties/LuxuryPropertyGrid';
-import { LifestyleCollections, LifestyleFilter } from '@/components/properties/LifestyleCollections';
+import { FloatingFilterBar, LifestyleFilter, SortOption } from '@/components/properties/FloatingFilterBar';
 
 export const OffPlanProjectsSection = () => {
   const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
@@ -90,51 +89,33 @@ export const OffPlanProjectsSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="mb-12 md:mb-16"
+          className="mb-8 md:mb-12"
         >
           <span className="label-editorial text-accent mb-4 block">
             Curated Selection
           </span>
-          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground">
+          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground mb-4">
             Off-Plan Collection
           </h2>
+          <p className="text-muted-foreground text-lg max-w-2xl">
+            Discover Dubai's most exclusive off-plan developments from world-renowned developers.
+          </p>
         </motion.div>
 
-        {/* Lifestyle Collections */}
+        {/* Floating Filter Bar - Airbnb Style */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          <LifestyleCollections 
-            activeFilter={activeLifestyle} 
-            onFilterChange={setActiveLifestyle} 
-          />
-        </motion.div>
-
-        {/* Smart Sort Chips */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
           className="mb-10"
         >
-          <SmartSortChips 
-            activeSort={activeSort} 
-            onSortChange={setActiveSort} 
+          <FloatingFilterBar
+            activeLifestyle={activeLifestyle}
+            activeSort={activeSort}
+            onLifestyleChange={setActiveLifestyle}
+            onSortChange={setActiveSort}
+            propertyCount={sortedProperties.length}
           />
-        </motion.div>
-
-        {/* Results Count */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="mb-10"
-        >
-          <span className="text-xs uppercase tracking-[0.15em] text-muted-foreground">
-            {sortedProperties.length} {sortedProperties.length === 1 ? 'Property' : 'Properties'}
-          </span>
         </motion.div>
 
         {/* Property Grid */}
