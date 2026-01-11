@@ -302,4 +302,63 @@
   .text-silver-muted {
     color: hsl(var(--silver-muted));
   }
+
+  /* Skeleton shimmer animation */
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  .skeleton-shimmer {
+    animation: shimmer 2s infinite;
+  }
+
+  /* Modern card hover glow */
+  .card-glow {
+    position: relative;
+  }
+
+  .card-glow::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, hsl(var(--accent) / 0.2), transparent, hsl(var(--accent) / 0.1));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .card-glow:hover::before {
+    opacity: 1;
+  }
+
+  /* Magnetic button effect */
+  .magnetic-hover {
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Glass morphism for filter bar */
+  .glass-filter {
+    @apply bg-background/60 backdrop-blur-2xl border border-border/30;
+  }
+
+  /* Premium shadow for cards */
+  .shadow-premium {
+    box-shadow: 
+      0 4px 6px -1px hsl(0 0% 0% / 0.05),
+      0 10px 15px -3px hsl(0 0% 0% / 0.08),
+      0 20px 25px -5px hsl(0 0% 0% / 0.1);
+  }
+
+  .shadow-premium-hover {
+    box-shadow: 
+      0 10px 15px -3px hsl(0 0% 0% / 0.08),
+      0 20px 25px -5px hsl(0 0% 0% / 0.12),
+      0 40px 50px -10px hsl(0 0% 0% / 0.15);
+  }
 }

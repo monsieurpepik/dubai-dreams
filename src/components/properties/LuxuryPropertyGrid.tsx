@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { LuxuryPropertyCard } from './LuxuryPropertyCard';
+import { ModernPropertyCard } from './ModernPropertyCard';
 import { PropertyGridSkeleton } from './PropertyCardSkeleton';
 
 interface PropertyImage {
@@ -63,59 +63,30 @@ export const LuxuryPropertyGrid = ({ properties, isLoading }: LuxuryPropertyGrid
     );
   }
 
-  // Magazine-style layout: first property is featured, then alternating 2-column grid
-  // Every 5th property (after first) gets featured treatment
-  const getIsFeatured = (index: number): boolean => {
-    if (index === 0) return true;
-    return (index - 1) % 4 === 3; // Every 5th property (positions 0, 4, 8, 12...)
-  };
-
+  // Modern grid layout: First property featured, then 2-3 column responsive grid
   return (
-    <div className="space-y-10">
-      {properties.map((property, index) => {
-        const isFeatured = getIsFeatured(index);
-        
-        // If this is a featured card, render it solo
-        if (isFeatured) {
-          return (
-            <LuxuryPropertyCard
+    <div className="space-y-8">
+      {/* Featured First Property */}
+      {properties.length > 0 && (
+        <ModernPropertyCard
+          property={properties[0]}
+          index={0}
+          featured
+        />
+      )}
+
+      {/* Responsive Grid for Remaining Properties */}
+      {properties.length > 1 && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {properties.slice(1).map((property, index) => (
+            <ModernPropertyCard
               key={property.id}
               property={property}
-              index={index}
-              featured
+              index={index + 1}
             />
-          );
-        }
-        
-        // For non-featured, we need to group them in pairs
-        // Check if this is the start of a pair (odd position after first featured)
-        const adjustedIndex = index > 0 ? index - 1 : index;
-        const positionInGroup = adjustedIndex % 4;
-        
-        // Only render at the start of each pair
-        if (positionInGroup === 0 || positionInGroup === 2) {
-          const nextProperty = properties[index + 1];
-          const nextIsFeatured = nextProperty ? getIsFeatured(index + 1) : true;
-          
-          return (
-            <div key={property.id} className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <LuxuryPropertyCard
-                property={property}
-                index={index}
-              />
-              {nextProperty && !nextIsFeatured && (
-                <LuxuryPropertyCard
-                  property={nextProperty}
-                  index={index + 1}
-                />
-              )}
-            </div>
-          );
-        }
-        
-        // Skip properties that are the second in a pair (already rendered above)
-        return null;
-      })}
+          ))}
+        </div>
+      )}
     </div>
   );
 };
