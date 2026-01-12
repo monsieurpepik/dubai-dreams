@@ -5,6 +5,9 @@ import { MapPin, Calendar, Building, TrendingUp } from 'lucide-react';
 import { ImageHoverCarousel } from './ImageHoverCarousel';
 import { FloatingSaveButton } from './QuickActions';
 import { DynamicBadges, StatusBadge } from './DynamicBadges';
+import { ActivityDot } from './LiveActivityBadge';
+import { ScarcityDot } from './UnitsRemaining';
+import { VerifiedBadge } from './TrustSignals';
 
 interface PropertyImage {
   id: string;
@@ -193,9 +196,16 @@ export const ModernPropertyCard = ({ property, index, featured = false }: Modern
           </h3>
           
           {/* Location with Icon */}
-          <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-            <MapPin className="w-3.5 h-3.5" />
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
             <span>{property.area}, {property.location}</span>
+            <VerifiedBadge className="ml-auto" />
+          </div>
+          
+          {/* Live Activity & Scarcity Row */}
+          <div className="flex items-center gap-3">
+            <ActivityDot propertyId={property.id} />
+            <ScarcityDot propertyId={property.id} status={property.status} />
           </div>
 
           {/* Property Details Row */}
