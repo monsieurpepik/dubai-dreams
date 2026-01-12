@@ -20,6 +20,9 @@ import { MortgageTimelineExplainer } from '@/components/properties/MortgageTimel
 import { DocumentDownload } from '@/components/properties/DocumentDownload';
 import { WhatsAppButton } from '@/components/properties/WhatsAppButton';
 import { MobileCTABar } from '@/components/properties/MobileCTABar';
+import { LiveActivityBadge } from '@/components/properties/LiveActivityBadge';
+import { UnitsRemaining } from '@/components/properties/UnitsRemaining';
+import { TrustSignals, VerifiedBadge } from '@/components/properties/TrustSignals';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 const formatPrice = (price: number): string => {
@@ -177,13 +180,24 @@ const PropertyDetail = () => {
                   </span>
                 )}
                 
-                <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-4">
-                  {property.name}
-                </h1>
+                <div className="flex items-center gap-3 mb-4">
+                  <h1 className="font-serif text-4xl md:text-5xl text-foreground">
+                    {property.name}
+                  </h1>
+                  <VerifiedBadge className="mt-2" />
+                </div>
                 
-                <p className="text-lg text-muted-foreground">
+                <p className="text-lg text-muted-foreground mb-4">
                   {property.area}, {property.location}
                 </p>
+
+                {/* Live Activity Indicators */}
+                <LiveActivityBadge 
+                  propertyId={property.id} 
+                  status={property.status} 
+                  variant="detail"
+                  className="mb-4"
+                />
 
                 {/* Investment Badges */}
                 <div className="flex flex-wrap gap-3 mt-4">
@@ -296,6 +310,16 @@ const PropertyDetail = () => {
 
             {/* Sidebar */}
             <div className="space-y-6">
+              {/* Units Remaining - Scarcity Signal */}
+              <UnitsRemaining 
+                propertyId={property.id} 
+                status={property.status}
+                variant="bar"
+              />
+
+              {/* WhatsApp CTA in sidebar */}
+              <WhatsAppButton propertyName={property.name} variant="sidebar" />
+
               <div ref={inquiryFormRef}>
                 <InquiryForm
                   propertyId={property.id}
