@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X } from 'lucide-react';
-import { getWhatsAppUrl, getPropertyWhatsAppUrl } from '@/config/contact';
+import { useTenant } from '@/hooks/useTenant';
 import { analytics } from '@/lib/analytics';
 import { useState } from 'react';
 
@@ -11,13 +11,23 @@ interface WhatsAppButtonProps {
 
 export const WhatsAppButton = ({ propertyName, variant = 'floating' }: WhatsAppButtonProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { tenant, getWhatsAppUrl, getPropertyWhatsAppUrl } = useTenant();
+
   const whatsappUrl = propertyName 
     ? getPropertyWhatsAppUrl(propertyName)
     : getWhatsAppUrl();
 
+  // Don't render if no WhatsApp number configured
+  if (!tenant?.whatsapp_number) {
+    return null;
+  }
+
   const handleClick = () => {
     analytics.clickWhatsApp(propertyName);
   };
+
+  // City name for personalized messages
+  const cityName = tenant?.office_location?.city || 'property';
 
   // Inline variant for cards
   if (variant === 'inline') {
@@ -110,7 +120,7 @@ export const WhatsAppButton = ({ propertyName, variant = 'floating' }: WhatsAppB
               
               <div className="bg-muted/50 rounded-xl p-3 mb-3">
                 <p className="text-sm text-muted-foreground">
-                  👋 Hi! Interested in Dubai property? Our experts are ready to help you find your perfect investment.
+                  👋 Hi! Interested in {cityName} property? Our experts are ready to help you find your perfect investment.
                 </p>
               </div>
               

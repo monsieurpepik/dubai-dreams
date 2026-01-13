@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { useTenant } from '@/hooks/useTenant';
 
 const navItems = [
   { label: 'Properties', href: '#properties', isRoute: false },
@@ -14,6 +15,7 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { tenant } = useTenant();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,6 +39,12 @@ export function Header() {
     }
   };
 
+  // Extract brand name parts for styling
+  const brandName = tenant?.brand_name || 'OwningDubai';
+  const brandParts = brandName.match(/^(Owning)(.*)$/);
+  const brandPrefix = brandParts?.[1] || 'Owning';
+  const brandLocation = brandParts?.[2] || '';
+
   return (
     <>
       <motion.header
@@ -50,12 +58,12 @@ export function Header() {
         }`}
       >
         <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-6 md:h-20 lg:px-12">
-          {/* Logo */}
+          {/* Logo - Tenant Aware */}
           <Link 
             to="/" 
             className="text-[11px] font-medium uppercase tracking-[0.25em] text-foreground transition-all duration-300 hover:opacity-70"
           >
-            Owning Dubai
+            {brandPrefix}<span className="font-semibold">{brandLocation}</span>
           </Link>
 
           {/* Desktop Navigation */}

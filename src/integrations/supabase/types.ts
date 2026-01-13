@@ -21,6 +21,7 @@ export type Database = {
           created_at: string
           id: string
           offplan_vs_ready_delta: number | null
+          tenant_id: string | null
           trend_12m: string
           trend_percentage: number
           updated_at: string
@@ -31,6 +32,7 @@ export type Database = {
           created_at?: string
           id?: string
           offplan_vs_ready_delta?: number | null
+          tenant_id?: string | null
           trend_12m: string
           trend_percentage?: number
           updated_at?: string
@@ -41,11 +43,20 @@ export type Database = {
           created_at?: string
           id?: string
           offplan_vs_ready_delta?: number | null
+          tenant_id?: string | null
           trend_12m?: string
           trend_percentage?: number
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "area_market_data_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       developers: {
         Row: {
@@ -55,6 +66,7 @@ export type Database = {
           logo_url: string | null
           name: string
           slug: string
+          tenant_id: string | null
           total_projects: number | null
           years_active: number | null
         }
@@ -65,6 +77,7 @@ export type Database = {
           logo_url?: string | null
           name: string
           slug: string
+          tenant_id?: string | null
           total_projects?: number | null
           years_active?: number | null
         }
@@ -75,10 +88,19 @@ export type Database = {
           logo_url?: string | null
           name?: string
           slug?: string
+          tenant_id?: string | null
           total_projects?: number | null
           years_active?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "developers_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       document_requests: {
         Row: {
@@ -89,6 +111,7 @@ export type Database = {
           name: string | null
           phone: string | null
           property_id: string | null
+          tenant_id: string | null
         }
         Insert: {
           created_at?: string | null
@@ -98,6 +121,7 @@ export type Database = {
           name?: string | null
           phone?: string | null
           property_id?: string | null
+          tenant_id?: string | null
         }
         Update: {
           created_at?: string | null
@@ -107,6 +131,7 @@ export type Database = {
           name?: string | null
           phone?: string | null
           property_id?: string | null
+          tenant_id?: string | null
         }
         Relationships: [
           {
@@ -114,6 +139,13 @@ export type Database = {
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_requests_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
             referencedColumns: ["id"]
           },
         ]
@@ -131,6 +163,7 @@ export type Database = {
           property_id: string | null
           quiz_responses: Json | null
           source: string | null
+          tenant_id: string | null
           updated_at: string
         }
         Insert: {
@@ -145,6 +178,7 @@ export type Database = {
           property_id?: string | null
           quiz_responses?: Json | null
           source?: string | null
+          tenant_id?: string | null
           updated_at?: string
         }
         Update: {
@@ -159,6 +193,7 @@ export type Database = {
           property_id?: string | null
           quiz_responses?: Json | null
           source?: string | null
+          tenant_id?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -167,6 +202,13 @@ export type Database = {
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leads_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
             referencedColumns: ["id"]
           },
         ]
@@ -179,6 +221,7 @@ export type Database = {
           is_active: boolean
           source: string | null
           subscribed_at: string
+          tenant_id: string | null
           unsubscribed_at: string | null
         }
         Insert: {
@@ -188,6 +231,7 @@ export type Database = {
           is_active?: boolean
           source?: string | null
           subscribed_at?: string
+          tenant_id?: string | null
           unsubscribed_at?: string | null
         }
         Update: {
@@ -197,9 +241,18 @@ export type Database = {
           is_active?: boolean
           source?: string | null
           subscribed_at?: string
+          tenant_id?: string | null
           unsubscribed_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "newsletter_subscribers_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       properties: {
         Row: {
@@ -231,6 +284,7 @@ export type Database = {
           slug: string
           status: string | null
           tagline: string | null
+          tenant_id: string | null
           updated_at: string
           view_type: string[] | null
           virtual_tour_url: string | null
@@ -264,6 +318,7 @@ export type Database = {
           slug: string
           status?: string | null
           tagline?: string | null
+          tenant_id?: string | null
           updated_at?: string
           view_type?: string[] | null
           virtual_tour_url?: string | null
@@ -297,6 +352,7 @@ export type Database = {
           slug?: string
           status?: string | null
           tagline?: string | null
+          tenant_id?: string | null
           updated_at?: string
           view_type?: string[] | null
           virtual_tour_url?: string | null
@@ -309,6 +365,13 @@ export type Database = {
             referencedRelation: "developers"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "properties_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
         ]
       }
       property_highlights: {
@@ -319,6 +382,7 @@ export type Database = {
           icon: string
           id: string
           property_id: string
+          tenant_id: string | null
           title: string
         }
         Insert: {
@@ -328,6 +392,7 @@ export type Database = {
           icon: string
           id?: string
           property_id: string
+          tenant_id?: string | null
           title: string
         }
         Update: {
@@ -337,6 +402,7 @@ export type Database = {
           icon?: string
           id?: string
           property_id?: string
+          tenant_id?: string | null
           title?: string
         }
         Relationships: [
@@ -345,6 +411,13 @@ export type Database = {
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_highlights_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
             referencedColumns: ["id"]
           },
         ]
@@ -357,6 +430,7 @@ export type Database = {
           id: string
           is_primary: boolean | null
           property_id: string
+          tenant_id: string | null
           url: string
         }
         Insert: {
@@ -366,6 +440,7 @@ export type Database = {
           id?: string
           is_primary?: boolean | null
           property_id: string
+          tenant_id?: string | null
           url: string
         }
         Update: {
@@ -375,6 +450,7 @@ export type Database = {
           id?: string
           is_primary?: boolean | null
           property_id?: string
+          tenant_id?: string | null
           url?: string
         }
         Relationships: [
@@ -385,7 +461,98 @@ export type Database = {
             referencedRelation: "properties"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "property_images_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
         ]
+      }
+      tenants: {
+        Row: {
+          brand_display: string
+          brand_name: string
+          brand_tagline: string | null
+          country_code: string
+          created_at: string
+          currency_code: string
+          currency_locale: string | null
+          currency_symbol: string
+          domain: string
+          email: string
+          features: Json | null
+          id: string
+          is_active: boolean | null
+          mortgage_config: Json | null
+          office_location: Json | null
+          phone: string | null
+          regulatory_body: string | null
+          regulatory_number: string | null
+          residency_program: Json | null
+          seo_config: Json | null
+          slug: string
+          theme: Json | null
+          updated_at: string
+          whatsapp_number: string | null
+          working_hours: Json | null
+        }
+        Insert: {
+          brand_display: string
+          brand_name: string
+          brand_tagline?: string | null
+          country_code?: string
+          created_at?: string
+          currency_code?: string
+          currency_locale?: string | null
+          currency_symbol?: string
+          domain: string
+          email: string
+          features?: Json | null
+          id?: string
+          is_active?: boolean | null
+          mortgage_config?: Json | null
+          office_location?: Json | null
+          phone?: string | null
+          regulatory_body?: string | null
+          regulatory_number?: string | null
+          residency_program?: Json | null
+          seo_config?: Json | null
+          slug: string
+          theme?: Json | null
+          updated_at?: string
+          whatsapp_number?: string | null
+          working_hours?: Json | null
+        }
+        Update: {
+          brand_display?: string
+          brand_name?: string
+          brand_tagline?: string | null
+          country_code?: string
+          created_at?: string
+          currency_code?: string
+          currency_locale?: string | null
+          currency_symbol?: string
+          domain?: string
+          email?: string
+          features?: Json | null
+          id?: string
+          is_active?: boolean | null
+          mortgage_config?: Json | null
+          office_location?: Json | null
+          phone?: string | null
+          regulatory_body?: string | null
+          regulatory_number?: string | null
+          residency_program?: Json | null
+          seo_config?: Json | null
+          slug?: string
+          theme?: Json | null
+          updated_at?: string
+          whatsapp_number?: string | null
+          working_hours?: Json | null
+        }
+        Relationships: []
       }
     }
     Views: {
