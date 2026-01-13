@@ -1,35 +1,81 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import { useTenant } from '@/hooks/useTenant';
 import heroImage from '@/assets/hero-dubai-skyline.jpeg';
 
-const lifestyleHeadlines = [
+// Default headlines that work for any market
+const defaultHeadlines = [
   {
-    headline: "Wake Up to the Arabian Gulf",
-    subline: "Where your morning view changes everything"
+    headline: "The Smartest Entry Point",
+    subline: "Premium off-plan investments, expertly curated"
   },
   {
-    headline: "Your Tax-Free Chapter Begins",
-    subline: "0% income tax. 100% opportunity"
+    headline: "Where Ambition Meets Opportunity",
+    subline: "The world's most coveted addresses, before they're built"
   },
   {
-    headline: "Where Ambition Meets the Sea",
-    subline: "Dubai's most coveted addresses, before they're built"
-  },
-  {
-    headline: "The World's Safe Haven",
-    subline: "Invest where the future is being designed"
+    headline: "Your Investment Journey Begins",
+    subline: "Expert guidance. Premium access. Exceptional returns."
   }
 ];
 
+// Market-specific headlines (keyed by tenant slug)
+const marketHeadlines: Record<string, Array<{ headline: string; subline: string }>> = {
+  dubai: [
+    {
+      headline: "Wake Up to the Arabian Gulf",
+      subline: "Where your morning view changes everything"
+    },
+    {
+      headline: "Your Tax-Free Chapter Begins",
+      subline: "0% income tax. 100% opportunity"
+    },
+    {
+      headline: "Where Ambition Meets the Sea",
+      subline: "Dubai's most coveted addresses, before they're built"
+    },
+    {
+      headline: "The World's Safe Haven",
+      subline: "Invest where the future is being designed"
+    }
+  ],
+  mumbai: [
+    {
+      headline: "The Heart of India's Future",
+      subline: "Premium addresses in the city that never sleeps"
+    },
+    {
+      headline: "Where Dreams Take Shape",
+      subline: "Mumbai's most prestigious developments await"
+    }
+  ],
+  saudi: [
+    {
+      headline: "Vision 2030 Begins Here",
+      subline: "Be part of the Kingdom's transformation"
+    },
+    {
+      headline: "The New Frontier of Investment",
+      subline: "Premium residences in Saudi Arabia's rising cities"
+    }
+  ]
+};
+
 export function HeroSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { tenant } = useTenant();
+
+  // Get headlines for current tenant
+  const headlines = tenant?.slug 
+    ? (marketHeadlines[tenant.slug] || defaultHeadlines)
+    : defaultHeadlines;
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % lifestyleHeadlines.length);
+      setCurrentIndex((prev) => (prev + 1) % headlines.length);
     }, 6000);
     return () => clearInterval(interval);
-  }, []);
+  }, [headlines.length]);
 
   const scrollToProperties = () => {
     const element = document.getElementById('properties');
@@ -38,7 +84,10 @@ export function HeroSection() {
     }
   };
 
-  const current = lifestyleHeadlines[currentIndex];
+  const current = headlines[currentIndex];
+
+  // Use tenant hero image or default
+  const backgroundImage = tenant?.theme?.hero_image_url || heroImage;
 
   return (
     <section className="relative h-screen w-full overflow-hidden">
@@ -46,8 +95,8 @@ export function HeroSection() {
       <div className="absolute inset-0">
         <motion.img
           key="hero-bg"
-          src={heroImage}
-          alt="Dubai skyline at golden hour with Burj Al Arab"
+          src={backgroundImage}
+          alt={`${tenant?.office_location?.city || 'City'} skyline at golden hour`}
           className="h-full w-full object-cover"
           initial={{ scale: 1 }}
           animate={{ scale: 1.08 }}
@@ -81,7 +130,7 @@ export function HeroSection() {
 
         {/* Headline Indicators */}
         <div className="flex gap-2 mb-10">
-          {lifestyleHeadlines.map((_, index) => (
+          {headlines.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}

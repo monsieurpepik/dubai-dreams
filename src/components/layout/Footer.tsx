@@ -1,7 +1,28 @@
 import { Mail, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTenant } from "@/hooks/useTenant";
 
 export function Footer() {
+  const { tenant } = useTenant();
+
+  // Brand name parts
+  const brandName = tenant?.brand_name || 'OwningDubai';
+  const brandParts = brandName.match(/^(Owning)(.*)$/);
+  const brandPrefix = brandParts?.[1] || 'Owning';
+  const brandLocation = brandParts?.[2] || '';
+
+  // Location display
+  const location = tenant?.office_location
+    ? `${tenant.office_location.city}, ${tenant.office_location.country}`
+    : 'Dubai, United Arab Emirates';
+
+  // Email
+  const email = tenant?.email || 'hello@owningdubai.com';
+
+  // Regulatory info
+  const regulatoryBody = tenant?.regulatory_body || 'RERA';
+  const regulatoryNumber = tenant?.regulatory_number || 'Registered Broker';
+
   return (
     <footer className="bg-background border-t border-border/30">
       <div className="container-wide py-20">
@@ -11,11 +32,11 @@ export function Footer() {
           <div>
             <Link to="/" className="inline-block mb-6">
               <span className="text-xl font-light tracking-tight text-foreground">
-                Owning<span className="font-medium">Dubai</span>
+                {brandPrefix}<span className="font-medium">{brandLocation}</span>
               </span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-              Curated off-plan properties in Dubai's most sought-after locations.
+              {tenant?.brand_tagline || `Curated off-plan properties in ${tenant?.office_location?.city || 'Dubai'}'s most sought-after locations.`}
             </p>
           </div>
 
@@ -68,11 +89,11 @@ export function Footer() {
             <ul className="space-y-4 text-sm text-muted-foreground">
               <li className="flex items-center gap-3">
                 <MapPin className="w-4 h-4 text-muted-foreground" />
-                <span>Dubai, United Arab Emirates</span>
+                <span>{location}</span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-muted-foreground" />
-                <span>hello@owningdubai.com</span>
+                <span>{email}</span>
               </li>
             </ul>
           </div>
@@ -82,9 +103,9 @@ export function Footer() {
         <div className="mt-20 pt-8 border-t border-border/30">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
             <div className="flex flex-col md:flex-row items-center gap-4">
-              <span>© 2026 OwningDubai. All rights reserved.</span>
+              <span>© {new Date().getFullYear()} {brandName}. All rights reserved.</span>
               <span className="hidden md:inline text-border">·</span>
-              <span>RERA Registered Broker</span>
+              <span>{regulatoryBody} {regulatoryNumber}</span>
             </div>
             <div className="flex items-center gap-6">
               <a href="#" className="hover:text-foreground transition-colors">
