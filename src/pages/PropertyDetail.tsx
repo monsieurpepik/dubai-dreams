@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Header } from '@/components/layout/Header';
@@ -10,21 +10,13 @@ import { SEO } from '@/components/SEO';
 import { ImmersiveGallery } from '@/components/properties/ImmersiveGallery';
 import { InquiryForm } from '@/components/properties/InquiryForm';
 import { AffordabilityCTA } from '@/components/properties/AffordabilityCTA';
-import { MarketContextCard } from '@/components/properties/MarketContextCard';
+import { SimpleMarketContext } from '@/components/properties/SimpleMarketContext';
 import { DeveloperTrustCard } from '@/components/properties/DeveloperTrustCard';
 import { ConstructionProgress } from '@/components/properties/ConstructionProgress';
-import { InvestmentProjectionCard } from '@/components/properties/InvestmentProjectionCard';
-import { OffPlanSavingsBadge } from '@/components/properties/OffPlanSavingsBadge';
-import { ROIBadge } from '@/components/properties/ROIBadge';
-import { MortgageTimelineExplainer } from '@/components/properties/MortgageTimelineExplainer';
-import { DocumentDownload } from '@/components/properties/DocumentDownload';
 import { WhatsAppButton } from '@/components/properties/WhatsAppButton';
-import { MobileCTABar } from '@/components/properties/MobileCTABar';
-import { LiveActivityBadge } from '@/components/properties/LiveActivityBadge';
-import { UnitsRemaining } from '@/components/properties/UnitsRemaining';
-import { TrustSignals, VerifiedBadge } from '@/components/properties/TrustSignals';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+
 const formatPrice = (price: number): string => {
   if (price >= 1000000) {
     return `AED ${(price / 1000000).toFixed(1)}M`;
@@ -70,20 +62,6 @@ const PropertyDetail = () => {
       return data;
     },
     enabled: !!slug,
-  });
-
-  // Fetch area market data for off-plan savings
-  const { data: areaData } = useQuery({
-    queryKey: ['area-market', property?.area],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from('area_market_data')
-        .select('*')
-        .eq('area', property!.area)
-        .maybeSingle();
-      return data;
-    },
-    enabled: !!property?.area,
   });
 
   if (isLoading) {
@@ -132,7 +110,6 @@ const PropertyDetail = () => {
     );
   }
 
-  const features = Array.isArray(property.features) ? property.features : [];
   const primaryImage = property.property_images?.find((img: { is_primary?: boolean }) => img.is_primary)?.url || 
     property.property_images?.[0]?.url || 
     'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&h=630&fit=crop';
@@ -158,7 +135,7 @@ const PropertyDetail = () => {
           </Link>
         </div>
 
-        {/* Gallery */}
+        {/* Gallery - Cinematic Hero */}
         <ImmersiveGallery
           images={property.property_images || []}
           propertyName={property.name}
@@ -167,7 +144,7 @@ const PropertyDetail = () => {
         {/* Content */}
         <div className="container-wide py-16 md:py-24">
           <div className="grid lg:grid-cols-3 gap-12 lg:gap-16">
-            {/* Main Content */}
+            {/* Main Content - Decisive, Clean */}
             <div className="lg:col-span-2 space-y-12">
               {/* Header */}
               <motion.div
@@ -175,130 +152,77 @@ const PropertyDetail = () => {
                 animate={{ opacity: 1, y: 0 }}
               >
                 {property.developer && (
-                  <span className="text-xs font-medium text-accent uppercase tracking-luxury mb-4 block">
+                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-4 block">
                     {property.developer.name}
                   </span>
                 )}
                 
-                <div className="flex items-center gap-3 mb-4">
-                  <h1 className="font-serif text-4xl md:text-5xl text-foreground">
-                    {property.name}
-                  </h1>
-                  <VerifiedBadge className="mt-2" />
-                </div>
+                <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-4">
+                  {property.name}
+                </h1>
                 
-                <p className="text-lg text-muted-foreground mb-4">
+                <p className="text-lg text-muted-foreground">
                   {property.area}, {property.location}
                 </p>
-
-                {/* Live Activity Indicators */}
-                <LiveActivityBadge 
-                  propertyId={property.id} 
-                  status={property.status} 
-                  variant="detail"
-                  className="mb-4"
-                />
-
-                {/* Investment Badges */}
-                <div className="flex flex-wrap gap-3 mt-4">
-                  {areaData?.offplan_vs_ready_delta && areaData.offplan_vs_ready_delta > 0 && (
-                    <OffPlanSavingsBadge savingsPercent={areaData.offplan_vs_ready_delta} size="md" />
-                  )}
-                  {property.roi_estimate && (
-                    <ROIBadge roiPercent={property.roi_estimate} size="md" />
-                  )}
-                  {property.golden_visa_eligible && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-accent/10 text-accent text-xs font-medium uppercase tracking-wider">
-                      Golden Visa Eligible
-                    </span>
-                  )}
-                </div>
               </motion.div>
 
-              {/* Specs Grid - Clean */}
+              {/* Specs Grid - Minimal */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="grid grid-cols-2 md:grid-cols-4 gap-6 py-8 border-y border-border/30"
+                className="grid grid-cols-2 md:grid-cols-4 gap-8 py-8 border-y border-border/30"
               >
                 <div>
-                  <span className="text-xs uppercase tracking-luxury text-muted-foreground block mb-1">
+                  <span className="text-xs uppercase tracking-wider text-muted-foreground block mb-2">
+                    Starting Price
+                  </span>
+                  <span className="text-xl text-foreground font-medium">
+                    {formatPrice(property.price_from)}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-xs uppercase tracking-wider text-muted-foreground block mb-2">
                     Bedrooms
                   </span>
-                  <span className="text-foreground font-medium">
+                  <span className="text-xl text-foreground font-medium">
                     {formatBedrooms(property.bedrooms || [])}
                   </span>
                 </div>
                 <div>
-                  <span className="text-xs uppercase tracking-luxury text-muted-foreground block mb-1">
+                  <span className="text-xs uppercase tracking-wider text-muted-foreground block mb-2">
                     Completion
                   </span>
-                  <span className="text-foreground font-medium">
+                  <span className="text-xl text-foreground font-medium">
                     {formatDate(property.completion_date)}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-xs uppercase tracking-luxury text-muted-foreground block mb-1">
-                    Price From
-                  </span>
-                  <span className="text-foreground font-medium">
-                    {formatPrice(property.price_from)}
                   </span>
                 </div>
                 {property.payment_plan && (
                   <div>
-                    <span className="text-xs uppercase tracking-luxury text-muted-foreground block mb-1">
+                    <span className="text-xs uppercase tracking-wider text-muted-foreground block mb-2">
                       Payment Plan
                     </span>
-                    <span className="text-foreground font-medium">
+                    <span className="text-xl text-foreground font-medium">
                       {property.payment_plan}
                     </span>
                   </div>
                 )}
               </motion.div>
 
-              {/* Description - Editorial */}
+              {/* Description - Editorial, 2-3 lines max */}
               {(property.lifestyle_description || property.description) && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                 >
-                  <h2 className="font-serif text-2xl text-foreground mb-6">
-                    The Residence
-                  </h2>
-                  <p className="text-muted-foreground leading-relaxed text-lg">
+                  <p className="text-muted-foreground leading-relaxed text-lg max-w-2xl">
                     {property.lifestyle_description || property.description}
                   </p>
                 </motion.div>
               )}
 
-              {/* Features - Clean list */}
-              {features.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                >
-                  <h2 className="font-serif text-2xl text-foreground mb-6">
-                    Features
-                  </h2>
-                  <div className="grid grid-cols-2 gap-3">
-                    {features.map((feature: string, index: number) => (
-                      <div
-                        key={index}
-                        className="flex items-center gap-3 py-2"
-                      >
-                        <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0" />
-                        <span className="text-sm text-muted-foreground">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Construction Progress - Show for off-plan properties */}
+              {/* Construction Progress - Visual delivery timeline */}
               {property.status !== 'ready' && (
                 <ConstructionProgress
                   stage={(property.construction_stage as 'pre-launch' | 'foundation' | 'structure' | 'finishing' | 'ready') || 'pre-launch'}
@@ -308,75 +232,35 @@ const PropertyDetail = () => {
               )}
             </div>
 
-            {/* Sidebar */}
+            {/* Sidebar - Focused, no clutter */}
             <div className="space-y-6">
-              {/* Units Remaining - Scarcity Signal */}
-              <UnitsRemaining 
-                propertyId={property.id} 
-                status={property.status}
-                variant="bar"
+              {/* Market Context - Simple & Reassuring */}
+              <SimpleMarketContext
+                area={property.area}
+                propertyPriceFrom={property.price_from}
               />
-
-              {/* WhatsApp CTA in sidebar */}
-              <WhatsAppButton propertyName={property.name} variant="sidebar" />
-
-              <div ref={inquiryFormRef}>
-                <InquiryForm
-                  propertyId={property.id}
-                  propertyName={property.name}
-                />
-              </div>
 
               {/* Developer Trust Card */}
               {property.developer && (
                 <DeveloperTrustCard developer={property.developer} />
               )}
 
-              <MarketContextCard
-                area={property.area}
-                propertyPriceFrom={property.price_from}
-              />
-
-              {/* Investment Projection Card */}
-              <InvestmentProjectionCard
-                priceFrom={property.price_from}
-                roiEstimate={property.roi_estimate}
-                areaAppreciation={areaData?.trend_percentage || 5}
-                completionDate={property.completion_date}
-              />
-
-              {/* Mortgage Timeline - for off-plan */}
-              {property.status !== 'ready' && (
-                <MortgageTimelineExplainer
-                  priceFrom={property.price_from}
-                  paymentPlan={property.payment_plan}
-                  completionDate={property.completion_date}
-                />
-              )}
-
-              {/* Document Downloads */}
-              <DocumentDownload
-                propertyId={property.id}
-                propertyName={property.name}
-                brochureUrl={property.brochure_url}
-              />
-
+              {/* Affordability CTA - Primary action */}
               <AffordabilityCTA priceFrom={property.price_from} />
+
+              {/* Inquiry Form */}
+              <div ref={inquiryFormRef}>
+                <InquiryForm
+                  propertyId={property.id}
+                  propertyName={property.name}
+                />
+              </div>
             </div>
           </div>
         </div>
       </main>
       <Footer />
       <WhatsAppButton propertyName={property.name} />
-      <MobileCTABar
-        propertyName={property.name}
-        priceFrom={property.price_from}
-        onInquireClick={() => {
-          inquiryFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }}
-      />
-      {/* Add bottom padding on mobile to prevent content hiding behind sticky CTA */}
-      <div className="h-32 md:hidden" />
     </div>
   );
 };
