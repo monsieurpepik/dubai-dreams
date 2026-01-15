@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { analytics } from '@/lib/analytics';
+import { useTenant } from '@/hooks/useTenant';
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, 'Name is required').max(100, 'Name must be less than 100 characters'),
@@ -22,6 +23,7 @@ const contactSchema = z.object({
 type ContactFormData = z.infer<typeof contactSchema>;
 
 const Contact = () => {
+  const { tenant } = useTenant();
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
@@ -33,10 +35,17 @@ const Contact = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const { toast } = useToast();
 
+  // Tenant-aware values
+  const cityName = tenant?.office_location?.city || 'Dubai';
+  const brandName = tenant?.brand_name || 'Owning';
+  const officeArea = tenant?.office_location?.area || 'Dubai Marina';
+  const officeCountry = tenant?.office_location?.country || 'United Arab Emirates';
+  const contactEmail = tenant?.email || 'hello@owning.com';
+  const workingHours = tenant?.working_hours;
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing
     if (errors[name as keyof ContactFormData]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
     }
@@ -46,7 +55,6 @@ const Contact = () => {
     e.preventDefault();
     setErrors({});
 
-    // Validate form data
     const result = contactSchema.safeParse(formData);
     if (!result.success) {
       const fieldErrors: Partial<Record<keyof ContactFormData, string>> = {};
@@ -73,7 +81,6 @@ const Contact = () => {
 
       if (error) throw error;
 
-      // Send notification email
       try {
         await supabase.functions.invoke('send-lead-notification', {
           body: {
@@ -90,7 +97,6 @@ const Contact = () => {
         console.error('Failed to send notification:', notifyError);
       }
 
-      // Track analytics
       analytics.submitContactForm();
 
       setIsSuccess(true);
@@ -114,8 +120,8 @@ const Contact = () => {
     <div className="min-h-screen bg-background">
       <SEO 
         title="Contact Us"
-        description="Get in touch with OwningDubai. Our Dubai Marina team is ready to help you find your perfect off-plan property investment."
-        url="https://owningdubai.com/contact"
+        description={`Get in touch with ${brandName}. Our ${cityName} team is ready to help you find your perfect off-plan property investment.`}
+        url={`https://owning${cityName.toLowerCase()}.com/contact`}
       />
       <Header />
       <main className="pt-20">
@@ -135,7 +141,7 @@ const Contact = () => {
                 Contact Us
               </h1>
               <p className="text-lg text-muted-foreground">
-                Have questions about Dubai off-plan properties? Our team is here to help you find your perfect investment.
+                Have questions about {cityName} off-plan properties? Our team is here to help.
               </p>
             </motion.div>
           </div>
@@ -161,7 +167,7 @@ const Contact = () => {
                       Thank You
                     </h2>
                     <p className="text-muted-foreground">
-                      We've received your message and will respond within 24 hours.
+                      We've received your message and will respond shortly.
                     </p>
                   </div>
                 ) : (
@@ -237,13 +243,13 @@ const Contact = () => {
                     </Button>
 
                     <p className="text-xs text-center text-muted-foreground">
-                      We respect your privacy and will never share your information.
+                      We respect your privacy.
                     </p>
                   </form>
                 )}
               </motion.div>
 
-              {/* Info & Map */}
+              {/* Info */}
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -260,8 +266,8 @@ const Contact = () => {
                     <div>
                       <h3 className="font-medium text-foreground mb-1">Location</h3>
                       <p className="text-muted-foreground">
-                        Dubai Marina, Dubai<br />
-                        United Arab Emirates
+                        {officeArea}, {cityName}<br />
+                        {officeCountry}
                       </p>
                     </div>
                   </div>
@@ -273,7 +279,7 @@ const Contact = () => {
                     <div>
                       <h3 className="font-medium text-foreground mb-1">Email</h3>
                       <p className="text-muted-foreground">
-                        hello@owningdubai.com
+                        {contactEmail}
                       </p>
                     </div>
                   </div>
@@ -285,25 +291,20 @@ const Contact = () => {
                     <div>
                       <h3 className="font-medium text-foreground mb-1">Working Hours</h3>
                       <p className="text-muted-foreground">
-                        Sunday – Thursday: 9am – 6pm<br />
-                        Friday – Saturday: By appointment
+                        {workingHours ? (
+                          <>
+                            {workingHours.weekdays}<br />
+                            {workingHours.weekends}
+                          </>
+                        ) : (
+                          <>
+                            Sunday – Thursday: 9am – 6pm<br />
+                            Friday – Saturday: By appointment
+                          </>
+                        )}
                       </p>
                     </div>
                   </div>
-                </div>
-
-                {/* Google Map Embed */}
-                <div className="aspect-[4/3] w-full overflow-hidden border border-border/50">
-                  <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14438.494732299845!2d55.13097877531738!3d25.080226876576!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f6cdb6f0a5c9b%3A0x3f60b37f1c2d7bb7!2sDubai%20Marina!5e0!3m2!1sen!2sae!4v1704672000000!5m2!1sen!2sae"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title="Dubai Marina Location"
-                  />
                 </div>
               </motion.div>
             </div>

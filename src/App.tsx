@@ -7,6 +7,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { TenantProvider } from "@/contexts/TenantContext";
 import { usePageTracking } from "@/hooks/usePageTracking";
 import Index from "./pages/Index";
+import Properties from "./pages/Properties";
 import PropertyDetail from "./pages/PropertyDetail";
 import Calculator from "./pages/Calculator";
 import Contact from "./pages/Contact";
@@ -32,6 +33,7 @@ const App = () => (
             <AnalyticsWrapper>
               <Routes>
                 <Route path="/" element={<Index />} />
+                <Route path="/properties" element={<Properties />} />
                 <Route path="/properties/:slug" element={<PropertyDetail />} />
                 <Route path="/calculator" element={<Calculator />} />
                 <Route path="/contact" element={<Contact />} />

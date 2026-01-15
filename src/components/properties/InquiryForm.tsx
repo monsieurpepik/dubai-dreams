@@ -96,7 +96,7 @@ export const InquiryForm = ({ propertyId, propertyName }: InquiryFormProps) => {
           Thank You
         </h3>
         <p className="text-sm text-muted-foreground">
-          We'll be in touch within 24 hours.
+          We'll respond shortly.
         </p>
       </motion.div>
     );
@@ -113,7 +113,7 @@ export const InquiryForm = ({ propertyId, propertyName }: InquiryFormProps) => {
         Inquire
       </h3>
       <p className="text-sm text-muted-foreground mb-6">
-        Request floor plans and current availability.
+        Get project details.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">

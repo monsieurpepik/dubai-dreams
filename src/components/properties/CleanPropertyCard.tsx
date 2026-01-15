@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useTenant } from '@/hooks/useTenant';
 
 interface PropertyImage {
   id: string;
@@ -40,13 +41,6 @@ interface CleanPropertyCardProps {
   index: number;
 }
 
-const formatPrice = (price: number): string => {
-  if (price >= 1000000) {
-    return `AED ${(price / 1000000).toFixed(price % 1000000 === 0 ? 0 : 1)}M`;
-  }
-  return `AED ${(price / 1000).toFixed(0)}K`;
-};
-
 const formatDate = (dateString: string | null): string => {
   if (!dateString) return 'TBA';
   const date = new Date(dateString);
@@ -54,7 +48,9 @@ const formatDate = (dateString: string | null): string => {
   return `Q${quarter} ${date.getFullYear()}`;
 };
 
+
 export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) => {
+  const { formatPrice } = useTenant();
   const primaryImage = property.property_images?.find(img => img.is_primary) 
     || property.property_images?.[0];
 
@@ -106,7 +102,7 @@ export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) =
           {/* Key Details - Single line */}
           <div className="flex items-center gap-3 pt-2 text-sm">
             <span className="text-foreground font-medium">
-              From {formatPrice(property.price_from)}
+              From {formatPrice(property.price_from, { compact: true })}
             </span>
             <span className="text-muted-foreground">·</span>
             <span className="text-muted-foreground">

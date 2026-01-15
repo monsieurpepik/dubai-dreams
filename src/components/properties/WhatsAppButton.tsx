@@ -29,26 +29,8 @@ export const WhatsAppButton = ({ propertyName, variant = 'floating' }: WhatsAppB
   // City name for personalized messages
   const cityName = tenant?.office_location?.city || 'property';
 
-  // Inline variant for cards
+  // Inline variant for cards - neutral, minimal
   if (variant === 'inline') {
-    return (
-      <motion.a
-        href={whatsappUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={handleClick}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        className="flex items-center gap-2 bg-[#25D366] text-white px-4 py-2 rounded-full text-sm font-medium shadow-md hover:shadow-lg transition-shadow"
-      >
-        <MessageCircle className="w-4 h-4" />
-        <span>WhatsApp</span>
-      </motion.a>
-    );
-  }
-
-  // Sidebar variant for property detail
-  if (variant === 'sidebar') {
     return (
       <motion.a
         href={whatsappUrl}
@@ -57,15 +39,33 @@ export const WhatsAppButton = ({ propertyName, variant = 'floating' }: WhatsAppB
         onClick={handleClick}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        className="flex items-center justify-center gap-2 w-full bg-[#25D366] text-white px-4 py-3 rounded-xl text-sm font-medium shadow-md hover:shadow-lg transition-all"
+        className="flex items-center gap-2 bg-foreground text-background px-4 py-2 text-xs font-medium uppercase tracking-wider"
       >
-        <MessageCircle className="w-5 h-5" />
-        <span>Chat on WhatsApp</span>
+        <MessageCircle className="w-4 h-4" />
+        <span>Message</span>
       </motion.a>
     );
   }
 
-  // Floating variant - shows on all screen sizes with expanded state on desktop
+  // Sidebar variant for property detail - calm, professional
+  if (variant === 'sidebar') {
+    return (
+      <motion.a
+        href={whatsappUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={handleClick}
+        whileHover={{ scale: 1.01 }}
+        whileTap={{ scale: 0.99 }}
+        className="flex items-center justify-center gap-2 w-full bg-foreground text-background px-4 py-3 text-xs font-medium uppercase tracking-wider transition-opacity hover:opacity-90"
+      >
+        <MessageCircle className="w-4 h-4" />
+        <span>Start Conversation</span>
+      </motion.a>
+    );
+  }
+
+  // Floating variant - neutral, confident, no urgency
   return (
     <>
       {/* Mobile: Simple button */}
@@ -74,42 +74,34 @@ export const WhatsAppButton = ({ propertyName, variant = 'floating' }: WhatsAppB
         target="_blank"
         rel="noopener noreferrer"
         onClick={handleClick}
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.98 }}
-        transition={{ delay: 1, duration: 0.3 }}
-        className="fixed bottom-6 right-6 z-50 md:hidden flex items-center justify-center w-14 h-14 bg-[#25D366] text-white rounded-full shadow-lg"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1, duration: 0.4 }}
+        className="fixed bottom-6 right-6 z-50 md:hidden flex items-center justify-center w-12 h-12 bg-foreground text-background"
       >
-        <MessageCircle className="w-6 h-6" />
+        <MessageCircle className="w-5 h-5" />
       </motion.a>
 
-      {/* Desktop: Expandable button */}
+      {/* Desktop: Expandable widget */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 1, duration: 0.3 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1, duration: 0.4 }}
         className="fixed bottom-6 right-6 z-50 hidden md:block"
       >
         <AnimatePresence mode="wait">
           {isExpanded ? (
             <motion.div
               key="expanded"
-              initial={{ opacity: 0, scale: 0.9, y: 10 }}
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 10 }}
-              className="bg-background border border-border rounded-2xl shadow-xl p-4 w-72"
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              className="bg-background border border-border p-6 w-72"
             >
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-10 h-10 bg-[#25D366] rounded-full flex items-center justify-center">
-                    <MessageCircle className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-sm text-foreground">Chat with us</p>
-                    <p className="text-xs text-muted-foreground">Typically replies instantly</p>
-                  </div>
-                </div>
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  Contact
+                </span>
                 <button
                   onClick={() => setIsExpanded(false)}
                   className="text-muted-foreground hover:text-foreground transition-colors"
@@ -118,21 +110,19 @@ export const WhatsAppButton = ({ propertyName, variant = 'floating' }: WhatsAppB
                 </button>
               </div>
               
-              <div className="bg-muted/50 rounded-xl p-3 mb-3">
-                <p className="text-sm text-muted-foreground">
-                  👋 Hi! Interested in {cityName} property? Our experts are ready to help you find your perfect investment.
-                </p>
-              </div>
+              <p className="text-sm text-foreground mb-6">
+                Have a question about {cityName} property?
+              </p>
               
               <a
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={handleClick}
-                className="flex items-center justify-center gap-2 w-full bg-[#25D366] text-white px-4 py-3 rounded-xl text-sm font-medium hover:bg-[#20BD5A] transition-colors"
+                className="flex items-center justify-center gap-2 w-full bg-foreground text-background px-4 py-3 text-xs font-medium uppercase tracking-wider hover:opacity-90 transition-opacity"
               >
                 <MessageCircle className="w-4 h-4" />
-                <span>Start Chat</span>
+                <span>Start Conversation</span>
               </a>
             </motion.div>
           ) : (
@@ -142,16 +132,12 @@ export const WhatsAppButton = ({ propertyName, variant = 'floating' }: WhatsAppB
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsExpanded(true)}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="flex items-center gap-2 bg-[#25D366] text-white px-5 py-3 rounded-full shadow-lg hover:shadow-xl transition-shadow"
+              className="flex items-center gap-3 bg-foreground text-background px-5 py-3 text-xs font-medium uppercase tracking-wider hover:opacity-90 transition-opacity"
             >
-              <MessageCircle className="w-5 h-5" />
-              <span className="text-sm font-medium">Chat with us</span>
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-              </span>
+              <MessageCircle className="w-4 h-4" />
+              <span>Contact</span>
             </motion.button>
           )}
         </AnimatePresence>

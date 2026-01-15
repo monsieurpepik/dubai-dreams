@@ -1,16 +1,10 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useTenant } from '@/hooks/useTenant';
 
 interface AffordabilityCTAProps {
   priceFrom: number;
 }
-
-const formatCurrency = (value: number): string => {
-  if (value >= 1000000) {
-    return `AED ${(value / 1000000).toFixed(1)}M`;
-  }
-  return `AED ${(value / 1000).toFixed(0)}K`;
-};
 
 const calculateMonthlyEstimate = (price: number): number => {
   const downPayment = price * 0.2;
@@ -24,6 +18,7 @@ const calculateMonthlyEstimate = (price: number): number => {
 };
 
 export const AffordabilityCTA = ({ priceFrom }: AffordabilityCTAProps) => {
+  const { formatPrice } = useTenant();
   const monthlyEstimate = calculateMonthlyEstimate(priceFrom);
 
   return (
@@ -37,7 +32,7 @@ export const AffordabilityCTA = ({ priceFrom }: AffordabilityCTAProps) => {
         Affordability
       </h3>
       <p className="text-sm text-muted-foreground mb-6">
-        Estimate your monthly payment.
+        See monthly estimates.
       </p>
 
       <div className="mb-6 pb-6 border-b border-border/30">
@@ -45,7 +40,7 @@ export const AffordabilityCTA = ({ priceFrom }: AffordabilityCTAProps) => {
           Monthly from
         </span>
         <span className="font-serif text-2xl text-foreground">
-          {formatCurrency(monthlyEstimate)}
+          {formatPrice(monthlyEstimate, { compact: true })}
         </span>
         <span className="text-xs text-muted-foreground block mt-1">
           Based on 20% down, 25 years
