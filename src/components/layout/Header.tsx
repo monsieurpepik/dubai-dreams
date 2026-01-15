@@ -5,9 +5,9 @@ import { Menu, X } from 'lucide-react';
 import { useTenant } from '@/hooks/useTenant';
 
 const navItems = [
-  { label: 'Properties', href: '#properties', isRoute: false },
-  { label: 'About', href: '/about', isRoute: true },
+  { label: 'Properties', href: '/properties', isRoute: true },
   { label: 'Calculator', href: '/calculator', isRoute: true },
+  { label: 'About', href: '/about', isRoute: true },
   { label: 'Contact', href: '/contact', isRoute: true },
 ];
 

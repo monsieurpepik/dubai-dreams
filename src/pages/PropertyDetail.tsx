@@ -16,13 +16,7 @@ import { ConstructionProgress } from '@/components/properties/ConstructionProgre
 import { WhatsAppButton } from '@/components/properties/WhatsAppButton';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-
-const formatPrice = (price: number): string => {
-  if (price >= 1000000) {
-    return `AED ${(price / 1000000).toFixed(1)}M`;
-  }
-  return `AED ${(price / 1000).toFixed(0)}K`;
-};
+import { useTenant } from '@/hooks/useTenant';
 
 const formatBedrooms = (bedrooms: number[]): string => {
   if (!bedrooms || bedrooms.length === 0) return 'TBA';
@@ -41,9 +35,12 @@ const formatDate = (dateString: string | null): string => {
   return `Q${quarter} ${date.getFullYear()}`;
 };
 
+
 const PropertyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const inquiryFormRef = useRef<HTMLDivElement>(null);
+  const { formatPrice, tenant } = useTenant();
+  const cityName = tenant?.office_location?.city || 'Dubai';
 
   const { data: property, isLoading, error } = useQuery({
     queryKey: ['property', slug],
@@ -97,7 +94,7 @@ const PropertyDetail = () => {
             <p className="text-muted-foreground mb-8">
               The property you're looking for doesn't exist.
             </p>
-            <Link to="/#properties">
+            <Link to="/properties">
               <Button variant="outline" className="gap-2">
                 <ArrowLeft className="w-4 h-4" />
                 Back to Properties
@@ -118,16 +115,16 @@ const PropertyDetail = () => {
     <div className="min-h-screen bg-background">
       <SEO 
         title={`${property.name} | ${property.area}`}
-        description={`${property.name} in ${property.area}, ${property.location}. Starting from ${formatPrice(property.price_from)}. ${property.tagline || property.description?.slice(0, 100) || 'Premium off-plan property in Dubai.'}`}
+        description={`${property.name} in ${property.area}, ${property.location}. Starting from ${formatPrice(property.price_from, { compact: true })}. ${property.tagline || property.description?.slice(0, 100) || `Premium off-plan property in ${cityName}.`}`}
         image={primaryImage}
-        url={`https://owningdubai.com/properties/${property.slug}`}
+        url={`https://owning${cityName.toLowerCase()}.com/properties/${property.slug}`}
       />
       <Header />
       <main className="pt-20">
         {/* Back Navigation */}
         <div className="container-wide py-6">
           <Link
-            to="/#properties"
+            to="/properties"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -178,7 +175,7 @@ const PropertyDetail = () => {
                     Starting Price
                   </span>
                   <span className="text-xl text-foreground font-medium">
-                    {formatPrice(property.price_from)}
+                    {formatPrice(property.price_from, { compact: true })}
                   </span>
                 </div>
                 <div>

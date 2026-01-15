@@ -53,15 +53,15 @@ export function HeroSection() {
           </p>
 
           {/* Single CTA - Apple minimal style */}
-          <motion.button
+          <motion.a
+            href="/properties"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            onClick={scrollToProperties}
-            className="px-10 py-4 bg-white text-black text-xs font-medium uppercase tracking-[0.2em] hover:bg-white/90 transition-colors duration-300"
+            className="inline-block px-10 py-4 bg-white text-black text-xs font-medium uppercase tracking-[0.2em] hover:bg-white/90 transition-colors duration-300"
           >
             Explore Projects
-          </motion.button>
+          </motion.a>
         </motion.div>
       </div>
 
