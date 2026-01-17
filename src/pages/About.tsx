@@ -1,49 +1,37 @@
 import { motion } from 'framer-motion';
-import { Target, Users, Award, TrendingUp } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { SEO } from '@/components/SEO';
 
-const teamMembers = [
+const principles = [
   {
-    name: 'Sarah Al-Rashid',
-    role: 'Founder & CEO',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80',
-    bio: 'Former investment banker with 15 years in Dubai real estate.',
+    title: 'Transparency Over Tactics',
+    description: 'Every price, timeline, and projection comes from verified sources. No hidden fees, no pressure.',
   },
   {
-    name: 'James Mitchell',
-    role: 'Head of Sales',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80',
-    bio: 'Specialist in luxury off-plan investments and Golden Visa properties.',
+    title: 'Data Over Hype',
+    description: 'Market intelligence replaces marketing speak. Decisions informed by facts, not feelings.',
   },
   {
-    name: 'Fatima Hassan',
-    role: 'Client Relations',
-    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80',
-    bio: 'Dedicated to ensuring seamless experiences for international buyers.',
+    title: 'Guidance Over Pressure',
+    description: 'Information flows freely. Contact happens when you are ready, not when we are.',
   },
-];
-
-const stats = [
-  { value: 'AED 2B+', label: 'Properties Sold' },
-  { value: '500+', label: 'Happy Clients' },
-  { value: '12', label: 'Years Experience' },
-  { value: '50+', label: 'Developer Partners' },
 ];
 
 const About = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title="About Us"
-        description="Meet the OwningDubai team. 12+ years helping international investors navigate Dubai's off-plan property market with transparency and expertise."
+        title="About"
+        description="Owning is a real estate intelligence platform. We help international investors discover, evaluate, and understand off-plan property opportunities."
         url="https://owningdubai.com/about"
       />
       <Header />
       <main className="pt-20">
         {/* Hero */}
-        <section className="py-20 md:py-32 bg-muted/30">
+        <section className="py-20 md:py-32">
           <div className="container-wide">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -52,169 +40,94 @@ const About = () => {
               className="max-w-3xl"
             >
               <p className="text-xs font-medium uppercase tracking-luxury text-muted-foreground mb-4">
-                About Us
+                About
               </p>
               <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-6">
-                Your Trusted Partner in Dubai Real Estate
+                Real Estate Intelligence
               </h1>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                We help discerning investors navigate Dubai&apos;s dynamic off-plan market with expertise, transparency, and personalized service.
+                A platform for discovering and understanding off-plan property opportunities.
               </p>
             </motion.div>
           </div>
         </section>
 
-        {/* Mission Statement */}
-        <section className="py-16 md:py-24">
+        {/* Platform Vision */}
+        <section className="py-16 md:py-24 border-t border-border/30">
           <div className="container-wide">
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="max-w-3xl">
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
               >
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                    <Target className="w-5 h-5 text-foreground" />
-                  </div>
-                  <span className="text-xs font-medium uppercase tracking-luxury text-muted-foreground">
-                    Our Mission
-                  </span>
-                </div>
-                <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
-                  Empowering Smart Property Investment
+                <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-8">
+                  What We're Building
                 </h2>
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  At OwningDubai, we believe everyone deserves access to premium real estate opportunities. Our mission is to demystify Dubai&apos;s off-plan market, providing clear insights and curated selections that match your investment goals.
-                </p>
-                <p className="text-muted-foreground leading-relaxed">
-                  We combine deep market knowledge with genuine care for our clients, ensuring every transaction is not just successful but truly transformative.
-                </p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="relative aspect-[4/3] overflow-hidden"
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1000&q=80"
-                  alt="Dubai skyline"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent" />
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* Stats */}
-        <section className="py-16 bg-muted/30">
-          <div className="container-wide">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {stats.map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                  className="text-center"
-                >
-                  <p className="font-serif text-3xl md:text-4xl text-foreground mb-2">
-                    {stat.value}
+                <div className="space-y-6 text-muted-foreground leading-relaxed">
+                  <p>
+                    Buying property in a new market is difficult. Information is fragmented, pricing is opaque, and most platforms are designed to capture leads rather than inform decisions.
                   </p>
-                  <p className="text-sm text-muted-foreground uppercase tracking-wide">
-                    {stat.label}
+                  <p>
+                    Owning exists to change that. We curate verified off-plan projects, provide market context that matters, and offer tools to evaluate affordability—all before any contact is required.
                   </p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Company Story */}
-        <section className="py-16 md:py-24">
-          <div className="container-wide">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="max-w-3xl mx-auto text-center mb-16"
-            >
-              <div className="flex items-center justify-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-foreground" />
+                  <p>
+                    The goal is simple: enable confident property decisions through transparency, data, and calm presentation.
+                  </p>
                 </div>
-              </div>
-              <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
-                Our Story
-              </h2>
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                Founded in 2012, OwningDubai began with a simple observation: international investors struggled to navigate Dubai&apos;s complex off-plan market. Too many agencies prioritized commissions over client success.
-              </p>
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                We set out to change that. Starting with just three properties and a commitment to transparency, we built relationships with Dubai&apos;s most reputable developers. Today, we represent over 50 developer partners and have helped more than 500 clients secure their ideal investments.
-              </p>
-              <p className="text-muted-foreground leading-relaxed">
-                Our approach remains unchanged: listen first, educate always, and only recommend properties we would invest in ourselves.
-              </p>
-            </motion.div>
+              </motion.div>
+            </div>
           </div>
         </section>
 
-        {/* Values */}
-        <section className="py-16 bg-muted/30">
+        {/* How It Works */}
+        <section className="py-16 md:py-24 bg-muted/30">
           <div className="container-wide">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-center mb-12"
+              className="mb-12"
             >
               <h2 className="font-serif text-3xl md:text-4xl text-foreground">
-                What We Stand For
+                How It Works
               </h2>
             </motion.div>
 
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-3 gap-12">
               {[
                 {
-                  icon: Award,
-                  title: 'Integrity',
-                  description: 'We only recommend properties we believe in. No hidden fees, no pressure tactics.',
+                  step: '01',
+                  title: 'Discover',
+                  description: 'Browse curated off-plan projects. Each listing includes verified pricing, delivery timelines, and developer information.',
                 },
                 {
-                  icon: Users,
-                  title: 'Client First',
-                  description: 'Your goals drive our recommendations. We succeed when you succeed.',
+                  step: '02',
+                  title: 'Evaluate',
+                  description: 'Understand market context for each area. See price trends, compare to similar properties, and estimate monthly payments.',
                 },
                 {
-                  icon: Target,
-                  title: 'Expertise',
-                  description: 'Deep market knowledge backed by data, not speculation.',
+                  step: '03',
+                  title: 'Connect',
+                  description: 'When ready, request project details or schedule a consultation. No pressure, no obligation.',
                 },
-              ].map((value, index) => (
+              ].map((item, index) => (
                 <motion.div
-                  key={value.title}
+                  key={item.step}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
-                  className="bg-background border border-border/50 p-8"
                 >
-                  <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-6">
-                    <value.icon className="w-6 h-6 text-foreground" />
-                  </div>
-                  <h3 className="font-serif text-xl text-foreground mb-3">
-                    {value.title}
+                  <span className="text-xs text-muted-foreground tracking-luxury">
+                    {item.step}
+                  </span>
+                  <h3 className="font-serif text-xl text-foreground mt-2 mb-3">
+                    {item.title}
                   </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    {value.description}
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {item.description}
                   </p>
                 </motion.div>
               ))}
@@ -222,52 +135,65 @@ const About = () => {
           </div>
         </section>
 
-        {/* Team */}
+        {/* Principles */}
         <section className="py-16 md:py-24">
           <div className="container-wide">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-center mb-12"
+              className="mb-12"
             >
-              <p className="text-xs font-medium uppercase tracking-luxury text-muted-foreground mb-4">
-                The Team
-              </p>
               <h2 className="font-serif text-3xl md:text-4xl text-foreground">
-                Meet Our Experts
+                Platform Principles
               </h2>
             </motion.div>
 
             <div className="grid md:grid-cols-3 gap-8">
-              {teamMembers.map((member, index) => (
+              {principles.map((principle, index) => (
                 <motion.div
-                  key={member.name}
+                  key={principle.title}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
-                  className="group"
+                  className="border-t border-border/50 pt-6"
                 >
-                  <div className="aspect-[3/4] overflow-hidden mb-6">
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
-                  <h3 className="font-serif text-xl text-foreground mb-1">
-                    {member.name}
+                  <h3 className="font-serif text-xl text-foreground mb-3">
+                    {principle.title}
                   </h3>
-                  <p className="text-xs font-medium uppercase tracking-luxury text-muted-foreground mb-3">
-                    {member.role}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {member.bio}
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {principle.description}
                   </p>
                 </motion.div>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="py-16 md:py-24 border-t border-border/30">
+          <div className="container-wide">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="max-w-xl"
+            >
+              <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-6">
+                Explore Current Projects
+              </h2>
+              <p className="text-muted-foreground mb-8">
+                Browse verified off-plan opportunities across premium locations.
+              </p>
+              <Link
+                to="/properties"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background text-sm transition-opacity hover:opacity-90"
+              >
+                View Projects
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </motion.div>
           </div>
         </section>
       </main>

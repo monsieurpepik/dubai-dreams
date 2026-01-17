@@ -6,13 +6,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Slider } from '@/components/ui/slider';
 import { SEO } from '@/components/SEO';
-
-const formatCurrency = (value: number): string => {
-  if (value >= 1000000) {
-    return `AED ${(value / 1000000).toFixed(1)}M`;
-  }
-  return `AED ${(value / 1000).toFixed(0)}K`;
-};
+import { useTenant } from '@/contexts/TenantContext';
 
 const calculateMonthlyPayment = (
   principal: number,
@@ -62,6 +56,7 @@ const verdictConfig = {
 };
 
 const Calculator = () => {
+  const { formatPrice } = useTenant();
   const [propertyPrice, setPropertyPrice] = useState(2000000);
   const [downPaymentPercent, setDownPaymentPercent] = useState(20);
   const [isResident, setIsResident] = useState(true);
@@ -134,7 +129,7 @@ const Calculator = () => {
                   Property Price
                 </label>
                 <span className="font-serif text-2xl text-foreground">
-                  {formatCurrency(propertyPrice)}
+                  {formatPrice(propertyPrice, { compact: true })}
                 </span>
               </div>
               <Slider
@@ -146,8 +141,8 @@ const Calculator = () => {
                 className="py-4"
               />
               <div className="flex justify-between text-xs text-muted-foreground mt-2">
-                <span>AED 500K</span>
-                <span>AED 20M</span>
+                <span>{formatPrice(500000, { compact: true })}</span>
+                <span>{formatPrice(20000000, { compact: true })}</span>
               </div>
             </div>
 
@@ -160,7 +155,7 @@ const Calculator = () => {
                 <span className="font-serif text-2xl text-foreground">
                   {calculations.effectiveDownPayment}%
                   <span className="text-base text-muted-foreground ml-2">
-                    ({formatCurrency(calculations.downPaymentAmount)})
+                    ({formatPrice(calculations.downPaymentAmount, { compact: true })})
                   </span>
                 </span>
               </div>
@@ -216,7 +211,7 @@ const Calculator = () => {
                 Estimated Monthly Payment
               </span>
               <span className="font-serif text-5xl md:text-6xl text-foreground">
-                {formatCurrency(calculations.monthlyPayment)}
+                {formatPrice(calculations.monthlyPayment, { compact: true })}
               </span>
               <span className="text-muted-foreground block mt-2">
                 based on 25-year term at 4.5% avg rate
@@ -239,11 +234,11 @@ const Calculator = () => {
             <div className="grid grid-cols-2 gap-6 text-sm">
               <div>
                 <span className="text-muted-foreground">Loan Amount</span>
-                <p className="text-foreground font-medium">{formatCurrency(calculations.loanAmount)}</p>
+                <p className="text-foreground font-medium">{formatPrice(calculations.loanAmount, { compact: true })}</p>
               </div>
               <div>
                 <span className="text-muted-foreground">Down Payment</span>
-                <p className="text-foreground font-medium">{formatCurrency(calculations.downPaymentAmount)}</p>
+                <p className="text-foreground font-medium">{formatPrice(calculations.downPaymentAmount, { compact: true })}</p>
               </div>
             </div>
           </motion.div>
