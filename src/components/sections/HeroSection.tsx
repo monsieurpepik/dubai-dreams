@@ -42,26 +42,36 @@ export function HeroSection() {
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-3xl mx-auto"
         >
-          {/* Authority headline - single, calm, confident */}
+          {/* Transformational headline */}
           <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl text-white mb-6 leading-[1.1] tracking-tight">
-            The Smartest Entry Point to {cityName} Real Estate
+            Turn AED 500K Into a Portfolio
           </h1>
           
-          {/* Single line supporting text */}
+          {/* Supporting text - investment focused */}
           <p className="text-lg md:text-xl text-white/60 mb-12 max-w-xl mx-auto font-light">
-            Off-plan developments from trusted developers.
+            Off-plan projects with 6-10% projected yields. Tax-free returns.
           </p>
 
-          {/* Single CTA - Apple minimal style */}
-          <motion.a
-            href="/properties"
+          {/* Dual CTAs */}
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            className="inline-block px-10 py-4 bg-white text-black text-xs font-medium uppercase tracking-[0.2em] hover:bg-white/90 transition-colors duration-300"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
-            Explore Projects
-          </motion.a>
+            <a
+              href="/calculator"
+              className="inline-block px-10 py-4 bg-white text-black text-xs font-medium uppercase tracking-[0.2em] hover:bg-white/90 transition-colors duration-300"
+            >
+              See Your Returns
+            </a>
+            <a
+              href="/properties"
+              className="inline-block px-10 py-4 border border-white/30 text-white text-xs font-medium uppercase tracking-[0.2em] hover:bg-white/10 transition-colors duration-300"
+            >
+              Browse Projects
+            </a>
+          </motion.div>
         </motion.div>
       </div>
 
