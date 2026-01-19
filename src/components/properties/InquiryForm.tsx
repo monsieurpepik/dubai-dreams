@@ -110,10 +110,10 @@ export const InquiryForm = ({ propertyId, propertyName }: InquiryFormProps) => {
       className="bg-card border border-border/50 p-8"
     >
       <h3 className="font-serif text-xl text-foreground mb-2">
-        Inquire
+        Get Your Investment Report
       </h3>
       <p className="text-sm text-muted-foreground mb-6">
-        Get project details.
+        Receive projected ROI, rental yield, and Golden Visa eligibility analysis.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -139,7 +139,7 @@ export const InquiryForm = ({ propertyId, propertyName }: InquiryFormProps) => {
           disabled={isSubmitting}
           className="w-full h-12 bg-foreground text-background hover:bg-foreground/90 text-xs uppercase tracking-luxury"
         >
-          {isSubmitting ? 'Sending...' : 'Request Details'}
+          {isSubmitting ? 'Sending...' : 'Send My Report'}
         </Button>
 
         <p className="text-xs text-center text-muted-foreground">

@@ -95,4 +95,18 @@ export const analytics = {
       source: 'website',
     });
   },
+
+  // Investment Quiz
+  startQuiz: () => {
+    trackEvent('start_quiz', {
+      source: 'investment_quiz',
+    });
+  },
+
+  completeQuiz: (budget: number, priority: string) => {
+    trackEvent('complete_quiz', {
+      investment_budget: budget,
+      investment_priority: priority,
+    });
+  },
 };

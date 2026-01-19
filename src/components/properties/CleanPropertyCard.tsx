@@ -108,6 +108,15 @@ export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) =
             <span className="text-muted-foreground">
               {formatDate(property.completion_date)}
             </span>
+            {/* ROI Badge - Investment visibility */}
+            {property.roi_estimate && property.roi_estimate > 0 && (
+              <>
+                <span className="text-muted-foreground">·</span>
+                <span className="text-accent font-medium">
+                  {property.roi_estimate}% Est. Yield
+                </span>
+              </>
+            )}
           </div>
         </div>
       </motion.article>
