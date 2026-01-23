@@ -7,8 +7,10 @@ import { useTenant } from '@/hooks/useTenant';
 const navItems = [
   { label: 'Properties', href: '/properties', isRoute: true },
   { label: 'Calculator', href: '/calculator', isRoute: true },
+  { label: 'How It Works', href: '/how-it-works', isRoute: true },
   { label: 'About', href: '/about', isRoute: true },
   { label: 'Contact', href: '/contact', isRoute: true },
+  { label: 'Developer Portal', href: '/developer/login', isRoute: true },
 ];
 
 export function Header() {

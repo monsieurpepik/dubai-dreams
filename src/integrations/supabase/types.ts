@@ -63,9 +63,12 @@ export type Database = {
           created_at: string
           description: string | null
           id: string
+          is_merchant: boolean | null
           logo_url: string | null
           name: string
+          onboarded_at: string | null
           slug: string
+          subscription_tier: string | null
           tenant_id: string | null
           total_projects: number | null
           years_active: number | null
@@ -74,9 +77,12 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          is_merchant?: boolean | null
           logo_url?: string | null
           name: string
+          onboarded_at?: string | null
           slug: string
+          subscription_tier?: string | null
           tenant_id?: string | null
           total_projects?: number | null
           years_active?: number | null
@@ -85,9 +91,12 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          is_merchant?: boolean | null
           logo_url?: string | null
           name?: string
+          onboarded_at?: string | null
           slug?: string
+          subscription_tier?: string | null
           tenant_id?: string | null
           total_projects?: number | null
           years_active?: number | null
@@ -152,11 +161,14 @@ export type Database = {
       }
       leads: {
         Row: {
+          claimed_at: string | null
+          claimed_by: string | null
           created_at: string
           email: string
           golden_visa_interest: boolean | null
           id: string
           investment_capacity: number | null
+          lead_status: string | null
           mortgage_data: Json | null
           name: string | null
           phone: string | null
@@ -167,11 +179,14 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          claimed_at?: string | null
+          claimed_by?: string | null
           created_at?: string
           email: string
           golden_visa_interest?: boolean | null
           id?: string
           investment_capacity?: number | null
+          lead_status?: string | null
           mortgage_data?: Json | null
           name?: string | null
           phone?: string | null
@@ -182,11 +197,14 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          claimed_at?: string | null
+          claimed_by?: string | null
           created_at?: string
           email?: string
           golden_visa_interest?: boolean | null
           id?: string
           investment_capacity?: number | null
+          lead_status?: string | null
           mortgage_data?: Json | null
           name?: string | null
           phone?: string | null
@@ -209,6 +227,85 @@ export type Database = {
             columns: ["tenant_id"]
             isOneToOne: false
             referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      merchant_invites: {
+        Row: {
+          accepted_at: string | null
+          created_at: string
+          developer_id: string
+          email: string
+          expires_at: string
+          id: string
+          invited_by: string | null
+          role: Database["public"]["Enums"]["app_role"]
+          token: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          created_at?: string
+          developer_id: string
+          email: string
+          expires_at?: string
+          id?: string
+          invited_by?: string | null
+          role?: Database["public"]["Enums"]["app_role"]
+          token?: string
+        }
+        Update: {
+          accepted_at?: string | null
+          created_at?: string
+          developer_id?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          invited_by?: string | null
+          role?: Database["public"]["Enums"]["app_role"]
+          token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "merchant_invites_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      merchant_users: {
+        Row: {
+          created_at: string
+          developer_id: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          developer_id: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          developer_id?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "merchant_users_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
             referencedColumns: ["id"]
           },
         ]
@@ -271,8 +368,10 @@ export type Database = {
           features: Json | null
           golden_visa_eligible: boolean | null
           id: string
+          last_edited_by: string | null
           lifestyle_description: string | null
           lifestyle_tags: string[] | null
+          listing_status: string | null
           location: string
           name: string
           payment_plan: string | null
@@ -283,6 +382,7 @@ export type Database = {
           roi_estimate: number | null
           slug: string
           status: string | null
+          submitted_by: string | null
           tagline: string | null
           tenant_id: string | null
           updated_at: string
@@ -305,8 +405,10 @@ export type Database = {
           features?: Json | null
           golden_visa_eligible?: boolean | null
           id?: string
+          last_edited_by?: string | null
           lifestyle_description?: string | null
           lifestyle_tags?: string[] | null
+          listing_status?: string | null
           location: string
           name: string
           payment_plan?: string | null
@@ -317,6 +419,7 @@ export type Database = {
           roi_estimate?: number | null
           slug: string
           status?: string | null
+          submitted_by?: string | null
           tagline?: string | null
           tenant_id?: string | null
           updated_at?: string
@@ -339,8 +442,10 @@ export type Database = {
           features?: Json | null
           golden_visa_eligible?: boolean | null
           id?: string
+          last_edited_by?: string | null
           lifestyle_description?: string | null
           lifestyle_tags?: string[] | null
+          listing_status?: string | null
           location?: string
           name?: string
           payment_plan?: string | null
@@ -351,6 +456,7 @@ export type Database = {
           roi_estimate?: number | null
           slug?: string
           status?: string | null
+          submitted_by?: string | null
           tagline?: string | null
           tenant_id?: string | null
           updated_at?: string
@@ -559,10 +665,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_developer_id: { Args: { _user_id: string }; Returns: string }
+      has_merchant_role: {
+        Args: {
+          _developer_id: string
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      user_belongs_to_developer: {
+        Args: { _developer_id: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "editor" | "viewer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -689,6 +807,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "editor", "viewer"],
+    },
   },
 } as const
