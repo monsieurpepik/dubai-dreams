@@ -56,6 +56,26 @@ export default function DeveloperDashboard() {
     enabled: !!developer?.id && !!properties?.length,
   });
 
+  // Fetch real property view counts
+  const { data: viewCount } = useQuery({
+    queryKey: ['developer-views', developer?.id],
+    queryFn: async () => {
+      if (!developer?.id || !properties?.length) return 0;
+      const propertyIds = properties.map(p => p.id);
+      const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000).toISOString();
+      
+      const { count, error } = await supabase
+        .from('property_views')
+        .select('id', { count: 'exact', head: true })
+        .in('property_id', propertyIds)
+        .gte('created_at', thirtyDaysAgo);
+      
+      if (error) return 0;
+      return count || 0;
+    },
+    enabled: !!developer?.id && !!properties?.length,
+  });
+
   const stats = [
     {
       title: 'Active Listings',
@@ -80,10 +100,10 @@ export default function DeveloperDashboard() {
     },
     {
       title: 'Property Views',
-      value: '2,847',
+      value: viewCount?.toLocaleString() || '0',
       icon: Eye,
-      change: '-5% vs last month',
-      positive: false,
+      change: 'Last 30 days',
+      positive: true,
     },
   ];
 

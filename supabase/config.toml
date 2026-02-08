@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.send-lead-notification]
 verify_jwt = false
+
+[functions.send-nurture-email]
+verify_jwt = false

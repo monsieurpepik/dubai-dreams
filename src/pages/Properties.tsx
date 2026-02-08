@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
+import { LayoutGrid, Map } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -9,6 +10,7 @@ import { CleanPropertyGrid } from '@/components/properties/CleanPropertyGrid';
 import { SmartSortBar, SortOption } from '@/components/properties/SmartSortBar';
 import { PropertyFilters, FilterState, defaultFilters } from '@/components/properties/PropertyFilters';
 import { CompareBar } from '@/components/properties/CompareBar';
+import { PropertyMap } from '@/components/properties/PropertyMap';
 import { useTenant } from '@/hooks/useTenant';
 import { useState, useMemo } from 'react';
 
@@ -26,6 +28,7 @@ const Properties = () => {
   const collection = searchParams.get('collection');
   const [sortBy, setSortBy] = useState<SortOption>('featured');
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
+  const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid');
   const cityName = tenant?.office_location?.city || 'Dubai';
 
   const { data: properties, isLoading } = useQuery({
@@ -133,9 +136,33 @@ const Properties = () => {
 
         <section className="py-12 md:py-16">
           <div className="container-wide">
-            <PropertyFilters filters={filters} onChange={setFilters} resultCount={propertyCount} />
-            <SmartSortBar activeSort={sortBy} onSortChange={setSortBy} propertyCount={propertyCount} />
-            <CleanPropertyGrid properties={filteredProperties} isLoading={isLoading} />
+            <div className="flex items-center justify-between mb-6">
+              <PropertyFilters filters={filters} onChange={setFilters} resultCount={propertyCount} />
+              <div className="flex items-center gap-1 border border-border/50">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`p-2 transition-colors ${viewMode === 'grid' ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground'}`}
+                  aria-label="Grid view"
+                >
+                  <LayoutGrid className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setViewMode('map')}
+                  className={`p-2 transition-colors ${viewMode === 'map' ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground'}`}
+                  aria-label="Map view"
+                >
+                  <Map className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+            {viewMode === 'grid' ? (
+              <>
+                <SmartSortBar activeSort={sortBy} onSortChange={setSortBy} propertyCount={propertyCount} />
+                <CleanPropertyGrid properties={filteredProperties} isLoading={isLoading} />
+              </>
+            ) : (
+              <PropertyMap properties={filteredProperties} />
+            )}
 
             {/* Empty state for filters */}
             {!isLoading && propertyCount === 0 && (properties?.length || 0) > 0 && (
