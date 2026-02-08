@@ -2,7 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Share2 } from 'lucide-react';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTenant } from '@/hooks/useTenant';
 import { generateWhatsAppShareUrl } from '@/utils/sharing';
+import { useTrackView } from '@/hooks/useTrackView';
 
 const formatBedrooms = (bedrooms: number[]): string => {
   if (!bedrooms || bedrooms.length === 0) return 'TBA';
@@ -61,6 +62,9 @@ const PropertyDetail = () => {
     },
     enabled: !!slug,
   });
+
+  // Track property view
+  useTrackView(property?.id);
 
   if (isLoading) {
     return (
