@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
+import { BackToTop } from '@/components/ui/BackToTop';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { SEO } from '@/components/SEO';
@@ -309,6 +310,7 @@ export default function HowItWorks() {
       </main>
       
       <Footer />
+      <BackToTop />
     </>
   );
 }
