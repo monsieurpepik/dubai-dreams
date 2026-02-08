@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Heart } from 'lucide-react';
 import { useTenant } from '@/hooks/useTenant';
+import { useSavedProperties } from '@/hooks/useSavedProperties';
 
 interface PropertyImage {
   id: string;
@@ -51,6 +53,8 @@ const formatDate = (dateString: string | null): string => {
 
 export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) => {
   const { formatPrice } = useTenant();
+  const { isSaved, toggleSave } = useSavedProperties();
+  const saved = isSaved(property.id);
   const primaryImage = property.property_images?.find(img => img.is_primary) 
     || property.property_images?.[0];
 
@@ -77,7 +81,7 @@ export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) =
             </div>
           )}
           
-          {/* Developer badge - subtle trust indicator */}
+          {/* Developer badge */}
           {property.developer && (
             <div className="absolute bottom-4 left-4">
               <span className="inline-block px-3 py-1.5 bg-background/90 backdrop-blur-sm text-[10px] font-medium uppercase tracking-wider text-foreground">
@@ -85,6 +89,15 @@ export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) =
               </span>
             </div>
           )}
+
+          {/* Save button */}
+          <button
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleSave(property.id); }}
+            className="absolute top-4 right-4 p-2 bg-background/80 backdrop-blur-sm transition-colors hover:bg-background"
+            aria-label={saved ? 'Remove from shortlist' : 'Save to shortlist'}
+          >
+            <Heart className={`w-4 h-4 transition-colors ${saved ? 'fill-accent text-accent' : 'text-foreground'}`} />
+          </button>
         </div>
 
         {/* Content - Minimal, editorial */}

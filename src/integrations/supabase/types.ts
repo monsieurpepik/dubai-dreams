@@ -660,6 +660,50 @@ export type Database = {
         }
         Relationships: []
       }
+      testimonials: {
+        Row: {
+          country: string
+          created_at: string
+          id: string
+          is_featured: boolean | null
+          name: string
+          property_name: string | null
+          quote: string
+          rating: number | null
+          tenant_id: string | null
+        }
+        Insert: {
+          country: string
+          created_at?: string
+          id?: string
+          is_featured?: boolean | null
+          name: string
+          property_name?: string | null
+          quote: string
+          rating?: number | null
+          tenant_id?: string | null
+        }
+        Update: {
+          country?: string
+          created_at?: string
+          id?: string
+          is_featured?: boolean | null
+          name?: string
+          property_name?: string | null
+          quote?: string
+          rating?: number | null
+          tenant_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "testimonials_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

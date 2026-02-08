@@ -7,6 +7,7 @@ import { InvestmentMathSection } from "@/components/sections/InvestmentMathSecti
 import { CollectionsSection } from "@/components/sections/CollectionsSection";
 import { OffPlanProjectsSection } from "@/components/sections/OffPlanProjectsSection";
 import { TrustedDevelopersStrip } from "@/components/sections/TrustedDevelopersStrip";
+import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { InvestmentQuiz } from "@/components/lead-capture/InvestmentQuiz";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import { SEO } from "@/components/SEO";
@@ -41,8 +42,11 @@ const Index = () => {
         
         {/* 7. Developer Logos - Trust layer */}
         <TrustedDevelopersStrip />
+
+        {/* 8. Social Proof */}
+        <TestimonialsSection />
         
-        {/* 8. Investment Quiz CTA */}
+        {/* 9. Investment Quiz CTA */}
         <section className="py-20 md:py-28 bg-secondary">
           <div className="container-wide">
             <div className="text-center mb-12">
