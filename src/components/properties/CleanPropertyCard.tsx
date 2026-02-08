@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart } from 'lucide-react';
+import { Heart, BarChart3 } from 'lucide-react';
 import { useTenant } from '@/hooks/useTenant';
 import { useSavedProperties } from '@/hooks/useSavedProperties';
+import { useCompare } from '@/hooks/useCompare';
 
 interface PropertyImage {
   id: string;
@@ -54,7 +55,9 @@ const formatDate = (dateString: string | null): string => {
 export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) => {
   const { formatPrice } = useTenant();
   const { isSaved, toggleSave } = useSavedProperties();
+  const { isComparing, toggleCompare, canAdd } = useCompare();
   const saved = isSaved(property.id);
+  const comparing = isComparing(property.id);
   const primaryImage = property.property_images?.find(img => img.is_primary) 
     || property.property_images?.[0];
 
@@ -90,14 +93,26 @@ export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) =
             </div>
           )}
 
-          {/* Save button */}
-          <button
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleSave(property.id); }}
-            className="absolute top-4 right-4 p-2 bg-background/80 backdrop-blur-sm transition-colors hover:bg-background"
-            aria-label={saved ? 'Remove from shortlist' : 'Save to shortlist'}
-          >
-            <Heart className={`w-4 h-4 transition-colors ${saved ? 'fill-accent text-accent' : 'text-foreground'}`} />
-          </button>
+          {/* Action buttons */}
+          <div className="absolute top-4 right-4 flex gap-1.5">
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleCompare(property.id); }}
+              className={`p-2 backdrop-blur-sm transition-colors ${
+                comparing ? 'bg-accent text-accent-foreground' : 'bg-background/80 text-foreground hover:bg-background'
+              } ${!canAdd && !comparing ? 'opacity-40 cursor-not-allowed' : ''}`}
+              aria-label={comparing ? 'Remove from comparison' : 'Add to comparison'}
+              disabled={!canAdd && !comparing}
+            >
+              <BarChart3 className="w-4 h-4" />
+            </button>
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleSave(property.id); }}
+              className="p-2 bg-background/80 backdrop-blur-sm transition-colors hover:bg-background"
+              aria-label={saved ? 'Remove from shortlist' : 'Save to shortlist'}
+            >
+              <Heart className={`w-4 h-4 transition-colors ${saved ? 'fill-accent text-accent' : 'text-foreground'}`} />
+            </button>
+          </div>
         </div>
 
         {/* Content - Minimal, editorial */}
