@@ -159,6 +159,57 @@ export type Database = {
           },
         ]
       }
+      email_sequences: {
+        Row: {
+          created_at: string
+          email_number: number
+          email_type: string
+          id: string
+          lead_id: string
+          scheduled_at: string
+          sent_at: string | null
+          status: string
+          tenant_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email_number?: number
+          email_type?: string
+          id?: string
+          lead_id: string
+          scheduled_at: string
+          sent_at?: string | null
+          status?: string
+          tenant_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email_number?: number
+          email_type?: string
+          id?: string
+          lead_id?: string
+          scheduled_at?: string
+          sent_at?: string | null
+          status?: string
+          tenant_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_sequences_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_sequences_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leads: {
         Row: {
           claimed_at: string | null
@@ -369,10 +420,12 @@ export type Database = {
           golden_visa_eligible: boolean | null
           id: string
           last_edited_by: string | null
+          latitude: number | null
           lifestyle_description: string | null
           lifestyle_tags: string[] | null
           listing_status: string | null
           location: string
+          longitude: number | null
           name: string
           payment_plan: string | null
           post_handover_percent: number | null
@@ -406,10 +459,12 @@ export type Database = {
           golden_visa_eligible?: boolean | null
           id?: string
           last_edited_by?: string | null
+          latitude?: number | null
           lifestyle_description?: string | null
           lifestyle_tags?: string[] | null
           listing_status?: string | null
           location: string
+          longitude?: number | null
           name: string
           payment_plan?: string | null
           post_handover_percent?: number | null
@@ -443,10 +498,12 @@ export type Database = {
           golden_visa_eligible?: boolean | null
           id?: string
           last_edited_by?: string | null
+          latitude?: number | null
           lifestyle_description?: string | null
           lifestyle_tags?: string[] | null
           listing_status?: string | null
           location?: string
+          longitude?: number | null
           name?: string
           payment_plan?: string | null
           post_handover_percent?: number | null
@@ -569,6 +626,48 @@ export type Database = {
           },
           {
             foreignKeyName: "property_images_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_views: {
+        Row: {
+          created_at: string
+          id: string
+          property_id: string
+          referrer: string | null
+          session_id: string | null
+          tenant_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          property_id: string
+          referrer?: string | null
+          session_id?: string | null
+          tenant_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          property_id?: string
+          referrer?: string | null
+          session_id?: string | null
+          tenant_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_views_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_views_tenant_id_fkey"
             columns: ["tenant_id"]
             isOneToOne: false
             referencedRelation: "tenants"
