@@ -22,7 +22,8 @@ export const OffPlanProjectsSection = () => {
     },
   });
 
-  const editorsPicks = useMemo(() => properties.slice(0, 3), [properties]);
+  const editorsPicks = useMemo(() => properties.slice(0, 6), [properties]);
+  const totalCount = properties.length;
 
   return (
     <section
@@ -30,7 +31,7 @@ export const OffPlanProjectsSection = () => {
       className="py-28 md:py-36 lg:py-44 bg-background"
     >
       <div className="container-wide">
-        {/* Header — sentence case, no animation */}
+        {/* Header */}
         <div className="flex items-end justify-between mb-16 md:mb-20">
           <h2 className="font-serif text-foreground">
             Selected works
@@ -39,11 +40,11 @@ export const OffPlanProjectsSection = () => {
             to="/properties"
             className="hidden md:inline-flex text-xs text-muted-foreground hover:text-foreground transition-opacity duration-300 hover:opacity-70"
           >
-            View all
+            {editorsPicks.length} of {totalCount} projects · View all
           </Link>
         </div>
 
-        {/* 3 Properties */}
+        {/* 6 Properties */}
         <CleanPropertyGrid properties={editorsPicks} isLoading={isLoading} />
 
         {/* Mobile CTA */}
@@ -52,7 +53,7 @@ export const OffPlanProjectsSection = () => {
             to="/properties"
             className="text-xs text-muted-foreground hover:text-foreground transition-opacity duration-300"
           >
-            View all projects
+            {editorsPicks.length} of {totalCount} · View all projects
           </Link>
         </div>
       </div>

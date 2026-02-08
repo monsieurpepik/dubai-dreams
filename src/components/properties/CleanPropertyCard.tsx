@@ -51,10 +51,20 @@ export const CleanPropertyCard = ({ property }: CleanPropertyCardProps) => {
   });
   const primaryImage = sortedImages[0];
 
+  const isNew = property.created_at
+    ? Date.now() - new Date(property.created_at).getTime() < 14 * 24 * 60 * 60 * 1000
+    : false;
+
+  const bedroomLabel = property.bedrooms?.length
+    ? property.bedrooms.length === 1
+      ? `${property.bedrooms[0]} BR`
+      : `${Math.min(...property.bedrooms)}–${Math.max(...property.bedrooms)} BR`
+    : null;
+
   return (
     <Link to={`/properties/${property.slug}`} className="group block">
       <article className="space-y-5">
-        {/* Image — clean, no overlays */}
+        {/* Image */}
         <div className="relative aspect-[3/2] overflow-hidden bg-muted">
           {primaryImage ? (
             <img
@@ -69,18 +79,37 @@ export const CleanPropertyCard = ({ property }: CleanPropertyCardProps) => {
           )}
         </div>
 
-        {/* Content — name + area only, price on hover */}
-        <div className="space-y-1">
+        {/* Content */}
+        <div className="space-y-1.5">
+          {/* Developer + New */}
+          <p className="text-[11px] text-muted-foreground/60 tracking-wide">
+            {property.developer?.name}
+            {isNew && (
+              <span className="ml-2 text-foreground/50">New</span>
+            )}
+          </p>
+
           <h3 className="font-serif text-xl md:text-2xl text-foreground leading-tight">
             {property.name}
           </h3>
+
           <p className="text-sm text-muted-foreground">
             {property.area}
           </p>
-          {/* Price — fades in on hover */}
-          <p className="text-sm text-muted-foreground/0 group-hover:text-muted-foreground transition-all duration-500">
+
+          {/* Price — always visible */}
+          <p className="text-sm text-foreground/80">
             From {formatPrice(property.price_from, { compact: true })}
           </p>
+
+          {/* Specs */}
+          {(bedroomLabel || property.completion_date) && (
+            <p className="text-xs text-muted-foreground/50">
+              {bedroomLabel}
+              {bedroomLabel && property.completion_date && ' · '}
+              {property.completion_date && `Handover ${new Date(property.completion_date).getFullYear()}`}
+            </p>
+          )}
         </div>
       </article>
     </Link>

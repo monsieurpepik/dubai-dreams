@@ -1,8 +1,10 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
+import { SearchEntry } from "@/components/properties/SearchEntry";
 import { EditorialStatement } from "@/components/sections/EditorialStatement";
 import { OffPlanProjectsSection } from "@/components/sections/OffPlanProjectsSection";
+import { QuickCategories } from "@/components/sections/QuickCategories";
 import { BackToTop } from "@/components/ui/BackToTop";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import { SEO } from "@/components/SEO";
@@ -16,8 +18,10 @@ const Index = () => {
       <Header />
       <main>
         <HeroSection />
+        <SearchEntry />
         <EditorialStatement />
         <OffPlanProjectsSection />
+        <QuickCategories />
       </main>
       <Footer />
       <BackToTop />
