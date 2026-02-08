@@ -87,7 +87,7 @@ export const PropertyFilters = ({ filters, onChange, resultCount }: PropertyFilt
                     <button
                       key={b}
                       onClick={() => onChange({ ...filters, bedrooms: b })}
-                      className={`px-3 py-2 text-xs border transition-colors ${
+                      className={`px-3 py-2 min-h-[44px] text-xs border transition-colors ${
                         filters.bedrooms === b
                           ? 'bg-foreground text-background border-foreground'
                           : 'border-border/50 text-muted-foreground hover:border-foreground/30'
@@ -122,7 +122,7 @@ export const PropertyFilters = ({ filters, onChange, resultCount }: PropertyFilt
                     <button
                       key={s}
                       onClick={() => onChange({ ...filters, status: s })}
-                      className={`px-4 py-2 text-xs border transition-colors ${
+                      className={`px-4 py-2 min-h-[44px] text-xs border transition-colors ${
                         filters.status === s
                           ? 'bg-foreground text-background border-foreground'
                           : 'border-border/50 text-muted-foreground hover:border-foreground/30'

@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Share2 } from 'lucide-react';
+import { ArrowLeft, Share2, Eye } from 'lucide-react';
 import { useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Header } from '@/components/layout/Header';
@@ -15,12 +15,20 @@ import { DeveloperTrustCard } from '@/components/properties/DeveloperTrustCard';
 import { ConstructionProgress } from '@/components/properties/ConstructionProgress';
 import { WhatsAppButton } from '@/components/properties/WhatsAppButton';
 import { StickyPropertyBar } from '@/components/properties/StickyPropertyBar';
+import { MobileCTABar } from '@/components/properties/MobileCTABar';
+import { FloorPlans } from '@/components/properties/FloorPlans';
+import { DocumentDownload } from '@/components/properties/DocumentDownload';
+import { PaymentPlanBreakdown } from '@/components/properties/PaymentPlanBreakdown';
+import { WhyThisProject } from '@/components/properties/WhyThisProject';
+import { NeighborhoodContext } from '@/components/properties/NeighborhoodContext';
+import { CleanPropertyCard } from '@/components/properties/CleanPropertyCard';
 import { BackToTop } from '@/components/ui/BackToTop';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTenant } from '@/hooks/useTenant';
 import { generateWhatsAppShareUrl } from '@/utils/sharing';
 import { useTrackView } from '@/hooks/useTrackView';
+import { usePropertyViewCount } from '@/hooks/usePropertyPopularity';
 
 const formatBedrooms = (bedrooms: number[]): string => {
   if (!bedrooms || bedrooms.length === 0) return 'TBA';
@@ -65,6 +73,55 @@ const PropertyDetail = () => {
   });
 
   useTrackView(property?.id);
+  const { data: viewCount } = usePropertyViewCount(property?.id);
+
+  // Fetch area market data
+  const { data: areaData } = useQuery({
+    queryKey: ['area-market-data', property?.area],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('area_market_data')
+        .select('*')
+        .eq('area', property!.area)
+        .maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!property?.area,
+  });
+
+  // Fetch similar properties (same area OR similar price range)
+  const { data: similarProperties } = useQuery({
+    queryKey: ['similar-properties', property?.id, property?.area, property?.price_from],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('properties')
+        .select('*, developer:developers(*), property_images(*)')
+        .neq('id', property!.id)
+        .eq('area', property!.area)
+        .limit(6);
+
+      if (error) throw error;
+
+      // If not enough from same area, supplement with similar price
+      if ((data?.length || 0) < 4) {
+        const priceMin = property!.price_from * 0.7;
+        const priceMax = property!.price_from * 1.3;
+        const existingIds = [property!.id, ...(data || []).map(p => p.id)];
+        const { data: priceData } = await supabase
+          .from('properties')
+          .select('*, developer:developers(*), property_images(*)')
+          .not('id', 'in', `(${existingIds.join(',')})`)
+          .gte('price_from', priceMin)
+          .lte('price_from', priceMax)
+          .limit(6 - (data?.length || 0));
+
+        return [...(data || []), ...(priceData || [])];
+      }
+      return data || [];
+    },
+    enabled: !!property?.id,
+  });
 
   const scrollToInquiry = () => {
     inquiryFormRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -137,7 +194,7 @@ const PropertyDetail = () => {
         onRequestReport={scrollToInquiry}
       />
 
-      <main className="pt-20">
+      <main className="pt-20 pb-20 md:pb-0">
         {/* Back Navigation + Share */}
         <div className="container-wide py-6 flex items-center justify-between">
           <Link
@@ -147,15 +204,23 @@ const PropertyDetail = () => {
             <ArrowLeft className="w-4 h-4" />
             <span>Back</span>
           </Link>
-          <a
-            href={generateWhatsAppShareUrl(property, formatPrice)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <Share2 className="w-4 h-4" />
-            <span className="hidden sm:inline">Share via WhatsApp</span>
-          </a>
+          <div className="flex items-center gap-4">
+            {viewCount && viewCount > 5 && (
+              <span className="text-xs text-muted-foreground flex items-center gap-1.5">
+                <Eye className="w-3.5 h-3.5" />
+                Viewed {viewCount} times this month
+              </span>
+            )}
+            <a
+              href={generateWhatsAppShareUrl(property, formatPrice)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Share2 className="w-4 h-4" />
+              <span className="hidden sm:inline">Share via WhatsApp</span>
+            </a>
+          </div>
         </div>
 
         <ImmersiveGallery
@@ -228,11 +293,56 @@ const PropertyDetail = () => {
                   completionDate={property.completion_date}
                 />
               )}
+
+              {/* Neighborhood Context */}
+              <NeighborhoodContext
+                area={property.area}
+                areaData={areaData}
+                propertyPriceFrom={property.price_from}
+              />
+
+              {/* Floor Plans */}
+              {property.bedrooms && property.bedrooms.length > 0 && (
+                <FloorPlans
+                  bedrooms={property.bedrooms}
+                  propertyName={property.name}
+                />
+              )}
             </div>
 
             <div className="space-y-6">
+              {/* Why This Project */}
+              <WhyThisProject
+                roiEstimate={property.roi_estimate}
+                goldenVisaEligible={property.golden_visa_eligible}
+                completionDate={property.completion_date}
+                paymentPlan={property.payment_plan}
+                area={property.area}
+                areaData={areaData}
+              />
+
               <SimpleMarketContext area={property.area} propertyPriceFrom={property.price_from} />
+              
+              {/* Payment Plan Breakdown */}
+              {property.payment_plan && (
+                <PaymentPlanBreakdown
+                  paymentPlan={property.payment_plan}
+                  priceFrom={property.price_from}
+                  completionDate={property.completion_date}
+                  postHandoverYears={property.post_handover_years}
+                  postHandoverPercent={property.post_handover_percent}
+                />
+              )}
+
               {property.developer && <DeveloperTrustCard developer={property.developer} />}
+
+              {/* Document Download */}
+              <DocumentDownload
+                propertyId={property.id}
+                propertyName={property.name}
+                brochureUrl={property.brochure_url}
+              />
+
               <AffordabilityCTA priceFrom={property.price_from} />
               <div ref={inquiryFormRef}>
                 <InquiryForm propertyId={property.id} propertyName={property.name} />
@@ -240,9 +350,30 @@ const PropertyDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* Similar Properties */}
+        {similarProperties && similarProperties.length > 0 && (
+          <section className="border-t border-border/30 py-16 md:py-24">
+            <div className="container-wide">
+              <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-10">
+                You Might Also Like
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {similarProperties.slice(0, 3).map((p: any, i: number) => (
+                  <CleanPropertyCard key={p.id} property={p} index={i} />
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
       </main>
       <Footer />
       <WhatsAppButton propertyName={property.name} />
+      <MobileCTABar
+        propertyName={property.name}
+        priceFrom={property.price_from}
+        onInquireClick={scrollToInquiry}
+      />
       <BackToTop />
     </div>
   );
