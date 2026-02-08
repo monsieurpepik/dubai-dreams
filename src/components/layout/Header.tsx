@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Instagram, Facebook } from 'lucide-react';
+import { Menu, X, Instagram, Facebook, Search } from 'lucide-react';
 import { useTenant } from '@/hooks/useTenant';
+import { SearchOverlay } from '@/components/properties/SearchOverlay';
 
 const primaryNavItems = [
   { label: 'Properties', href: '/properties' },
@@ -20,6 +21,7 @@ const allNavItems = [
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { tenant } = useTenant();
@@ -85,15 +87,31 @@ export function Header() {
                 {item.label}
               </button>
             ))}
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Search"
+            >
+              <Search className="w-4 h-4" />
+            </button>
           </nav>
 
-          {/* Mobile Menu Toggle */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="relative z-50 p-2 text-foreground md:hidden transition-opacity duration-300 hover:opacity-70"
-          >
-            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          {/* Mobile buttons */}
+          <div className="flex items-center gap-1 md:hidden">
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="relative z-50 p-2 text-foreground transition-opacity duration-300 hover:opacity-70"
+              aria-label="Search"
+            >
+              <Search className="h-5 w-5" />
+            </button>
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="relative z-50 p-2 text-foreground transition-opacity duration-300 hover:opacity-70"
+            >
+              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
       </motion.header>
 
@@ -170,6 +188,9 @@ export function Header() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Search Overlay */}
+      <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );
 }
