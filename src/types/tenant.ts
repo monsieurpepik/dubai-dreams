@@ -35,6 +35,13 @@ export interface TenantMortgageConfig {
   min_salary_aed?: number;
 }
 
+export interface TenantSocialLinks {
+  instagram?: string | null;
+  facebook?: string | null;
+  x?: string | null;
+  linkedin?: string | null;
+}
+
 export interface TenantTheme {
   accent_color?: string;
   hero_image_url?: string | null;
@@ -94,6 +101,9 @@ export interface Tenant {
   
   // Features
   features: TenantFeatures;
+  
+  // Social
+  social_links: TenantSocialLinks | null;
   
   is_active: boolean;
   created_at: string;

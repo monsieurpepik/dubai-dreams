@@ -75,6 +75,32 @@ export function HeroSection() {
         </motion.div>
       </div>
 
+      {/* Geometric Accent — subtle diamond */}
+      <motion.svg
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 1, duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+        className="absolute inset-0 w-full h-full pointer-events-none z-[1]"
+        viewBox="0 0 1000 1000"
+        preserveAspectRatio="xMidYMid slice"
+        fill="none"
+      >
+        <rect
+          x="400" y="300" width="200" height="200"
+          transform="rotate(45 500 400)"
+          stroke="white"
+          strokeOpacity="0.08"
+          strokeWidth="1"
+        />
+        <rect
+          x="370" y="270" width="260" height="260"
+          transform="rotate(45 500 400)"
+          stroke="white"
+          strokeOpacity="0.04"
+          strokeWidth="0.5"
+        />
+      </motion.svg>
+
       {/* Scroll indicator - subtle line */}
       <motion.div 
         initial={{ opacity: 0 }}
