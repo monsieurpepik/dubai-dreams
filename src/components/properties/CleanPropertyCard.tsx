@@ -36,6 +36,7 @@ interface Property {
   golden_visa_eligible: boolean;
   status: string;
   tagline?: string | null;
+  created_at?: string;
   property_images: PropertyImage[];
 }
 
@@ -51,12 +52,36 @@ const formatDate = (dateString: string | null): string => {
   return `Q${quarter} ${date.getFullYear()}`;
 };
 
+const isNew = (createdAt?: string): boolean => {
+  if (!createdAt) return false;
+  const twoWeeksAgo = new Date();
+  twoWeeksAgo.setDate(twoWeeksAgo.getDate() - 14);
+  return new Date(createdAt) > twoWeeksAgo;
+};
+
+const isNearHandover = (completionDate: string | null): boolean => {
+  if (!completionDate) return false;
+  const sixMonths = new Date();
+  sixMonths.setMonth(sixMonths.getMonth() + 6);
+  return new Date(completionDate) <= sixMonths;
+};
+
+const estimateMonthly = (price: number): string => {
+  // Simple estimate: 25yr mortgage, ~4.5% rate
+  const monthlyRate = 0.045 / 12;
+  const months = 25 * 12;
+  const payment = price * (monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+  if (payment >= 1000) return `${Math.round(payment / 1000)}K`;
+  return `${Math.round(payment)}`;
+};
+
 export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) => {
   const { formatPrice } = useTenant();
   const { isSaved, toggleSave } = useSavedProperties();
   const { isComparing, toggleCompare, canAdd } = useCompare();
   const saved = isSaved(property.id);
   const comparing = isComparing(property.id);
+  const isLuxury = property.price_from >= 5000000;
   
   const sortedImages = [...(property.property_images || [])].sort((a, b) => {
     if (a.is_primary && !b.is_primary) return -1;
@@ -70,6 +95,12 @@ export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) =
     ? `${property.roi_estimate}% Est. Yield`
     : formatDate(property.completion_date);
 
+  // Smart badges
+  const badges: { label: string; variant: 'accent' | 'default' }[] = [];
+  if (isNew(property.created_at)) badges.push({ label: 'New', variant: 'accent' });
+  if (property.golden_visa_eligible) badges.push({ label: 'Golden Visa', variant: 'default' });
+  if (isNearHandover(property.completion_date)) badges.push({ label: 'Near Handover', variant: 'default' });
+
   return (
     <Link to={`/properties/${property.slug}`} className="group block">
       <motion.article
@@ -80,7 +111,7 @@ export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) =
         whileTap={{ scale: 0.985 }}
         className="space-y-4"
       >
-        {/* Image — cinematic 3:2 aspect */}
+        {/* Image */}
         <div className="relative aspect-[3/2] overflow-hidden bg-muted rounded-sm">
           {primaryImage ? (
             <img
@@ -94,7 +125,25 @@ export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) =
             </div>
           )}
 
-          {/* Always-visible Heart (Airbnb pattern) */}
+          {/* Smart Badges */}
+          {badges.length > 0 && (
+            <div className="absolute top-4 left-4 flex gap-1.5 z-10">
+              {badges.map((badge) => (
+                <span
+                  key={badge.label}
+                  className={`px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider backdrop-blur-sm rounded-sm ${
+                    badge.variant === 'accent'
+                      ? 'bg-accent/90 text-accent-foreground'
+                      : 'bg-background/70 text-foreground'
+                  }`}
+                >
+                  {badge.label}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Heart */}
           <button
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleSave(property.id); }}
             className="absolute top-4 right-4 p-2 bg-background/60 backdrop-blur-sm rounded-full transition-colors hover:bg-background/80"
@@ -103,8 +152,8 @@ export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) =
             <Heart className={`w-4 h-4 transition-colors ${saved ? 'fill-accent text-accent' : 'text-foreground/70'}`} />
           </button>
 
-          {/* Compare — hover only (power user) */}
-          <div className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          {/* Compare — hover only */}
+          <div className={`absolute ${badges.length > 0 ? 'bottom-4 left-4' : 'top-4 left-4'} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}>
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleCompare(property.id); }}
               className={`p-2 backdrop-blur-sm rounded-full transition-colors ${
@@ -117,7 +166,7 @@ export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) =
             </button>
           </div>
 
-          {/* Dot indicators (Airbnb pattern) */}
+          {/* Dot indicators */}
           {imageCount > 1 && (
             <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1">
               {sortedImages.slice(0, 5).map((_, i) => (
@@ -144,7 +193,7 @@ export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) =
             {property.developer ? `${property.developer.name} · ` : ''}{property.area}
           </p>
           <div className="flex items-center gap-3 pt-1 text-sm">
-            <span className="text-foreground font-medium">
+            <span className={`text-foreground font-medium ${isLuxury ? 'font-serif text-base' : ''}`}>
               From {formatPrice(property.price_from, { compact: true })}
             </span>
             <span className="text-muted-foreground">·</span>
@@ -152,6 +201,10 @@ export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) =
               {differentiator}
             </span>
           </div>
+          {/* Estimated monthly */}
+          <p className="text-[11px] text-muted-foreground/60">
+            from AED {estimateMonthly(property.price_from)}/mo est.
+          </p>
         </div>
       </motion.article>
     </Link>

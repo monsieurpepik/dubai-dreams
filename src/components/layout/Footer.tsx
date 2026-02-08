@@ -1,5 +1,6 @@
 import { Mail, MapPin, Instagram, Facebook } from "lucide-react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useTenant } from "@/hooks/useTenant";
 
 export function Footer() {
@@ -23,6 +24,35 @@ export function Footer() {
 
   return (
     <footer className="bg-background border-t border-border/30">
+      {/* Pre-footer brand moment */}
+      <div className="border-b border-border/20">
+        <div className="container-wide py-20 md:py-28">
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            className="font-serif text-4xl md:text-6xl lg:text-7xl text-foreground font-light leading-[1.1] max-w-3xl"
+          >
+            Your next property decision, informed.
+          </motion.h2>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="mt-8"
+          >
+            <Link
+              to="/contact"
+              className="inline-block px-8 py-4 bg-foreground text-background text-xs font-medium uppercase tracking-[0.2em] hover:bg-foreground/90 transition-colors duration-300"
+            >
+              Start a Conversation
+            </Link>
+          </motion.div>
+        </div>
+      </div>
+
       <div className="container-wide py-16 md:py-20">
         {/* 4-Column Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-8">

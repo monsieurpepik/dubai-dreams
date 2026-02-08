@@ -34,14 +34,13 @@ export const TrustedDevelopersStrip = () => {
             Projects from Dubai's established developers
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
+          <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4">
             {developers.map((developer, index) => (
               <motion.div
                 key={developer.id}
                 initial={{ opacity: 0 }}
                 animate={inView ? { opacity: 1 } : {}}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="flex items-center"
               >
                 {developer.logo_url ? (
                   <img
@@ -50,7 +49,7 @@ export const TrustedDevelopersStrip = () => {
                     className="h-8 md:h-10 w-auto opacity-60 hover:opacity-100 transition-opacity duration-300 grayscale hover:grayscale-0"
                   />
                 ) : (
-                  <span className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-300">
+                  <span className="inline-block px-4 py-2 text-xs font-medium text-muted-foreground bg-muted/50 border border-border/30 rounded-full hover:text-foreground hover:border-foreground/30 transition-all duration-300">
                     {developer.name}
                   </span>
                 )}
