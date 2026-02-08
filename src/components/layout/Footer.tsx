@@ -108,12 +108,12 @@ export function Footer() {
               <span>{regulatoryBody} {regulatoryNumber}</span>
             </div>
             <div className="flex items-center gap-6">
-              <a href="#" className="hover:text-foreground transition-colors">
+              <Link to="/privacy" className="hover:text-foreground transition-colors">
                 Privacy
-              </a>
-              <a href="#" className="hover:text-foreground transition-colors">
+              </Link>
+              <Link to="/terms" className="hover:text-foreground transition-colors">
                 Terms
-              </a>
+              </Link>
             </div>
           </div>
         </div>
