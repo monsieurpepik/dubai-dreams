@@ -1,4 +1,4 @@
-import { Mail, MapPin } from "lucide-react";
+import { Mail, MapPin, Instagram, Facebook } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTenant } from "@/hooks/useTenant";
 
@@ -22,6 +22,8 @@ export function Footer() {
   // Regulatory info
   const regulatoryBody = tenant?.regulatory_body || 'RERA';
   const regulatoryNumber = tenant?.regulatory_number || 'Registered Broker';
+
+  const socialLinks = tenant?.social_links;
 
   return (
     <footer className="bg-background border-t border-border/30">
@@ -108,6 +110,22 @@ export function Footer() {
               <span>{regulatoryBody} {regulatoryNumber}</span>
             </div>
             <div className="flex items-center gap-6">
+              {/* Social Icons */}
+              {socialLinks?.instagram && (
+                <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                  <Instagram className="w-4 h-4" />
+                </a>
+              )}
+              {socialLinks?.facebook && (
+                <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                  <Facebook className="w-4 h-4" />
+                </a>
+              )}
+              {socialLinks?.x && (
+                <a href={socialLinks.x} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+              )}
               <Link to="/privacy" className="hover:text-foreground transition-colors">
                 Privacy
               </Link>
