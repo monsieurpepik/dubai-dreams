@@ -223,6 +223,24 @@ const PropertyDetail = () => {
           </div>
         </div>
 
+        {/* Full-width cinematic hero image */}
+        <div className="relative h-[60vh] overflow-hidden">
+          <img
+            src={primaryImage}
+            alt={property.name}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+          <div className="absolute bottom-8 left-0 container-wide">
+            <h1 className="font-serif text-3xl md:text-5xl text-white mb-2">
+              {property.name}
+            </h1>
+            <p className="text-white/70 text-sm">
+              {property.area}, {property.location}
+            </p>
+          </div>
+        </div>
+
         <ImmersiveGallery
           images={property.property_images || []}
           propertyName={property.name}
@@ -235,10 +253,13 @@ const PropertyDetail = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
               >
-                {property.developer && (
-                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-4 block">
+              {property.developer && (
+                  <Link
+                    to={`/properties?developer=${property.developer.slug}`}
+                    className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-4 block hover:text-foreground transition-colors"
+                  >
                     {property.developer.name}
-                  </span>
+                  </Link>
                 )}
                 <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-4">
                   {property.name}

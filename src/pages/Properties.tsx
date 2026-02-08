@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
-import { LayoutGrid, Map, Search } from 'lucide-react';
+import { LayoutGrid, Map, Columns, Search } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -13,6 +13,7 @@ import { CompareBar } from '@/components/properties/CompareBar';
 import { PropertyMap } from '@/components/properties/PropertyMap';
 import { CategoryBar, CategoryFilter } from '@/components/properties/CategoryBar';
 import { SaveSearchButton } from '@/components/properties/SaveSearchButton';
+import { CleanPropertyCard } from '@/components/properties/CleanPropertyCard';
 import { useTenant } from '@/hooks/useTenant';
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
@@ -30,7 +31,7 @@ const Properties = () => {
   const collection = searchParams.get('collection');
   const [sortBy, setSortBy] = useState<SortOption>('featured');
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
-  const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'map' | 'split'>('grid');
   const [category, setCategory] = useState<CategoryFilter>(
     (collection as CategoryFilter) || 'all'
   );
@@ -130,6 +131,12 @@ const Properties = () => {
     ? currentCollection.description
     : `Discover curated off-plan developments in ${cityName}.`;
 
+  const viewButtons = [
+    { mode: 'grid' as const, icon: LayoutGrid, label: 'Grid view' },
+    { mode: 'split' as const, icon: Columns, label: 'Split view' },
+    { mode: 'map' as const, icon: Map, label: 'Map view' },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       <SEO
@@ -158,7 +165,6 @@ const Properties = () => {
           </div>
         </section>
 
-        {/* Airbnb-style Category Bar */}
         <CategoryBar active={category} onChange={handleCategoryChange} />
 
         <section className="py-12 md:py-16">
@@ -179,32 +185,45 @@ const Properties = () => {
                 />
               </div>
               <div className="flex items-center gap-1 border border-border/50">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`p-2 transition-colors ${viewMode === 'grid' ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground'}`}
-                  aria-label="Grid view"
-                >
-                  <LayoutGrid className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setViewMode('map')}
-                  className={`p-2 transition-colors ${viewMode === 'map' ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground'}`}
-                  aria-label="Map view"
-                >
-                  <Map className="w-4 h-4" />
-                </button>
+                {viewButtons.map(({ mode, icon: Icon, label }) => (
+                  <button
+                    key={mode}
+                    onClick={() => setViewMode(mode)}
+                    className={`p-2 transition-colors ${viewMode === mode ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground'}`}
+                    aria-label={label}
+                  >
+                    <Icon className="w-4 h-4" />
+                  </button>
+                ))}
               </div>
             </div>
-            {viewMode === 'grid' ? (
+
+            {viewMode === 'grid' && (
               <>
                 <SmartSortBar activeSort={sortBy} onSortChange={setSortBy} propertyCount={propertyCount} />
                 <CleanPropertyGrid properties={filteredProperties} isLoading={isLoading} />
               </>
-            ) : (
+            )}
+
+            {viewMode === 'map' && (
               <PropertyMap properties={filteredProperties} />
             )}
 
-            {/* Empty state with personality */}
+            {viewMode === 'split' && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="max-h-[80vh] overflow-y-auto space-y-6 pr-2">
+                  <SmartSortBar activeSort={sortBy} onSortChange={setSortBy} propertyCount={propertyCount} />
+                  {filteredProperties.map((p: any, i: number) => (
+                    <CleanPropertyCard key={p.id} property={p} index={i} variant="compact" />
+                  ))}
+                </div>
+                <div className="sticky top-24 h-[80vh]">
+                  <PropertyMap properties={filteredProperties} />
+                </div>
+              </div>
+            )}
+
+            {/* Empty state */}
             {!isLoading && propertyCount === 0 && (properties?.length || 0) > 0 && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}

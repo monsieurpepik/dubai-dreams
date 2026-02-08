@@ -2,9 +2,10 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { SearchEntry } from "@/components/properties/SearchEntry";
+import { QuickCategories } from "@/components/sections/QuickCategories";
 import { EditorialStatement } from "@/components/sections/EditorialStatement";
 import { OffPlanProjectsSection } from "@/components/sections/OffPlanProjectsSection";
-import { QuickCategories } from "@/components/sections/QuickCategories";
+import { RecentlyAddedSection } from "@/components/sections/RecentlyAddedSection";
 import { BackToTop } from "@/components/ui/BackToTop";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import { SEO } from "@/components/SEO";
@@ -19,9 +20,10 @@ const Index = () => {
       <main>
         <HeroSection />
         <SearchEntry />
+        <QuickCategories />
         <EditorialStatement />
         <OffPlanProjectsSection />
-        <QuickCategories />
+        <RecentlyAddedSection />
       </main>
       <Footer />
       <BackToTop />
