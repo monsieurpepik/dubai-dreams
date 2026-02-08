@@ -1,94 +1,92 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
-import { Landmark, TrendingUp, Calendar, Waves } from 'lucide-react';
 
 const collections = [
   {
     id: 'golden-visa',
-    icon: Landmark,
     title: 'Golden Visa Eligible',
-    description: 'Properties qualifying for 10-year UAE residency',
+    description: '10-year UAE residency',
     filter: 'golden-visa',
+    image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80',
   },
   {
     id: 'high-yield',
-    icon: TrendingUp,
     title: 'High Yield Projects',
-    description: 'Estimated rental returns of 7%+',
+    description: '7%+ estimated returns',
     filter: 'high-yield',
+    image: 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=800&q=80',
   },
   {
     id: 'handover-2025',
-    icon: Calendar,
     title: 'Handover 2025',
-    description: 'Ready for delivery this year',
+    description: 'Ready for delivery',
     filter: 'handover-2025',
+    image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80',
   },
   {
     id: 'waterfront',
-    icon: Waves,
     title: 'Waterfront Living',
-    description: 'Beachfront and marina properties',
+    description: 'Beachfront & marina',
     filter: 'waterfront',
+    image: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&q=80',
   },
 ];
 
 export const CollectionsSection = () => {
-  const [ref, inView] = useInView({ threshold: 0.2, triggerOnce: true });
+  const [ref, inView] = useInView({ threshold: 0.15, triggerOnce: true });
 
   return (
-    <section ref={ref} className="py-20 md:py-28 bg-background">
+    <section ref={ref} className="py-28 md:py-36 lg:py-44 bg-background">
       <div className="container-wide">
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12 md:mb-16"
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center mb-16 md:mb-20"
         >
-          <span className="label-editorial text-muted-foreground mb-4 block">
-            Curated For You
-          </span>
-          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground">
+          <h2 className="font-serif text-foreground">
             Browse by Interest
           </h2>
         </motion.div>
 
-        {/* Collection Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        {/* Collection Cards — 2-column, full-bleed images */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {collections.map((collection, index) => (
             <motion.div
               key={collection.id}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 40 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
+              transition={{ duration: 0.8, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
             >
               <Link
                 to={`/properties?collection=${collection.filter}`}
-                className="group block p-8 bg-card border border-border/50 h-full transition-all duration-500 hover:border-foreground/30 hover:bg-accent/5"
+                className="group block relative aspect-[16/10] overflow-hidden bg-muted"
               >
-                {/* Icon */}
-                <div className="mb-6">
-                  <collection.icon 
-                    className="w-8 h-8 text-foreground transition-transform duration-300 group-hover:scale-110" 
-                    strokeWidth={1.5} 
-                  />
+                {/* Background image with hover parallax */}
+                <motion.img
+                  src={collection.image}
+                  alt={collection.title}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                />
+                
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+                {/* Text overlay at bottom */}
+                <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+                  <h3 className="font-serif text-2xl md:text-3xl text-white mb-1 group-hover:translate-y-[-2px] transition-transform duration-300">
+                    {collection.title}
+                  </h3>
+                  <p className="text-sm text-white/60">
+                    {collection.description}
+                  </p>
                 </div>
 
-                {/* Title */}
-                <h3 className="font-serif text-xl text-foreground mb-2 group-hover:text-accent transition-colors duration-300">
-                  {collection.title}
-                </h3>
-
-                {/* Description */}
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {collection.description}
-                </p>
-
-                {/* Arrow indicator */}
-                <div className="mt-6 text-muted-foreground group-hover:text-foreground transition-colors duration-300">
-                  <span className="text-lg">→</span>
+                {/* Arrow */}
+                <div className="absolute top-6 right-6 text-white/40 group-hover:text-white/80 transition-colors duration-300">
+                  <span className="text-xl">→</span>
                 </div>
               </Link>
             </motion.div>

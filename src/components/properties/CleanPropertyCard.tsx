@@ -51,7 +51,6 @@ const formatDate = (dateString: string | null): string => {
   return `Q${quarter} ${date.getFullYear()}`;
 };
 
-
 export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) => {
   const { formatPrice } = useTenant();
   const { isSaved, toggleSave } = useSavedProperties();
@@ -61,17 +60,22 @@ export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) =
   const primaryImage = property.property_images?.find(img => img.is_primary) 
     || property.property_images?.[0];
 
+  // Pick one differentiator: yield if available, else completion date
+  const differentiator = property.roi_estimate && property.roi_estimate > 0
+    ? `${property.roi_estimate}% Est. Yield`
+    : formatDate(property.completion_date);
+
   return (
     <Link to={`/properties/${property.slug}`} className="group block">
       <motion.article
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
-        transition={{ duration: 0.6, delay: Math.min(index * 0.1, 0.4), ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.8, delay: Math.min(index * 0.1, 0.4), ease: [0.22, 1, 0.36, 1] }}
         className="space-y-4"
       >
-        {/* Image - Clean, no overlays */}
-        <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+        {/* Image — cinematic 3:2 aspect */}
+        <div className="relative aspect-[3/2] overflow-hidden bg-muted rounded-sm">
           {primaryImage ? (
             <img
               src={primaryImage.url}
@@ -83,21 +87,12 @@ export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) =
               <span className="text-sm text-muted-foreground">No image</span>
             </div>
           )}
-          
-          {/* Developer badge */}
-          {property.developer && (
-            <div className="absolute bottom-4 left-4">
-              <span className="inline-block px-3 py-1.5 bg-background/90 backdrop-blur-sm text-[10px] font-medium uppercase tracking-wider text-foreground">
-                {property.developer.name}
-              </span>
-            </div>
-          )}
 
           {/* Action buttons */}
-          <div className="absolute top-4 right-4 flex gap-1.5">
+          <div className="absolute top-4 right-4 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleCompare(property.id); }}
-              className={`p-2 backdrop-blur-sm transition-colors ${
+              className={`p-2 backdrop-blur-sm rounded-sm transition-colors ${
                 comparing ? 'bg-accent text-accent-foreground' : 'bg-background/80 text-foreground hover:bg-background'
               } ${!canAdd && !comparing ? 'opacity-40 cursor-not-allowed' : ''}`}
               aria-label={comparing ? 'Remove from comparison' : 'Add to comparison'}
@@ -107,7 +102,7 @@ export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) =
             </button>
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleSave(property.id); }}
-              className="p-2 bg-background/80 backdrop-blur-sm transition-colors hover:bg-background"
+              className="p-2 bg-background/80 backdrop-blur-sm rounded-sm transition-colors hover:bg-background"
               aria-label={saved ? 'Remove from shortlist' : 'Save to shortlist'}
             >
               <Heart className={`w-4 h-4 transition-colors ${saved ? 'fill-accent text-accent' : 'text-foreground'}`} />
@@ -115,36 +110,26 @@ export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) =
           </div>
         </div>
 
-        {/* Content - Minimal, editorial */}
-        <div className="space-y-2">
-          {/* Property Name */}
+        {/* Content — Apple minimal */}
+        <div className="space-y-1.5">
           <h3 className="font-serif text-xl md:text-2xl text-foreground leading-tight group-hover:text-muted-foreground transition-colors duration-300">
             {property.name}
           </h3>
           
-          {/* Location */}
+          {/* Developer + Area */}
           <p className="text-sm text-muted-foreground">
-            {property.area}
+            {property.developer ? `${property.developer.name} · ` : ''}{property.area}
           </p>
 
-          {/* Key Details - Single line */}
-          <div className="flex items-center gap-3 pt-2 text-sm">
+          {/* Price + one differentiator */}
+          <div className="flex items-center gap-3 pt-1 text-sm">
             <span className="text-foreground font-medium">
               From {formatPrice(property.price_from, { compact: true })}
             </span>
             <span className="text-muted-foreground">·</span>
             <span className="text-muted-foreground">
-              {formatDate(property.completion_date)}
+              {differentiator}
             </span>
-            {/* ROI Badge - Investment visibility */}
-            {property.roi_estimate && property.roi_estimate > 0 && (
-              <>
-                <span className="text-muted-foreground">·</span>
-                <span className="text-accent font-medium">
-                  {property.roi_estimate}% Est. Yield
-                </span>
-              </>
-            )}
           </div>
         </div>
       </motion.article>
