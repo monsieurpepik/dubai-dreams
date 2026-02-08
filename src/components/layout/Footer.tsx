@@ -21,6 +21,14 @@ const developers = [
   { label: 'Omniyat', href: '/properties?developer=omniyat' },
 ];
 
+const popularSearches = [
+  { label: 'Studios under AED 1M', href: '/properties?collection=studio' },
+  { label: '3BR in Dubai Marina', href: '/properties?collection=3br+&area=Dubai+Marina' },
+  { label: 'Golden Visa Properties', href: '/properties?collection=golden-visa' },
+  { label: 'Waterfront Apartments', href: '/properties?collection=waterfront' },
+  { label: 'High Yield Investments', href: '/properties?collection=high-yield' },
+];
+
 const Dot = () => <span className="text-border/20">·</span>;
 
 export function Footer() {
@@ -50,6 +58,19 @@ export function Footer() {
                 {dev.label}
               </Link>
               {i < developers.length - 1 && <Dot />}
+            </span>
+          ))}
+        </div>
+
+        {/* Popular Searches */}
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-[11px] text-muted-foreground/40">
+          <span className="text-muted-foreground/25 mr-1">Explore</span>
+          {popularSearches.map((search, i) => (
+            <span key={search.label} className="flex items-center gap-4">
+              <Link to={search.href} className="hover:text-foreground transition-colors duration-300">
+                {search.label}
+              </Link>
+              {i < popularSearches.length - 1 && <Dot />}
             </span>
           ))}
         </div>

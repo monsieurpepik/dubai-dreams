@@ -11,14 +11,14 @@ const categories = [
 
 export function QuickCategories() {
   return (
-    <section className="py-12 md:py-16 bg-background">
+    <section className="py-8 md:py-10 bg-background">
       <div className="container-wide">
-        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
-          {categories.map((cat, i) => (
+        <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide pb-1">
+          {categories.map((cat) => (
             <Link
               key={cat.label}
               to={cat.href}
-              className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors duration-300"
+              className="flex-shrink-0 px-5 py-2.5 text-xs tracking-wide text-muted-foreground border border-border/40 hover:border-foreground/30 hover:text-foreground transition-all duration-300 whitespace-nowrap"
             >
               {cat.label}
             </Link>

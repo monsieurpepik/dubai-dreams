@@ -2,7 +2,8 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { CleanPropertyGrid } from '@/components/properties/CleanPropertyGrid';
+import { CleanPropertyCard } from '@/components/properties/CleanPropertyCard';
+import { PropertyGridSkeleton } from '@/components/properties/PropertyCardSkeleton';
 
 export const OffPlanProjectsSection = () => {
   const { data: properties = [], isLoading } = useQuery({
@@ -44,8 +45,27 @@ export const OffPlanProjectsSection = () => {
           </Link>
         </div>
 
-        {/* 6 Properties */}
-        <CleanPropertyGrid properties={editorsPicks} isLoading={isLoading} />
+        {/* Asymmetric Editorial Grid */}
+        {isLoading ? (
+          <PropertyGridSkeleton />
+        ) : editorsPicks.length > 0 ? (
+          <div className="space-y-8">
+            {/* Row 1: 2 large featured cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {editorsPicks.slice(0, 2).map((p: any, i: number) => (
+                <CleanPropertyCard key={p.id} property={p} index={i} />
+              ))}
+            </div>
+            {/* Row 2: 4 smaller cards */}
+            {editorsPicks.length > 2 && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {editorsPicks.slice(2, 6).map((p: any, i: number) => (
+                  <CleanPropertyCard key={p.id} property={p} index={i + 2} variant="compact" />
+                ))}
+              </div>
+            )}
+          </div>
+        ) : null}
 
         {/* Mobile CTA */}
         <div className="text-center mt-16 md:mt-20 md:hidden">
