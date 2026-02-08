@@ -18,6 +18,8 @@ import NotFound from "./pages/NotFound";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import SavedProperties from "./pages/SavedProperties";
+import Compare from "./pages/Compare";
+import AreaGuide from "./pages/AreaGuide";
 import DeveloperLogin from "./pages/developer/Login";
 import DeveloperDashboard from "./pages/developer/Dashboard";
 import DeveloperProperties from "./pages/developer/Properties";
@@ -53,6 +55,8 @@ const App = () => (
                   <Route path="/privacy" element={<Privacy />} />
                   <Route path="/terms" element={<Terms />} />
                   <Route path="/saved" element={<SavedProperties />} />
+                  <Route path="/compare" element={<Compare />} />
+                  <Route path="/areas/:slug" element={<AreaGuide />} />
                   
                   {/* Developer Portal Routes */}
                   <Route path="/developer/login" element={<DeveloperLogin />} />

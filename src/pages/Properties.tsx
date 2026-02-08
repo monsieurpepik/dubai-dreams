@@ -8,6 +8,7 @@ import { SEO } from '@/components/SEO';
 import { CleanPropertyGrid } from '@/components/properties/CleanPropertyGrid';
 import { SmartSortBar, SortOption } from '@/components/properties/SmartSortBar';
 import { PropertyFilters, FilterState, defaultFilters } from '@/components/properties/PropertyFilters';
+import { CompareBar } from '@/components/properties/CompareBar';
 import { useTenant } from '@/hooks/useTenant';
 import { useState, useMemo } from 'react';
 
@@ -149,6 +150,7 @@ const Properties = () => {
         </section>
       </main>
       <Footer />
+      <CompareBar />
     </div>
   );
 };

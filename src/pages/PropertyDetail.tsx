@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Share2 } from 'lucide-react';
 import { useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Header } from '@/components/layout/Header';
@@ -17,6 +17,7 @@ import { WhatsAppButton } from '@/components/properties/WhatsAppButton';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTenant } from '@/hooks/useTenant';
+import { generateWhatsAppShareUrl } from '@/utils/sharing';
 
 const formatBedrooms = (bedrooms: number[]): string => {
   if (!bedrooms || bedrooms.length === 0) return 'TBA';
@@ -121,8 +122,8 @@ const PropertyDetail = () => {
       />
       <Header />
       <main className="pt-20">
-        {/* Back Navigation */}
-        <div className="container-wide py-6">
+        {/* Back Navigation + Share */}
+        <div className="container-wide py-6 flex items-center justify-between">
           <Link
             to="/properties"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -130,6 +131,15 @@ const PropertyDetail = () => {
             <ArrowLeft className="w-4 h-4" />
             <span>Back</span>
           </Link>
+          <a
+            href={generateWhatsAppShareUrl(property, formatPrice)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <Share2 className="w-4 h-4" />
+            <span className="hidden sm:inline">Share via WhatsApp</span>
+          </a>
         </div>
 
         {/* Gallery - Cinematic Hero */}
