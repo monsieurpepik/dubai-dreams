@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { TenantProvider } from "@/contexts/TenantContext";
 import { DeveloperProvider } from "@/contexts/DeveloperContext";
 import { usePageTracking } from "@/hooks/usePageTracking";
+import { CustomCursor } from "@/components/ui/CustomCursor";
 import Index from "./pages/Index";
 import Properties from "./pages/Properties";
 import PropertyDetail from "./pages/PropertyDetail";
@@ -21,6 +22,7 @@ import Terms from "./pages/Terms";
 import SavedProperties from "./pages/SavedProperties";
 import Compare from "./pages/Compare";
 import AreaGuide from "./pages/AreaGuide";
+import Discover from "./pages/Discover";
 import DeveloperLogin from "./pages/developer/Login";
 import DeveloperDashboard from "./pages/developer/Dashboard";
 import DeveloperProperties from "./pages/developer/Properties";
@@ -38,7 +40,7 @@ const PageTransition = ({ children }: { children: React.ReactNode }) => (
   <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
-    transition={{ duration: 0.3, ease: "easeOut" }}
+    transition={{ duration: 0.2, ease: "easeOut" }}
   >
     {children}
   </motion.div>
@@ -61,6 +63,7 @@ const AnimatedRoutes = () => {
         <Route path="/saved" element={<PageTransition><SavedProperties /></PageTransition>} />
         <Route path="/compare" element={<PageTransition><Compare /></PageTransition>} />
         <Route path="/areas/:slug" element={<PageTransition><AreaGuide /></PageTransition>} />
+        <Route path="/discover" element={<PageTransition><Discover /></PageTransition>} />
         
         {/* Developer Portal Routes */}
         <Route path="/developer/login" element={<PageTransition><DeveloperLogin /></PageTransition>} />
@@ -85,6 +88,7 @@ const App = () => (
             <Sonner />
             <BrowserRouter>
               <AnalyticsWrapper>
+                <CustomCursor />
                 <AnimatedRoutes />
               </AnalyticsWrapper>
             </BrowserRouter>
