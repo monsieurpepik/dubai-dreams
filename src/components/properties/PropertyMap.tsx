@@ -1,16 +1,16 @@
-import { useMemo } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { Icon } from 'leaflet';
+import { useEffect, useRef, useMemo } from 'react';
+import L from 'leaflet';
 import { Link } from 'react-router-dom';
 import { useTenant } from '@/hooks/useTenant';
+import { createRoot } from 'react-dom/client';
 import 'leaflet/dist/leaflet.css';
 
 interface PropertyMapProps {
   properties: any[];
 }
 
-// Custom marker icon
-const createIcon = () => new Icon({
+// Fix default marker icon
+const defaultIcon = new L.Icon({
   iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
   iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
   shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
@@ -22,18 +22,62 @@ const createIcon = () => new Icon({
 
 export const PropertyMap = ({ properties }: PropertyMapProps) => {
   const { formatPrice } = useTenant();
+  const mapRef = useRef<L.Map | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const mappableProperties = useMemo(
     () => properties.filter(p => p.latitude && p.longitude),
     [properties]
   );
 
-  const center = useMemo(() => {
-    if (mappableProperties.length === 0) return [25.2048, 55.2708] as [number, number];
+  const center = useMemo<[number, number]>(() => {
+    if (mappableProperties.length === 0) return [25.2048, 55.2708];
     const avgLat = mappableProperties.reduce((s, p) => s + Number(p.latitude), 0) / mappableProperties.length;
     const avgLng = mappableProperties.reduce((s, p) => s + Number(p.longitude), 0) / mappableProperties.length;
-    return [avgLat, avgLng] as [number, number];
+    return [avgLat, avgLng];
   }, [mappableProperties]);
+
+  useEffect(() => {
+    if (!containerRef.current || mappableProperties.length === 0) return;
+
+    // Clean up previous map
+    if (mapRef.current) {
+      mapRef.current.remove();
+      mapRef.current = null;
+    }
+
+    const map = L.map(containerRef.current).setView(center, 11);
+    mapRef.current = map;
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>',
+    }).addTo(map);
+
+    mappableProperties.forEach(p => {
+      const img = p.property_images?.find((i: any) => i.is_primary)?.url || p.property_images?.[0]?.url;
+      const popupContent = `
+        <a href="/properties/${p.slug}" style="display:block;text-decoration:none;color:inherit;">
+          ${img ? `<img src="${img}" alt="${p.name}" style="width:192px;height:112px;object-fit:cover;margin-bottom:8px;" />` : ''}
+          <p style="font-weight:500;font-size:14px;margin:0 0 2px;font-family:'Cormorant Garamond',serif;">${p.name}</p>
+          <p style="font-size:12px;color:#888;margin:0 0 4px;">${p.area}</p>
+          <p style="font-size:12px;font-weight:500;margin:0;">
+            From ${formatPrice(p.price_from, { compact: true })}${p.roi_estimate ? ` · ${p.roi_estimate}% yield` : ''}
+          </p>
+        </a>
+      `;
+
+      L.marker([Number(p.latitude), Number(p.longitude)], { icon: defaultIcon })
+        .addTo(map)
+        .bindPopup(popupContent);
+    });
+
+    return () => {
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
+    };
+  }, [mappableProperties, center, formatPrice]);
 
   if (mappableProperties.length === 0) {
     return (
@@ -43,47 +87,5 @@ export const PropertyMap = ({ properties }: PropertyMapProps) => {
     );
   }
 
-  const icon = createIcon();
-
-  return (
-    <div className="h-[500px] md:h-[600px] w-full overflow-hidden border border-border/30">
-      <MapContainer
-        center={center}
-        zoom={11}
-        scrollWheelZoom={true}
-        style={{ height: '100%', width: '100%' }}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
-          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-        />
-        {mappableProperties.map(p => {
-          const img = p.property_images?.find((i: any) => i.is_primary)?.url || p.property_images?.[0]?.url;
-          return (
-            <Marker
-              key={p.id}
-              position={[Number(p.latitude), Number(p.longitude)]}
-              icon={icon}
-            >
-              <Popup>
-                <Link to={`/properties/${p.slug}`} className="block no-underline text-foreground">
-                  {img && (
-                    <img src={img} alt={p.name} className="w-48 h-28 object-cover mb-2" />
-                  )}
-                  <p className="font-medium text-sm mb-0.5" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-                    {p.name}
-                  </p>
-                  <p className="text-xs text-gray-500 mb-1">{p.area}</p>
-                  <p className="text-xs font-medium">
-                    From {formatPrice(p.price_from, { compact: true })}
-                    {p.roi_estimate ? ` · ${p.roi_estimate}% yield` : ''}
-                  </p>
-                </Link>
-              </Popup>
-            </Marker>
-          );
-        })}
-      </MapContainer>
-    </div>
-  );
+  return <div ref={containerRef} className="h-[500px] md:h-[600px] w-full overflow-hidden border border-border/30" />;
 };
