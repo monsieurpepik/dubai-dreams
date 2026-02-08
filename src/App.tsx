@@ -2,8 +2,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
+import { AnimatePresence, motion } from "framer-motion";
 import { TenantProvider } from "@/contexts/TenantContext";
 import { DeveloperProvider } from "@/contexts/DeveloperContext";
 import { usePageTracking } from "@/hooks/usePageTracking";
@@ -28,10 +29,50 @@ import DeveloperSettings from "./pages/developer/Settings";
 
 const queryClient = new QueryClient();
 
-// Analytics wrapper component
 const AnalyticsWrapper = ({ children }: { children: React.ReactNode }) => {
   usePageTracking();
   return <>{children}</>;
+};
+
+const PageTransition = ({ children }: { children: React.ReactNode }) => (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.3, ease: "easeOut" }}
+  >
+    {children}
+  </motion.div>
+);
+
+const AnimatedRoutes = () => {
+  const location = useLocation();
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<PageTransition><Index /></PageTransition>} />
+        <Route path="/properties" element={<PageTransition><Properties /></PageTransition>} />
+        <Route path="/properties/:slug" element={<PageTransition><PropertyDetail /></PageTransition>} />
+        <Route path="/calculator" element={<PageTransition><Calculator /></PageTransition>} />
+        <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
+        <Route path="/about" element={<PageTransition><About /></PageTransition>} />
+        <Route path="/how-it-works" element={<PageTransition><HowItWorks /></PageTransition>} />
+        <Route path="/privacy" element={<PageTransition><Privacy /></PageTransition>} />
+        <Route path="/terms" element={<PageTransition><Terms /></PageTransition>} />
+        <Route path="/saved" element={<PageTransition><SavedProperties /></PageTransition>} />
+        <Route path="/compare" element={<PageTransition><Compare /></PageTransition>} />
+        <Route path="/areas/:slug" element={<PageTransition><AreaGuide /></PageTransition>} />
+        
+        {/* Developer Portal Routes */}
+        <Route path="/developer/login" element={<PageTransition><DeveloperLogin /></PageTransition>} />
+        <Route path="/developer/dashboard" element={<PageTransition><DeveloperDashboard /></PageTransition>} />
+        <Route path="/developer/properties" element={<PageTransition><DeveloperProperties /></PageTransition>} />
+        <Route path="/developer/leads" element={<PageTransition><DeveloperLeads /></PageTransition>} />
+        <Route path="/developer/settings" element={<PageTransition><DeveloperSettings /></PageTransition>} />
+        
+        <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
+      </Routes>
+    </AnimatePresence>
+  );
 };
 
 const App = () => (
@@ -44,30 +85,7 @@ const App = () => (
             <Sonner />
             <BrowserRouter>
               <AnalyticsWrapper>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/properties" element={<Properties />} />
-                  <Route path="/properties/:slug" element={<PropertyDetail />} />
-                  <Route path="/calculator" element={<Calculator />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/how-it-works" element={<HowItWorks />} />
-                  <Route path="/privacy" element={<Privacy />} />
-                  <Route path="/terms" element={<Terms />} />
-                  <Route path="/saved" element={<SavedProperties />} />
-                  <Route path="/compare" element={<Compare />} />
-                  <Route path="/areas/:slug" element={<AreaGuide />} />
-                  
-                  {/* Developer Portal Routes */}
-                  <Route path="/developer/login" element={<DeveloperLogin />} />
-                  <Route path="/developer/dashboard" element={<DeveloperDashboard />} />
-                  <Route path="/developer/properties" element={<DeveloperProperties />} />
-                  <Route path="/developer/leads" element={<DeveloperLeads />} />
-                  <Route path="/developer/settings" element={<DeveloperSettings />} />
-                  
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
+                <AnimatedRoutes />
               </AnalyticsWrapper>
             </BrowserRouter>
           </TooltipProvider>

@@ -5,9 +5,10 @@ import { Footer } from '@/components/layout/Footer';
 import { SEO } from '@/components/SEO';
 import { CleanPropertyGrid } from '@/components/properties/CleanPropertyGrid';
 import { useSavedProperties } from '@/hooks/useSavedProperties';
-import { Heart } from 'lucide-react';
+import { Heart, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTenant } from '@/hooks/useTenant';
+import { motion } from 'framer-motion';
 
 const SavedProperties = () => {
   const { savedIds, clearAll } = useSavedProperties();
@@ -53,13 +54,25 @@ const SavedProperties = () => {
         <section className="py-12 md:py-16">
           <div className="container-wide">
             {savedIds.length === 0 ? (
-              <div className="text-center py-24 space-y-4">
-                <Heart className="w-12 h-12 mx-auto text-muted-foreground/30" />
-                <p className="text-muted-foreground text-lg">No properties saved yet.</p>
-                <Link to="/properties" className="btn-outline inline-block">
-                  Browse Properties
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-center py-24 space-y-5"
+              >
+                <div className="w-16 h-16 mx-auto rounded-full bg-muted flex items-center justify-center">
+                  <Heart className="w-7 h-7 text-muted-foreground/30" />
+                </div>
+                <div>
+                  <p className="text-lg font-serif text-foreground mb-2">Your shortlist is empty</p>
+                  <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+                    Start exploring to save properties you like. Tap the heart icon on any property card.
+                  </p>
+                </div>
+                <Link to="/properties" className="btn-primary inline-flex items-center gap-2 !mt-8">
+                  Explore Properties
+                  <ArrowRight className="w-4 h-4" />
                 </Link>
-              </div>
+              </motion.div>
             ) : (
               <>
                 <div className="flex items-center gap-4 mb-8">

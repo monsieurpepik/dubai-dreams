@@ -2,7 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Share2 } from 'lucide-react';
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -14,6 +14,8 @@ import { SimpleMarketContext } from '@/components/properties/SimpleMarketContext
 import { DeveloperTrustCard } from '@/components/properties/DeveloperTrustCard';
 import { ConstructionProgress } from '@/components/properties/ConstructionProgress';
 import { WhatsAppButton } from '@/components/properties/WhatsAppButton';
+import { StickyPropertyBar } from '@/components/properties/StickyPropertyBar';
+import { BackToTop } from '@/components/ui/BackToTop';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTenant } from '@/hooks/useTenant';
@@ -36,7 +38,6 @@ const formatDate = (dateString: string | null): string => {
   const quarter = Math.ceil((date.getMonth() + 1) / 3);
   return `Q${quarter} ${date.getFullYear()}`;
 };
-
 
 const PropertyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -63,8 +64,11 @@ const PropertyDetail = () => {
     enabled: !!slug,
   });
 
-  // Track property view
   useTrackView(property?.id);
+
+  const scrollToInquiry = () => {
+    inquiryFormRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   if (isLoading) {
     return (
@@ -125,6 +129,14 @@ const PropertyDetail = () => {
         url={`https://owning${cityName.toLowerCase()}.com/properties/${property.slug}`}
       />
       <Header />
+      
+      {/* Sticky Product Bar (Apple pattern) */}
+      <StickyPropertyBar
+        propertyName={property.name}
+        price={formatPrice(property.price_from, { compact: true })}
+        onRequestReport={scrollToInquiry}
+      />
+
       <main className="pt-20">
         {/* Back Navigation + Share */}
         <div className="container-wide py-6 flex items-center justify-between">
@@ -146,18 +158,14 @@ const PropertyDetail = () => {
           </a>
         </div>
 
-        {/* Gallery - Cinematic Hero */}
         <ImmersiveGallery
           images={property.property_images || []}
           propertyName={property.name}
         />
 
-        {/* Content */}
         <div className="container-wide py-16 md:py-24">
           <div className="grid lg:grid-cols-3 gap-12 lg:gap-16">
-            {/* Main Content - Decisive, Clean */}
             <div className="lg:col-span-2 space-y-12">
-              {/* Header */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -167,17 +175,14 @@ const PropertyDetail = () => {
                     {property.developer.name}
                   </span>
                 )}
-                
                 <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-4">
                   {property.name}
                 </h1>
-                
                 <p className="text-lg text-muted-foreground">
                   {property.area}, {property.location}
                 </p>
               </motion.div>
 
-              {/* Specs Grid - Minimal */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -185,42 +190,25 @@ const PropertyDetail = () => {
                 className="grid grid-cols-2 md:grid-cols-4 gap-8 py-8 border-y border-border/30"
               >
                 <div>
-                  <span className="text-xs uppercase tracking-wider text-muted-foreground block mb-2">
-                    Starting Price
-                  </span>
-                  <span className="text-xl text-foreground font-medium">
-                    {formatPrice(property.price_from, { compact: true })}
-                  </span>
+                  <span className="text-xs uppercase tracking-wider text-muted-foreground block mb-2">Starting Price</span>
+                  <span className="text-xl text-foreground font-medium">{formatPrice(property.price_from, { compact: true })}</span>
                 </div>
                 <div>
-                  <span className="text-xs uppercase tracking-wider text-muted-foreground block mb-2">
-                    Bedrooms
-                  </span>
-                  <span className="text-xl text-foreground font-medium">
-                    {formatBedrooms(property.bedrooms || [])}
-                  </span>
+                  <span className="text-xs uppercase tracking-wider text-muted-foreground block mb-2">Bedrooms</span>
+                  <span className="text-xl text-foreground font-medium">{formatBedrooms(property.bedrooms || [])}</span>
                 </div>
                 <div>
-                  <span className="text-xs uppercase tracking-wider text-muted-foreground block mb-2">
-                    Completion
-                  </span>
-                  <span className="text-xl text-foreground font-medium">
-                    {formatDate(property.completion_date)}
-                  </span>
+                  <span className="text-xs uppercase tracking-wider text-muted-foreground block mb-2">Completion</span>
+                  <span className="text-xl text-foreground font-medium">{formatDate(property.completion_date)}</span>
                 </div>
                 {property.payment_plan && (
                   <div>
-                    <span className="text-xs uppercase tracking-wider text-muted-foreground block mb-2">
-                      Payment Plan
-                    </span>
-                    <span className="text-xl text-foreground font-medium">
-                      {property.payment_plan}
-                    </span>
+                    <span className="text-xs uppercase tracking-wider text-muted-foreground block mb-2">Payment Plan</span>
+                    <span className="text-xl text-foreground font-medium">{property.payment_plan}</span>
                   </div>
                 )}
               </motion.div>
 
-              {/* Description - Editorial, 2-3 lines max */}
               {(property.lifestyle_description || property.description) && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -233,7 +221,6 @@ const PropertyDetail = () => {
                 </motion.div>
               )}
 
-              {/* Construction Progress - Visual delivery timeline */}
               {property.status !== 'ready' && (
                 <ConstructionProgress
                   stage={(property.construction_stage as 'pre-launch' | 'foundation' | 'structure' | 'finishing' | 'ready') || 'pre-launch'}
@@ -243,28 +230,12 @@ const PropertyDetail = () => {
               )}
             </div>
 
-            {/* Sidebar - Focused, no clutter */}
             <div className="space-y-6">
-              {/* Market Context - Simple & Reassuring */}
-              <SimpleMarketContext
-                area={property.area}
-                propertyPriceFrom={property.price_from}
-              />
-
-              {/* Developer Trust Card */}
-              {property.developer && (
-                <DeveloperTrustCard developer={property.developer} />
-              )}
-
-              {/* Affordability CTA - Primary action */}
+              <SimpleMarketContext area={property.area} propertyPriceFrom={property.price_from} />
+              {property.developer && <DeveloperTrustCard developer={property.developer} />}
               <AffordabilityCTA priceFrom={property.price_from} />
-
-              {/* Inquiry Form */}
               <div ref={inquiryFormRef}>
-                <InquiryForm
-                  propertyId={property.id}
-                  propertyName={property.name}
-                />
+                <InquiryForm propertyId={property.id} propertyName={property.name} />
               </div>
             </div>
           </div>
@@ -272,6 +243,7 @@ const PropertyDetail = () => {
       </main>
       <Footer />
       <WhatsAppButton propertyName={property.name} />
+      <BackToTop />
     </div>
   );
 };

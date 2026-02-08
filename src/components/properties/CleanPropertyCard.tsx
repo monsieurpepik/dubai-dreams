@@ -57,10 +57,15 @@ export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) =
   const { isComparing, toggleCompare, canAdd } = useCompare();
   const saved = isSaved(property.id);
   const comparing = isComparing(property.id);
-  const primaryImage = property.property_images?.find(img => img.is_primary) 
-    || property.property_images?.[0];
+  
+  const sortedImages = [...(property.property_images || [])].sort((a, b) => {
+    if (a.is_primary && !b.is_primary) return -1;
+    if (!a.is_primary && b.is_primary) return 1;
+    return (a.display_order || 0) - (b.display_order || 0);
+  });
+  const primaryImage = sortedImages[0];
+  const imageCount = sortedImages.length;
 
-  // Pick one differentiator: yield if available, else completion date
   const differentiator = property.roi_estimate && property.roi_estimate > 0
     ? `${property.roi_estimate}% Est. Yield`
     : formatDate(property.completion_date);
@@ -72,6 +77,7 @@ export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) =
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
         transition={{ duration: 0.8, delay: Math.min(index * 0.1, 0.4), ease: [0.22, 1, 0.36, 1] }}
+        whileTap={{ scale: 0.985 }}
         className="space-y-4"
       >
         {/* Image — cinematic 3:2 aspect */}
@@ -88,40 +94,55 @@ export const CleanPropertyCard = ({ property, index }: CleanPropertyCardProps) =
             </div>
           )}
 
-          {/* Action buttons */}
-          <div className="absolute top-4 right-4 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          {/* Always-visible Heart (Airbnb pattern) */}
+          <button
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleSave(property.id); }}
+            className="absolute top-4 right-4 p-2 bg-background/60 backdrop-blur-sm rounded-full transition-colors hover:bg-background/80"
+            aria-label={saved ? 'Remove from shortlist' : 'Save to shortlist'}
+          >
+            <Heart className={`w-4 h-4 transition-colors ${saved ? 'fill-accent text-accent' : 'text-foreground/70'}`} />
+          </button>
+
+          {/* Compare — hover only (power user) */}
+          <div className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleCompare(property.id); }}
-              className={`p-2 backdrop-blur-sm rounded-sm transition-colors ${
-                comparing ? 'bg-accent text-accent-foreground' : 'bg-background/80 text-foreground hover:bg-background'
+              className={`p-2 backdrop-blur-sm rounded-full transition-colors ${
+                comparing ? 'bg-accent text-accent-foreground' : 'bg-background/60 text-foreground/70 hover:bg-background/80'
               } ${!canAdd && !comparing ? 'opacity-40 cursor-not-allowed' : ''}`}
               aria-label={comparing ? 'Remove from comparison' : 'Add to comparison'}
               disabled={!canAdd && !comparing}
             >
               <BarChart3 className="w-4 h-4" />
             </button>
-            <button
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleSave(property.id); }}
-              className="p-2 bg-background/80 backdrop-blur-sm rounded-sm transition-colors hover:bg-background"
-              aria-label={saved ? 'Remove from shortlist' : 'Save to shortlist'}
-            >
-              <Heart className={`w-4 h-4 transition-colors ${saved ? 'fill-accent text-accent' : 'text-foreground'}`} />
-            </button>
           </div>
+
+          {/* Dot indicators (Airbnb pattern) */}
+          {imageCount > 1 && (
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1">
+              {sortedImages.slice(0, 5).map((_, i) => (
+                <div
+                  key={i}
+                  className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                    i === 0 ? 'bg-white' : 'bg-white/50'
+                  }`}
+                />
+              ))}
+              {imageCount > 5 && (
+                <div className="w-1.5 h-1.5 rounded-full bg-white/30" />
+              )}
+            </div>
+          )}
         </div>
 
-        {/* Content — Apple minimal */}
+        {/* Content */}
         <div className="space-y-1.5">
           <h3 className="font-serif text-xl md:text-2xl text-foreground leading-tight group-hover:text-muted-foreground transition-colors duration-300">
             {property.name}
           </h3>
-          
-          {/* Developer + Area */}
           <p className="text-sm text-muted-foreground">
             {property.developer ? `${property.developer.name} · ` : ''}{property.area}
           </p>
-
-          {/* Price + one differentiator */}
           <div className="flex items-center gap-3 pt-1 text-sm">
             <span className="text-foreground font-medium">
               From {formatPrice(property.price_from, { compact: true })}

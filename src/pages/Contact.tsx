@@ -1,41 +1,37 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { CheckCircle2, MapPin, Mail, Clock } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { CheckCircle2, MapPin, Mail, Clock, ArrowRight } from 'lucide-react';
 import { z } from 'zod';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { SEO } from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import { Slider } from '@/components/ui/slider';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { analytics } from '@/lib/analytics';
 import { useTenant } from '@/hooks/useTenant';
 
-const contactSchema = z.object({
-  name: z.string().trim().min(1, 'Name is required').max(100, 'Name must be less than 100 characters'),
-  email: z.string().trim().email('Invalid email address').max(255, 'Email must be less than 255 characters'),
-  phone: z.string().trim().max(20, 'Phone must be less than 20 characters').optional(),
-  message: z.string().trim().min(1, 'Message is required').max(1000, 'Message must be less than 1000 characters'),
-});
-
-type ContactFormData = z.infer<typeof contactSchema>;
+const intentOptions = [
+  'Buying First Property',
+  'Expanding Portfolio',
+  'Just Researching',
+  'Other',
+];
 
 const Contact = () => {
-  const { tenant } = useTenant();
-  const [formData, setFormData] = useState<ContactFormData>({
-    name: '',
-    email: '',
-    phone: '',
-    message: '',
-  });
-  const [errors, setErrors] = useState<Partial<Record<keyof ContactFormData, string>>>({});
+  const { tenant, formatPrice } = useTenant();
+  const [step, setStep] = useState(1);
+  const [intent, setIntent] = useState('');
+  const [budget, setBudget] = useState(2000000);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const { toast } = useToast();
 
-  // Tenant-aware values
   const cityName = tenant?.office_location?.city || 'Dubai';
   const brandName = tenant?.brand_name || 'Owning';
   const officeArea = tenant?.office_location?.area || 'Dubai Marina';
@@ -43,54 +39,33 @@ const Contact = () => {
   const contactEmail = tenant?.email || 'hello@owning.com';
   const workingHours = tenant?.working_hours;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (errors[name as keyof ContactFormData]) {
-      setErrors(prev => ({ ...prev, [name]: undefined }));
-    }
-  };
+  const canProceedStep2 = !!intent;
+  const canSubmit = email.includes('@') && name.trim().length > 0;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrors({});
-
-    const result = contactSchema.safeParse(formData);
-    if (!result.success) {
-      const fieldErrors: Partial<Record<keyof ContactFormData, string>> = {};
-      result.error.errors.forEach(err => {
-        if (err.path[0]) {
-          fieldErrors[err.path[0] as keyof ContactFormData] = err.message;
-        }
-      });
-      setErrors(fieldErrors);
-      return;
-    }
-
+  const handleSubmit = async () => {
+    if (!canSubmit) return;
     setIsSubmitting(true);
     try {
       const { error } = await supabase.from('leads').insert({
-        name: result.data.name,
-        email: result.data.email,
-        phone: result.data.phone || null,
+        name,
+        email,
+        phone: phone || null,
         source: 'contact_page',
-        quiz_responses: {
-          message: result.data.message,
-        },
+        investment_capacity: budget,
+        quiz_responses: { intent, budget },
       });
-
       if (error) throw error;
 
       try {
         await supabase.functions.invoke('send-lead-notification', {
           body: {
-            leadName: result.data.name,
-            leadEmail: result.data.email,
-            leadPhone: result.data.phone || null,
+            leadName: name,
+            leadEmail: email,
+            leadPhone: phone || null,
             propertyName: null,
             propertyId: null,
             source: 'contact_page',
-            message: result.data.message,
+            message: `Intent: ${intent}, Budget: ${budget}`,
           },
         });
       } catch (notifyError) {
@@ -98,27 +73,25 @@ const Contact = () => {
       }
 
       analytics.submitContactForm();
-
       setIsSuccess(true);
-      toast({
-        title: 'Message sent',
-        description: 'We will get back to you shortly.',
-      });
+      toast({ title: 'Message sent', description: 'We will get back to you shortly.' });
     } catch (error) {
       console.error('Error submitting form:', error);
-      toast({
-        title: 'Something went wrong',
-        description: 'Please try again.',
-        variant: 'destructive',
-      });
+      toast({ title: 'Something went wrong', description: 'Please try again.', variant: 'destructive' });
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const stepVariants = {
+    initial: { opacity: 0, x: 40 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -40 },
+  };
+
   return (
     <div className="min-h-screen bg-background">
-      <SEO 
+      <SEO
         title="Contact Us"
         description={`Get in touch with ${brandName}. Our ${cityName} team is ready to help you find your perfect off-plan property investment.`}
         url={`https://owning${cityName.toLowerCase()}.com/contact`}
@@ -134,14 +107,12 @@ const Contact = () => {
               transition={{ duration: 0.6 }}
               className="max-w-2xl"
             >
-              <p className="text-xs font-medium uppercase tracking-luxury text-accent mb-4">
-                Get in Touch
-              </p>
+              <p className="text-xs font-medium uppercase tracking-luxury text-accent mb-4">Get in Touch</p>
               <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-6">
-                Contact Us
+                Let's Talk
               </h1>
               <p className="text-lg text-muted-foreground">
-                Have questions about {cityName} off-plan properties? Our team is here to help.
+                Tell us a little about yourself. We'll match you with the right advisor.
               </p>
             </motion.div>
           </div>
@@ -151,103 +122,166 @@ const Contact = () => {
         <section className="py-16 md:py-24">
           <div className="container-wide">
             <div className="grid lg:grid-cols-2 gap-16">
-              {/* Form */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-              >
+              {/* Conversational Form */}
+              <div className="min-h-[400px]">
                 {isSuccess ? (
-                  <div className="bg-card border border-border/50 p-12 text-center">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="bg-muted/30 p-12 text-center"
+                  >
                     <div className="w-16 h-16 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-6">
                       <CheckCircle2 className="w-8 h-8 text-accent" />
                     </div>
-                    <h2 className="font-serif text-2xl text-foreground mb-3">
-                      Thank You
-                    </h2>
-                    <p className="text-muted-foreground">
-                      We've received your message and will respond shortly.
+                    <h2 className="font-serif text-2xl text-foreground mb-3">Thank You</h2>
+                    <p className="text-muted-foreground mb-2">
+                      We've received your details and will be in touch within 24 hours.
                     </p>
-                  </div>
+                    <p className="text-xs text-muted-foreground">
+                      A dedicated advisor will review your preferences and prepare tailored recommendations.
+                    </p>
+                  </motion.div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div>
-                      <label htmlFor="name" className="text-sm font-medium text-foreground mb-2 block">
-                        Full Name *
-                      </label>
-                      <Input
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        placeholder="John Smith"
-                        className={`h-12 bg-background border-border/50 focus:border-accent ${errors.name ? 'border-destructive' : ''}`}
-                      />
-                      {errors.name && <p className="text-sm text-destructive mt-1">{errors.name}</p>}
-                    </div>
-
-                    <div>
-                      <label htmlFor="email" className="text-sm font-medium text-foreground mb-2 block">
-                        Email Address *
-                      </label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="john@example.com"
-                        className={`h-12 bg-background border-border/50 focus:border-accent ${errors.email ? 'border-destructive' : ''}`}
-                      />
-                      {errors.email && <p className="text-sm text-destructive mt-1">{errors.email}</p>}
-                    </div>
-
-                    <div>
-                      <label htmlFor="phone" className="text-sm font-medium text-foreground mb-2 block">
-                        Phone Number
-                      </label>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        type="tel"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        placeholder="+971 50 XXX XXXX"
-                        className="h-12 bg-background border-border/50 focus:border-accent"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="message" className="text-sm font-medium text-foreground mb-2 block">
-                        Message *
-                      </label>
-                      <Textarea
-                        id="message"
-                        name="message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        placeholder="Tell us about your property interests..."
-                        rows={5}
-                        className={`bg-background border-border/50 focus:border-accent resize-none ${errors.message ? 'border-destructive' : ''}`}
-                      />
-                      {errors.message && <p className="text-sm text-destructive mt-1">{errors.message}</p>}
-                    </div>
-
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full h-12 bg-foreground text-background hover:bg-foreground/90 text-xs uppercase tracking-luxury"
-                    >
-                      {isSubmitting ? 'Sending...' : 'Send Message'}
-                    </Button>
-
-                    <p className="text-xs text-center text-muted-foreground">
-                      We respect your privacy.
+                  <div>
+                    {/* Step indicator */}
+                    <p className="text-xs text-muted-foreground mb-8 uppercase tracking-wider">
+                      {step} of 3
                     </p>
-                  </form>
+
+                    <AnimatePresence mode="wait">
+                      {step === 1 && (
+                        <motion.div key="step1" variants={stepVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.4 }}>
+                          <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-8 !text-2xl md:!text-3xl">
+                            What brings you here?
+                          </h2>
+                          <div className="grid grid-cols-2 gap-3">
+                            {intentOptions.map((option) => (
+                              <button
+                                key={option}
+                                onClick={() => setIntent(option)}
+                                className={`p-5 text-left text-sm transition-all border ${
+                                  intent === option
+                                    ? 'border-foreground bg-foreground/5 text-foreground'
+                                    : 'border-border/50 text-muted-foreground hover:border-foreground/30'
+                                }`}
+                              >
+                                {option}
+                              </button>
+                            ))}
+                          </div>
+                          <Button
+                            onClick={() => setStep(2)}
+                            disabled={!canProceedStep2}
+                            className="mt-8 h-12 px-8 bg-foreground text-background hover:bg-foreground/90 text-xs uppercase tracking-wider"
+                          >
+                            Continue
+                            <ArrowRight className="w-4 h-4 ml-2" />
+                          </Button>
+                        </motion.div>
+                      )}
+
+                      {step === 2 && (
+                        <motion.div key="step2" variants={stepVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.4 }}>
+                          <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-8 !text-2xl md:!text-3xl">
+                            What's your budget range?
+                          </h2>
+                          <div className="space-y-6">
+                            <div className="text-center">
+                              <span className="font-serif text-4xl text-foreground">
+                                {formatPrice(budget, { compact: true })}
+                              </span>
+                            </div>
+                            <Slider
+                              value={[budget]}
+                              onValueChange={(v) => setBudget(v[0])}
+                              min={500000}
+                              max={20000000}
+                              step={250000}
+                              className="py-4"
+                            />
+                            <div className="flex justify-between text-xs text-muted-foreground">
+                              <span>{formatPrice(500000, { compact: true })}</span>
+                              <span>{formatPrice(20000000, { compact: true })}</span>
+                            </div>
+                          </div>
+                          <div className="flex gap-3 mt-8">
+                            <Button
+                              variant="outline"
+                              onClick={() => setStep(1)}
+                              className="h-12 px-6 text-xs uppercase tracking-wider"
+                            >
+                              Back
+                            </Button>
+                            <Button
+                              onClick={() => setStep(3)}
+                              className="h-12 px-8 bg-foreground text-background hover:bg-foreground/90 text-xs uppercase tracking-wider"
+                            >
+                              Continue
+                              <ArrowRight className="w-4 h-4 ml-2" />
+                            </Button>
+                          </div>
+                        </motion.div>
+                      )}
+
+                      {step === 3 && (
+                        <motion.div key="step3" variants={stepVariants} initial="initial" animate="animate" exit="exit" transition={{ duration: 0.4 }}>
+                          <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-8 !text-2xl md:!text-3xl">
+                            How should we reach you?
+                          </h2>
+                          <div className="space-y-5">
+                            <div>
+                              <label className="text-sm font-medium text-foreground mb-2 block">Full Name *</label>
+                              <Input
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                placeholder="John Smith"
+                                className="h-12 bg-background border-border/50 focus:border-accent"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-sm font-medium text-foreground mb-2 block">Email *</label>
+                              <Input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="john@example.com"
+                                className="h-12 bg-background border-border/50 focus:border-accent"
+                              />
+                            </div>
+                            <div>
+                              <label className="text-sm font-medium text-foreground mb-2 block">Phone</label>
+                              <Input
+                                type="tel"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                placeholder="+971 50 XXX XXXX"
+                                className="h-12 bg-background border-border/50 focus:border-accent"
+                              />
+                            </div>
+                          </div>
+                          <div className="flex gap-3 mt-8">
+                            <Button
+                              variant="outline"
+                              onClick={() => setStep(2)}
+                              className="h-12 px-6 text-xs uppercase tracking-wider"
+                            >
+                              Back
+                            </Button>
+                            <Button
+                              onClick={handleSubmit}
+                              disabled={isSubmitting || !canSubmit}
+                              className="h-12 px-8 bg-foreground text-background hover:bg-foreground/90 text-xs uppercase tracking-wider"
+                            >
+                              {isSubmitting ? 'Sending...' : 'Send'}
+                            </Button>
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-4">We respect your privacy.</p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 )}
-              </motion.div>
+              </div>
 
               {/* Info */}
               <motion.div
@@ -257,7 +291,6 @@ const Contact = () => {
                 transition={{ duration: 0.6 }}
                 className="space-y-8"
               >
-                {/* Contact Info */}
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
@@ -265,25 +298,18 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-medium text-foreground mb-1">Location</h3>
-                      <p className="text-muted-foreground">
-                        {officeArea}, {cityName}<br />
-                        {officeCountry}
-                      </p>
+                      <p className="text-muted-foreground">{officeArea}, {cityName}<br />{officeCountry}</p>
                     </div>
                   </div>
-
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
                       <Mail className="w-5 h-5 text-accent" />
                     </div>
                     <div>
                       <h3 className="font-medium text-foreground mb-1">Email</h3>
-                      <p className="text-muted-foreground">
-                        {contactEmail}
-                      </p>
+                      <p className="text-muted-foreground">{contactEmail}</p>
                     </div>
                   </div>
-
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
                       <Clock className="w-5 h-5 text-accent" />
@@ -292,15 +318,9 @@ const Contact = () => {
                       <h3 className="font-medium text-foreground mb-1">Working Hours</h3>
                       <p className="text-muted-foreground">
                         {workingHours ? (
-                          <>
-                            {workingHours.weekdays}<br />
-                            {workingHours.weekends}
-                          </>
+                          <>{workingHours.weekdays}<br />{workingHours.weekends}</>
                         ) : (
-                          <>
-                            Sunday – Thursday: 9am – 6pm<br />
-                            Friday – Saturday: By appointment
-                          </>
+                          <>Sunday – Thursday: 9am – 6pm<br />Friday – Saturday: By appointment</>
                         )}
                       </p>
                     </div>
