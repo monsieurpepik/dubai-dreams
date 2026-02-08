@@ -59,24 +59,24 @@ export function Header() {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className={`fixed left-0 right-0 top-0 z-50 transition-all duration-500 ${
           isScrolled 
-            ? 'bg-background/95 backdrop-blur-xl shadow-[0_1px_3px_hsl(0_0%_0%/0.06)]' 
+            ? 'bg-background/95 backdrop-blur-xl border-b border-border/20' 
             : 'bg-transparent'
         }`}
       >
         <div className={`mx-auto flex max-w-[1400px] items-center justify-between px-6 lg:px-12 transition-all duration-500 ${
           isScrolled ? 'h-14 md:h-14' : 'h-16 md:h-20'
         }`}>
-          {/* Logo */}
+          {/* Logo — slightly larger */}
           <Link 
             to="/" 
             className={`font-medium uppercase tracking-[0.25em] text-foreground transition-all duration-500 hover:opacity-70 ${
-              isScrolled ? 'text-[10px]' : 'text-[11px]'
+              isScrolled ? 'text-[11px]' : 'text-xs'
             }`}
           >
             {brandPrefix}<span className="font-semibold">{brandLocation}</span>
           </Link>
 
-          {/* Desktop Navigation — reduced items */}
+          {/* Desktop Navigation */}
           <nav className="hidden items-center gap-10 md:flex">
             {primaryNavItems.map((item) => (
               <button
@@ -89,10 +89,10 @@ export function Header() {
             ))}
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+              className="p-2.5 text-muted-foreground hover:text-foreground transition-colors"
               aria-label="Search"
             >
-              <Search className="w-4 h-4" />
+              <Search className="w-[18px] h-[18px]" />
             </button>
           </nav>
 

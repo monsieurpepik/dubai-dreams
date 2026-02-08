@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, MapPin, Mail, Clock, ArrowRight } from 'lucide-react';
-import { z } from 'zod';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { SEO } from '@/components/SEO';
@@ -283,40 +282,34 @@ const Contact = () => {
                 )}
               </div>
 
-              {/* Info */}
+              {/* Info — streamlined, no circles */}
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className="space-y-8"
+                className="space-y-8 lg:pt-12"
               >
                 <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
-                      <MapPin className="w-5 h-5 text-accent" />
-                    </div>
+                  <div className="flex items-start gap-3">
+                    <MapPin className="w-4 h-4 text-muted-foreground mt-1 shrink-0" />
                     <div>
-                      <h3 className="font-medium text-foreground mb-1">Location</h3>
-                      <p className="text-muted-foreground">{officeArea}, {cityName}<br />{officeCountry}</p>
+                      <h3 className="text-sm font-medium text-foreground mb-1">Location</h3>
+                      <p className="text-sm text-muted-foreground">{officeArea}, {cityName}<br />{officeCountry}</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
-                      <Mail className="w-5 h-5 text-accent" />
-                    </div>
+                  <div className="flex items-start gap-3">
+                    <Mail className="w-4 h-4 text-muted-foreground mt-1 shrink-0" />
                     <div>
-                      <h3 className="font-medium text-foreground mb-1">Email</h3>
-                      <p className="text-muted-foreground">{contactEmail}</p>
+                      <h3 className="text-sm font-medium text-foreground mb-1">Email</h3>
+                      <p className="text-sm text-muted-foreground">{contactEmail}</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
-                      <Clock className="w-5 h-5 text-accent" />
-                    </div>
+                  <div className="flex items-start gap-3">
+                    <Clock className="w-4 h-4 text-muted-foreground mt-1 shrink-0" />
                     <div>
-                      <h3 className="font-medium text-foreground mb-1">Working Hours</h3>
-                      <p className="text-muted-foreground">
+                      <h3 className="text-sm font-medium text-foreground mb-1">Working Hours</h3>
+                      <p className="text-sm text-muted-foreground">
                         {workingHours ? (
                           <>{workingHours.weekdays}<br />{workingHours.weekends}</>
                         ) : (
@@ -325,6 +318,13 @@ const Contact = () => {
                       </p>
                     </div>
                   </div>
+                </div>
+
+                {/* Social proof */}
+                <div className="border-t border-border/30 pt-6">
+                  <p className="text-xs text-muted-foreground">
+                    Average response time: <span className="text-foreground font-medium">2 hours</span>
+                  </p>
                 </div>
               </motion.div>
             </div>

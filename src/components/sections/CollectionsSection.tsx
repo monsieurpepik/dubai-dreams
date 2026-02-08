@@ -6,30 +6,38 @@ const collections = [
   {
     id: 'golden-visa',
     title: 'Golden Visa Eligible',
-    description: '10-year UAE residency',
+    stat: '10yr',
+    statLabel: 'Residency',
+    description: 'Secure long-term UAE residency with qualifying investments',
     filter: 'golden-visa',
-    image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80',
+    accent: 'border-accent/30',
   },
   {
     id: 'high-yield',
     title: 'High Yield Projects',
-    description: '7%+ estimated returns',
+    stat: '7%+',
+    statLabel: 'Est. Returns',
+    description: 'Top-performing developments by projected rental yield',
     filter: 'high-yield',
-    image: 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=800&q=80',
+    accent: 'border-border/50',
   },
   {
     id: 'handover-2025',
-    title: 'Handover 2025',
-    description: 'Ready for delivery',
+    title: 'Handover 2025–26',
+    stat: 'Q4',
+    statLabel: 'Delivery',
+    description: 'Move-in ready or near completion — no more waiting',
     filter: 'handover-2025',
-    image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80',
+    accent: 'border-border/50',
   },
   {
     id: 'waterfront',
     title: 'Waterfront Living',
-    description: 'Beachfront & marina',
+    stat: '12+',
+    statLabel: 'Projects',
+    description: 'Beachfront, marina, and canal-side residences',
     filter: 'waterfront',
-    image: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&q=80',
+    accent: 'border-border/50',
   },
 ];
 
@@ -51,42 +59,80 @@ export const CollectionsSection = () => {
           </h2>
         </motion.div>
 
-        {/* Collection Cards — 2-column, full-bleed images */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          {collections.map((collection, index) => (
+        {/* Bento Grid — 1 large hero + 3 smaller */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+          {/* Hero Card — Golden Visa */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="md:row-span-2"
+          >
+            <Link
+              to={`/properties?collection=${collections[0].filter}`}
+              className={`group block h-full border ${collections[0].accent} bg-card p-8 md:p-10 transition-all duration-500 hover:border-foreground/30 hover:bg-secondary/50`}
+            >
+              <div className="flex flex-col justify-between h-full min-h-[300px] md:min-h-full">
+                <div>
+                  <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-accent">
+                    Featured Collection
+                  </span>
+                </div>
+                
+                <div className="my-auto py-10">
+                  <span className="font-serif text-8xl md:text-9xl lg:text-[10rem] text-foreground leading-none block">
+                    {collections[0].stat}
+                  </span>
+                  <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground mt-2 block">
+                    {collections[0].statLabel}
+                  </span>
+                </div>
+
+                <div>
+                  <h3 className="font-serif text-2xl md:text-3xl text-foreground mb-2 group-hover:translate-x-1 transition-transform duration-300">
+                    {collections[0].title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {collections[0].description}
+                  </p>
+                  <span className="inline-block mt-4 text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground group-hover:text-foreground transition-colors">
+                    Explore →
+                  </span>
+                </div>
+              </div>
+            </Link>
+          </motion.div>
+
+          {/* Smaller cards */}
+          {collections.slice(1).map((collection, index) => (
             <motion.div
               key={collection.id}
               initial={{ opacity: 0, y: 40 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.8, delay: (index + 1) * 0.1, ease: [0.22, 1, 0.36, 1] }}
             >
               <Link
                 to={`/properties?collection=${collection.filter}`}
-                className="group block relative aspect-[16/10] overflow-hidden bg-muted"
+                className={`group block border ${collection.accent} bg-card p-7 md:p-8 transition-all duration-500 hover:border-foreground/30 hover:bg-secondary/50 h-full`}
               >
-                {/* Background image with hover parallax */}
-                <motion.img
-                  src={collection.image}
-                  alt={collection.title}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-                />
-                
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-
-                {/* Text overlay at bottom */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-                  <h3 className="font-serif text-2xl md:text-3xl text-white mb-1 group-hover:translate-y-[-2px] transition-transform duration-300">
-                    {collection.title}
-                  </h3>
-                  <p className="text-sm text-white/60">
-                    {collection.description}
-                  </p>
-                </div>
-
-                {/* Arrow */}
-                <div className="absolute top-6 right-6 text-white/40 group-hover:text-white/80 transition-colors duration-300">
-                  <span className="text-xl">→</span>
+                <div className="flex flex-col justify-between h-full min-h-[180px]">
+                  <div>
+                    <span className="font-serif text-4xl md:text-5xl text-foreground leading-none">
+                      {collection.stat}
+                    </span>
+                    <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground ml-3">
+                      {collection.statLabel}
+                    </span>
+                  </div>
+                  
+                  <div className="mt-auto pt-6">
+                    <h3 className="font-serif text-xl text-foreground mb-1 group-hover:translate-x-1 transition-transform duration-300">
+                      {collection.title}
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      {collection.description}
+                    </p>
+                  </div>
                 </div>
               </Link>
             </motion.div>

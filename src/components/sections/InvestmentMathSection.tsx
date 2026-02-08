@@ -30,7 +30,7 @@ export const InvestmentMathSection = () => {
     <section ref={ref} className="relative py-28 md:py-36 lg:py-44 bg-background overflow-hidden">
       <div className="container-wide relative z-10">
         <div className="max-w-4xl mx-auto text-center">
-          {/* Hero number — Apple style: one massive stat */}
+          {/* Hero number */}
           <motion.div
             initial={{ opacity: 0, scale: 0.85 }}
             animate={inView ? { opacity: 1, scale: 1 } : {}}
@@ -54,21 +54,49 @@ export const InvestmentMathSection = () => {
             </span>
           </motion.div>
 
+          {/* Comparison context — trust layer */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.45 }}
+            className="flex flex-wrap items-center justify-center gap-4 md:gap-6 mb-8"
+          >
+            <span className="text-xs text-muted-foreground/70 border border-border/50 px-3 py-1.5">
+              vs. S&P 500: +62%
+            </span>
+            <span className="text-xs text-muted-foreground/70 border border-border/50 px-3 py-1.5">
+              vs. London RE: +18%
+            </span>
+            <span className="text-xs text-muted-foreground/70 border border-border/50 px-3 py-1.5">
+              vs. Singapore: +34%
+            </span>
+          </motion.div>
+
           {/* One-liner */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="text-muted-foreground max-w-md mx-auto mb-12 text-lg"
+            className="text-muted-foreground max-w-md mx-auto mb-4 text-lg"
           >
             Off-plan capital appreciation combined with 6-8% rental yields.
+          </motion.p>
+
+          {/* Source citation */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="text-[10px] text-muted-foreground/50 mb-12"
+          >
+            Based on Dubai Land Department data, 2020–2025. Past performance does not guarantee future results.
           </motion.p>
 
           {/* CTA */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.8, delay: 0.65 }}
           >
             <Link
               to="/calculator"

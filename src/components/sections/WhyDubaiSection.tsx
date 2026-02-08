@@ -1,107 +1,129 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useMotionValue, useTransform, animate } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Shield, Landmark, Plane, TrendingUp } from 'lucide-react';
+import { useRef, useEffect } from 'react';
 
 const benefits = [
   {
-    icon: Landmark,
     stat: "0%",
     title: "Income Tax",
-    description: "No income tax, no capital gains tax on property"
+    description: "No income tax. No capital gains tax. Keep everything you earn.",
+    gradient: "from-background via-secondary to-background",
   },
   {
-    icon: Shield,
     stat: "10yr",
     title: "Golden Visa",
-    description: "Residency with AED 2M+ property investment"
+    description: "Full UAE residency with a AED 2M+ property investment.",
+    gradient: "from-background via-muted to-background",
   },
   {
-    icon: Plane,
     stat: "5hr",
     title: "Global Hub",
-    description: "Reach 60% of the world's population"
+    description: "Reach 60% of the world's population within a 5-hour flight.",
+    gradient: "from-background via-secondary to-background",
   },
   {
-    icon: TrendingUp,
     stat: "#1",
     title: "Safe Haven",
-    description: "World's safest city for expats and investors"
+    description: "Ranked the world's safest city for expats and investors.",
+    gradient: "from-background via-muted to-background",
   }
 ];
 
+function AnimatedStat({ value }: { value: string }) {
+  const isNumeric = /^\d+/.test(value);
+  const num = isNumeric ? parseInt(value) : 0;
+  const suffix = isNumeric ? value.replace(/^\d+/, '') : '';
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (v) => Math.round(v));
+  const [statRef, statInView] = useInView({ triggerOnce: true, threshold: 0.5 });
+  
+  useEffect(() => {
+    if (statInView && isNumeric) {
+      animate(count, num, { duration: 1.5, ease: [0.22, 1, 0.36, 1] });
+    }
+  }, [statInView, isNumeric, num, count]);
+
+  if (!isNumeric) {
+    return <span>{value}</span>;
+  }
+  
+  return <span ref={statRef}><motion.span>{rounded}</motion.span>{suffix}</span>;
+}
+
 export const WhyDubaiSection = () => {
-  const [ref, inView] = useInView({ threshold: 0.2, triggerOnce: true });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
 
   return (
-    <section ref={ref} className="relative py-28 md:py-36 lg:py-44 bg-secondary overflow-hidden">
-      <div className="container-wide relative z-10">
-        {/* Section Header — Apple: big heading, no subtitle clutter */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-20 md:mb-24"
-        >
-          <h2 className="font-serif text-foreground">
+    <section ref={containerRef} className="relative bg-background">
+      {/* Sticky header */}
+      <div className="sticky top-0 z-10 pt-32 pb-8 pointer-events-none">
+        <div className="container-wide">
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-[10px] font-medium uppercase tracking-[0.3em] text-muted-foreground"
+          >
             Why Dubai
-          </h2>
-        </motion.div>
+          </motion.p>
+        </div>
+      </div>
 
-        {/* Benefits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6">
-          {benefits.map((benefit, index) => (
-            <motion.div
-              key={benefit.title}
-              initial={{ opacity: 0, y: 40 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
-              className="group relative"
-            >
-              <div className="p-8 md:p-6 lg:p-8 bg-card border border-border/50 h-full transition-all duration-500 hover:border-foreground/20">
-                {/* Icon */}
-                <div className="mb-6">
-                  <benefit.icon className="w-5 h-5 text-muted-foreground" strokeWidth={1.5} />
-                </div>
-                
-                {/* Stat — Apple: massive number */}
-                <div className="mb-4">
-                  <motion.span 
-                    className="font-serif text-5xl md:text-6xl text-foreground"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={inView ? { opacity: 1, scale: 1 } : {}}
-                    transition={{ duration: 0.8, delay: 0.3 + index * 0.12, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    {benefit.stat}
-                  </motion.span>
-                </div>
-
-                {/* Title & Description */}
-                <h3 className="text-[10px] font-medium uppercase tracking-[0.2em] text-foreground mb-3">
+      {/* Each benefit = sticky full-viewport reveal */}
+      {benefits.map((benefit, index) => (
+        <div key={benefit.title} className="min-h-screen flex items-center relative">
+          <div className={`absolute inset-0 bg-gradient-to-b ${benefit.gradient} opacity-50`} />
+          <div className="container-wide relative z-10 py-20">
+            <div className="max-w-4xl">
+              <motion.div
+                initial={{ opacity: 0, y: 60, filter: 'blur(20px)' }}
+                whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                viewport={{ once: true, margin: '-30%' }}
+                transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {/* Massive stat */}
+                <span className="font-serif text-[8rem] md:text-[12rem] lg:text-[16rem] text-foreground leading-none block">
+                  <AnimatedStat value={benefit.stat} />
+                </span>
+              </motion.div>
+              
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-20%' }}
+                transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                className="mt-4 md:mt-0"
+              >
+                <h3 className="text-[10px] font-medium uppercase tracking-[0.25em] text-muted-foreground mb-4">
                   {benefit.title}
                 </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <p className="text-xl md:text-2xl text-muted-foreground font-light max-w-lg leading-relaxed">
                   {benefit.description}
                 </p>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            </div>
+          </div>
         </div>
+      ))}
 
-        {/* Bottom CTA */}
-        <motion.div
+      {/* Bottom CTA */}
+      <div className="py-20 text-center">
+        <motion.a
+          href="/about"
           initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.8, delay: 0.7 }}
-          className="text-center mt-20"
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
         >
-          <a 
-            href="/about" 
-            className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Learn More
-            <span className="text-lg">→</span>
-          </a>
-        </motion.div>
+          Learn More
+          <span className="text-lg">→</span>
+        </motion.a>
       </div>
     </section>
   );
