@@ -12,6 +12,7 @@ import { PropertyFilters, FilterState, defaultFilters } from '@/components/prope
 import { CompareBar } from '@/components/properties/CompareBar';
 import { PropertyMap } from '@/components/properties/PropertyMap';
 import { CategoryBar, CategoryFilter } from '@/components/properties/CategoryBar';
+import { SaveSearchButton } from '@/components/properties/SaveSearchButton';
 import { useTenant } from '@/hooks/useTenant';
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
@@ -162,8 +163,21 @@ const Properties = () => {
 
         <section className="py-12 md:py-16">
           <div className="container-wide">
-            <div className="flex items-center justify-between mb-6">
-              <PropertyFilters filters={filters} onChange={setFilters} resultCount={propertyCount} />
+            <div className="flex items-center justify-between gap-4 mb-6">
+              <div className="flex items-center gap-4 flex-wrap">
+                <PropertyFilters filters={filters} onChange={setFilters} resultCount={propertyCount} />
+                <SaveSearchButton
+                  filters={{ ...filters, category }}
+                  hasActiveFilters={
+                    category !== 'all' ||
+                    filters.area !== 'All Areas' ||
+                    filters.bedrooms !== 'Any' ||
+                    filters.priceRange[0] > 500000 ||
+                    filters.priceRange[1] < 50000000 ||
+                    filters.status !== 'All'
+                  }
+                />
+              </div>
               <div className="flex items-center gap-1 border border-border/50">
                 <button
                   onClick={() => setViewMode('grid')}

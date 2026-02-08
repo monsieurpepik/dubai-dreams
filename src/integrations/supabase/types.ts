@@ -675,6 +675,50 @@ export type Database = {
           },
         ]
       }
+      saved_searches: {
+        Row: {
+          created_at: string
+          email: string
+          filters: Json
+          frequency: string
+          id: string
+          is_active: boolean
+          last_notified_at: string | null
+          name: string | null
+          tenant_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          filters?: Json
+          frequency?: string
+          id?: string
+          is_active?: boolean
+          last_notified_at?: string | null
+          name?: string | null
+          tenant_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          filters?: Json
+          frequency?: string
+          id?: string
+          is_active?: boolean
+          last_notified_at?: string | null
+          name?: string | null
+          tenant_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_searches_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tenants: {
         Row: {
           brand_display: string

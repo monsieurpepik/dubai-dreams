@@ -1,7 +1,10 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { ArrowLeft, TrendingUp, ArrowUpRight } from 'lucide-react';
+import { ArrowLeft, TrendingUp, ArrowUpRight, BarChart3, Users, Palmtree, Briefcase, GraduationCap, PartyPopper } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import { supabase } from '@/integrations/supabase/client';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -29,6 +32,60 @@ const areaDescriptions: Record<string, string> = {
   'Bluewaters Island': 'Home to Ain Dubai (the world\'s largest observation wheel), this island offers exclusive residences with stunning Arabian Gulf views and a resort lifestyle.',
 };
 
+// Best-for tags per area
+const areaTags: Record<string, { label: string; icon: React.ElementType }[]> = {
+  'Palm Jumeirah': [
+    { label: 'Luxury Investors', icon: Briefcase },
+    { label: 'Families', icon: Users },
+    { label: 'Beach Lifestyle', icon: Palmtree },
+  ],
+  'Business Bay': [
+    { label: 'Investors', icon: Briefcase },
+    { label: 'Young Professionals', icon: Users },
+  ],
+  'Dubai Marina': [
+    { label: 'Young Professionals', icon: Users },
+    { label: 'Nightlife', icon: PartyPopper },
+    { label: 'Investors', icon: Briefcase },
+  ],
+  'Dubai Creek Harbour': [
+    { label: 'Families', icon: Users },
+    { label: 'Long-Term Growth', icon: TrendingUp },
+  ],
+  'DAMAC Hills': [
+    { label: 'Families', icon: Users },
+    { label: 'Value Investors', icon: Briefcase },
+  ],
+  'Sobha Hartland': [
+    { label: 'Families', icon: Users },
+    { label: 'Schools', icon: GraduationCap },
+  ],
+  'Downtown Dubai': [
+    { label: 'Luxury Investors', icon: Briefcase },
+    { label: 'Nightlife', icon: PartyPopper },
+  ],
+};
+
+// Approximate coordinates for area map centering
+const areaCoordinates: Record<string, [number, number]> = {
+  'Palm Jumeirah': [25.1124, 55.1390],
+  'Business Bay': [25.1865, 55.2665],
+  'Dubai Marina': [25.0800, 55.1400],
+  'Dubai Creek Harbour': [25.1970, 55.3430],
+  'Dubai Harbour': [25.0930, 55.1320],
+  'Downtown Dubai': [25.1972, 55.2744],
+  'Sobha Hartland': [25.1750, 55.3100],
+  'DAMAC Hills': [25.0250, 55.2450],
+  'Al Barari': [25.0830, 55.2840],
+  'Mohammed Bin Rashid City': [25.1600, 55.3000],
+  'Dubai Hills Estate': [25.1290, 55.2420],
+  'JVC': [25.0650, 55.2100],
+  'Jumeirah Beach Residence': [25.0780, 55.1340],
+  'Dubai South': [24.9300, 55.1700],
+  'La Mer': [25.2300, 55.2500],
+  'Bluewaters Island': [25.0810, 55.1250],
+};
+
 const slugToArea = (slug: string) => slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
 const AreaGuide = () => {
@@ -36,6 +93,8 @@ const AreaGuide = () => {
   const areaName = slug ? slugToArea(slug) : '';
   const { formatPrice, tenant } = useTenant();
   const cityName = tenant?.office_location?.city || 'Dubai';
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<L.Map | null>(null);
 
   const { data: marketData } = useQuery({
     queryKey: ['area-market', areaName],
@@ -49,6 +108,18 @@ const AreaGuide = () => {
       return data;
     },
     enabled: !!areaName,
+  });
+
+  // Fetch all areas for comparison
+  const { data: allAreasData } = useQuery({
+    queryKey: ['all-area-market-data'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('area_market_data')
+        .select('area, avg_price_sqft, trend_percentage');
+      if (error) throw error;
+      return data;
+    },
   });
 
   const { data: properties, isLoading: propertiesLoading } = useQuery({
@@ -66,6 +137,47 @@ const AreaGuide = () => {
   });
 
   const description = areaDescriptions[areaName] || `Discover off-plan investment opportunities in ${areaName}, ${cityName}.`;
+  const tags = areaTags[areaName] || [{ label: 'Investors', icon: Briefcase }];
+  const coords = areaCoordinates[areaName];
+
+  // City average for comparison
+  const cityAvgPriceSqft = allAreasData
+    ? Math.round(allAreasData.reduce((s, a) => s + Number(a.avg_price_sqft), 0) / allAreasData.length)
+    : 0;
+
+  // Initialize Leaflet map
+  useEffect(() => {
+    if (!mapContainerRef.current || !coords) return;
+
+    if (mapRef.current) {
+      mapRef.current.remove();
+      mapRef.current = null;
+    }
+
+    const map = L.map(mapContainerRef.current).setView(coords, 14);
+    mapRef.current = map;
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>',
+    }).addTo(map);
+
+    const defaultIcon = new L.Icon({
+      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+      iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+    });
+
+    L.marker(coords, { icon: defaultIcon }).addTo(map).bindPopup(`<b>${areaName}</b>`);
+
+    return () => {
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
+    };
+  }, [coords, areaName]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -86,9 +198,29 @@ const AreaGuide = () => {
               <p className="label-editorial mb-3">{cityName} Area Guide</p>
               <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-6">{areaName}</h1>
               <p className="text-muted-foreground text-lg max-w-2xl leading-relaxed">{description}</p>
+              
+              {/* Best For tags */}
+              <div className="flex flex-wrap gap-2 mt-6">
+                {tags.map((tag) => {
+                  const Icon = tag.icon;
+                  return (
+                    <span key={tag.label} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-accent/10 text-accent text-xs font-medium uppercase tracking-wider">
+                      <Icon className="w-3.5 h-3.5" />
+                      {tag.label}
+                    </span>
+                  );
+                })}
+              </div>
             </motion.div>
           </div>
         </section>
+
+        {/* Area Map */}
+        {coords && (
+          <section className="border-b border-border/30">
+            <div ref={mapContainerRef} className="h-[300px] md:h-[400px] w-full" />
+          </section>
+        )}
 
         {/* Market Stats */}
         {marketData && (
@@ -129,6 +261,63 @@ const AreaGuide = () => {
                   <span className="text-2xl font-serif text-foreground capitalize">
                     {marketData.trend_12m}
                   </span>
+                </div>
+              </motion.div>
+            </div>
+          </section>
+        )}
+
+        {/* How this area compares */}
+        {marketData && cityAvgPriceSqft > 0 && (
+          <section className="py-12 md:py-16 border-b border-border/30">
+            <div className="container-wide">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-8 flex items-center gap-3">
+                  <BarChart3 className="w-5 h-5 text-accent" />
+                  How {areaName} Compares
+                </h2>
+                <div className="max-w-lg space-y-6">
+                  {/* Price bar comparison */}
+                  <div>
+                    <div className="flex justify-between text-xs text-muted-foreground mb-2">
+                      <span>{areaName}</span>
+                      <span>{formatPrice(marketData.avg_price_sqft)}/sqft</span>
+                    </div>
+                    <div className="h-2 bg-secondary overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${Math.min((marketData.avg_price_sqft / 3500) * 100, 100)}%` }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8 }}
+                        className="h-full bg-accent"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs text-muted-foreground mb-2">
+                      <span>{cityName} Average</span>
+                      <span>{formatPrice(cityAvgPriceSqft)}/sqft</span>
+                    </div>
+                    <div className="h-2 bg-secondary overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${Math.min((cityAvgPriceSqft / 3500) * 100, 100)}%` }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        className="h-full bg-muted-foreground/30"
+                      />
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {marketData.avg_price_sqft > cityAvgPriceSqft
+                      ? `${areaName} is ${Math.round(((marketData.avg_price_sqft - cityAvgPriceSqft) / cityAvgPriceSqft) * 100)}% above the ${cityName} average — a premium market.`
+                      : `${areaName} is ${Math.round(((cityAvgPriceSqft - marketData.avg_price_sqft) / cityAvgPriceSqft) * 100)}% below the ${cityName} average — strong value potential.`
+                    }
+                  </p>
                 </div>
               </motion.div>
             </div>
