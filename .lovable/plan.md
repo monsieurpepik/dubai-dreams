@@ -1,53 +1,54 @@
 
 
-# Elevated Mobile Experience + Social Presence
+# Cinematic Split-Text Hero Layout
 
-Inspired by the Uptown reference, here are the key patterns we can adopt while staying true to the existing Apple-level minimalist aesthetic:
-
----
-
-## 1. Premium Full-Screen Mobile Menu
-
-The current mobile menu is centered text links on a plain background. The reference shows a much richer experience with:
-- **Left-aligned, large serif typography** with staggered opacity (active item bold/white, others dimmed)
-- **Social media links** at the bottom of the menu
-- **A contextual CTA** ("Get a project in mind?") pinned to the bottom
-
-**Implementation:**
-- Redesign the mobile menu in `Header.tsx` with left-aligned nav items, editorial typography hierarchy, and staggered entrance animations
-- Add social media icons (Instagram, Facebook/X) at the bottom of the menu
-- Add a bottom CTA bar: "Have a project in mind?" linking to `/contact`
-- Active route highlighting with bold weight
+Inspired by the Uptown reference, here are the key patterns we can adopt for the hero section to create a more dramatic, editorial feel:
 
 ---
 
-## 2. Social Media Links in Footer
+## 1. Split-Text Hero Typography
 
-The footer currently has no social media presence. Add social icons (Instagram, Facebook, X/Twitter) to the footer, sourced from tenant config.
+The current hero has centered text. The reference uses a **staggered split layout** where headline words are placed at opposite corners -- "BUILDING" top-left, "VISIONS" bottom-right -- creating visual tension and a cinematic feel.
 
 **Implementation:**
-- Add social media icon links to `Footer.tsx`
-- Pull URLs from tenant config (with sensible defaults)
+- Rework the hero content layout in `HeroSection.tsx` from centered to a full-screen split composition
+- Place a small subtitle ("CREATING REALITIES" equivalent -- we'd use the tenant tagline or "INVEST WITH CONFIDENCE") top-left above the main word
+- First headline word left-aligned, second headline word right-aligned lower, with the geometric diamond centered between them
+- Supporting description text pinned to bottom-left
+- CTA button pinned to bottom-right with a small diamond accent
 
 ---
 
-## 3. Hero Section -- Geometric Accent Element
+## 2. "Scroll to Explore" Indicator
 
-The reference uses a decorative diamond/geometric shape overlaid on the hero. A subtle geometric accent can add visual sophistication.
+Replace the current minimal vertical line scroll indicator with a labeled "SCROLL TO EXPLORE" text + downward arrow, centered at the bottom.
 
-**Implementation:**
-- Add a subtle animated geometric line element (diamond or angular frame) to `HeroSection.tsx`, rendered as SVG with a fade-in animation
-- Keeps the premium feel without cluttering
+---
+
+## 3. Enhanced Geometric Diamond
+
+The existing diamond SVG is already in place but can be refined to sit between the split headline words as a focal centerpiece, matching the reference's more prominent diamond element.
 
 ---
 
 ## Technical Details
 
-### Files to modify:
-- `src/components/layout/Header.tsx` -- Redesign mobile menu with left-aligned layout, social links, bottom CTA
-- `src/components/layout/Footer.tsx` -- Add social media icon row
-- `src/components/sections/HeroSection.tsx` -- Add subtle geometric accent overlay
-- `src/types/tenant.ts` -- Add optional `social_links` to tenant type if not present
+### File to modify:
+- `src/components/sections/HeroSection.tsx` -- Rework layout to split-text composition with repositioned CTAs and scroll indicator
 
-### No new dependencies needed. Uses existing `framer-motion` and `lucide-react`.
+### Layout structure:
+```text
++-----------------------------------------------+
+| [subtitle small caps]                          |
+| TURN AED 500K                                  |
+|                                                |
+|              [diamond SVG]                     |
+|                                                |
+|                        INTO A PORTFOLIO        |
+| [description text]          [See Your Returns] |
+|            SCROLL TO EXPLORE                   |
++-----------------------------------------------+
+```
+
+### No new dependencies needed. Uses existing `framer-motion` for staggered entrance animations.
 
