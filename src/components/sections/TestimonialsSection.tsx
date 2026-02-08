@@ -21,14 +21,11 @@ export const TestimonialsSection = () => {
   if (!testimonials?.length) return null;
 
   return (
-    <section className="py-20 md:py-28 bg-background">
+    <section className="py-28 md:py-36 lg:py-44 bg-background">
       <div className="container-wide">
-        <div className="text-center mb-16">
-          <span className="label-editorial text-muted-foreground mb-4 block">
+        <div className="text-center mb-20">
+          <h2 className="font-serif text-foreground">
             Trusted by Investors
-          </span>
-          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground">
-            Helping 200+ International Investors
           </h2>
         </div>
 
@@ -36,11 +33,11 @@ export const TestimonialsSection = () => {
           {testimonials.map((t, i) => (
             <motion.blockquote
               key={t.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.15 }}
-              className="space-y-4"
+              transition={{ duration: 0.8, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
+              className="space-y-5"
             >
               <div className="flex gap-0.5">
                 {Array.from({ length: t.rating || 5 }).map((_, j) => (

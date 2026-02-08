@@ -49,7 +49,7 @@
     --input: 0 0% 88%;
     --ring: 40 35% 55%;
     
-    --radius: 0rem;
+    --radius: 0.125rem;
     
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 0 0% 30%;
@@ -133,6 +133,7 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    letter-spacing: 0.01em;
     overflow-x: hidden;
   }
 
@@ -144,7 +145,7 @@
   
   h2 {
     font-family: 'Cormorant Garamond', Georgia, serif;
-    @apply text-3xl md:text-5xl lg:text-6xl font-light tracking-tight leading-[1.15];
+    @apply text-4xl md:text-6xl lg:text-7xl font-light tracking-tight leading-[1.1];
   }
   
   h3 {

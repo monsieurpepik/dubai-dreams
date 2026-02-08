@@ -47,17 +47,14 @@ const Index = () => {
         <TestimonialsSection />
         
         {/* 9. Investment Quiz CTA */}
-        <section className="py-20 md:py-28 bg-secondary">
+        <section className="py-28 md:py-36 lg:py-44 bg-secondary">
           <div className="container-wide">
-            <div className="text-center mb-12">
-              <span className="label-editorial text-muted-foreground mb-4 block">
-                Personalized For You
-              </span>
-              <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground mb-4">
+            <div className="text-center mb-16 md:mb-20">
+              <h2 className="font-serif text-foreground mb-4">
                 Find Your Match
               </h2>
-              <p className="text-muted-foreground max-w-xl mx-auto">
-                Answer 3 quick questions. Get curated project recommendations.
+              <p className="text-muted-foreground max-w-md mx-auto">
+                Answer 3 quick questions. Get curated recommendations.
               </p>
             </div>
             <InvestmentQuiz />

@@ -10,7 +10,6 @@ export const OffPlanProjectsSection = () => {
   const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
   const [activeSort, setActiveSort] = useState<SortOption>('featured');
 
-  // Fetch properties with images and developers
   const { data: properties = [], isLoading } = useQuery({
     queryKey: ['properties'],
     queryFn: async () => {
@@ -28,13 +27,11 @@ export const OffPlanProjectsSection = () => {
     },
   });
 
-  // Sort properties based on active sort - MVP smart sorting only
   const sortedProperties = useMemo(() => {
     const sorted = [...properties];
     
     switch (activeSort) {
       case 'best-value':
-        // Best value = highest ROI + payment plan flexibility
         return sorted.sort((a, b) => {
           const aScore = (a.roi_estimate || 0) + (a.payment_plan ? 2 : 0);
           const bScore = (b.roi_estimate || 0) + (b.payment_plan ? 2 : 0);
@@ -58,30 +55,30 @@ export const OffPlanProjectsSection = () => {
     <section
       ref={ref}
       id="properties"
-      className="relative py-24 md:py-32 bg-background overflow-hidden"
+      className="relative py-28 md:py-36 lg:py-44 bg-background overflow-hidden"
     >
       <div className="container-wide relative z-10">
-        {/* Section Header - Apple minimal */}
+        {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-12 md:mb-16"
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-16 md:mb-20"
         >
-          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground mb-4">
+          <h2 className="font-serif text-foreground mb-4">
             Off-Plan Collection
           </h2>
-          <p className="text-muted-foreground text-lg max-w-xl">
+          <p className="text-muted-foreground text-lg max-w-md">
             Curated developments from Dubai's most trusted developers.
           </p>
         </motion.div>
 
-        {/* Smart Sort Bar - MVP focused */}
+        {/* Smart Sort Bar */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="mb-10"
+          transition={{ duration: 0.8, delay: 0.15 }}
+          className="mb-12"
         >
           <SmartSortBar
             activeSort={activeSort}

@@ -13,27 +13,27 @@ export const MarketStatsBar = () => {
   return (
     <section 
       ref={ref} 
-      className="py-6 md:py-8 bg-foreground text-background"
+      className="py-8 md:py-10 bg-foreground text-background"
     >
       <div className="container-wide">
         <motion.div
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.6 }}
-          className="flex flex-wrap items-center justify-center gap-6 md:gap-12"
+          transition={{ duration: 0.8 }}
+          className="flex flex-wrap items-center justify-center gap-8 md:gap-16"
         >
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
-              initial={{ opacity: 0, y: 10 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={inView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.7, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
               className="flex items-center gap-3"
             >
-              <span className="font-serif text-2xl md:text-3xl">
+              <span className="font-serif text-3xl md:text-4xl">
                 {stat.value}
               </span>
-              <span className="text-xs uppercase tracking-luxury text-background/70">
+              <span className="text-[10px] uppercase tracking-[0.2em] text-background/60">
                 {stat.label}
               </span>
             </motion.div>
