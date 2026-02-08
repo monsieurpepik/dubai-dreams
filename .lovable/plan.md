@@ -1,189 +1,197 @@
 
-# Executive Design Review + 2026 Modernization Plan
 
-## Property Finder / Bayut Executive Assessment (Post-Roadmap)
+# The Hermes Treatment -- From Premium to Maison-Level Digital Luxury
 
-**Current Rating: 8.5/10** -- up from 7.5, but still not there.
-
-### What's Working
-- Brand positioning is genuinely premium -- feels like a luxury advisory, not a portal
-- Conversational contact form is differentiated
-- Investment narrative (Why Dubai -> Math -> Quiz) is strong funnel design
-- Category bar, search overlay, similar properties -- solid feature parity
-- Social proof with view counts adds credibility
-
-### What's Still Missing (The Bayut/PF Exec View)
-
-**1. The homepage feels "static website" not "living platform"**
-- No real-time market pulse. Bayut's homepage feels alive -- trending areas, new listings this week, price movement tickers. This homepage is beautiful but feels like a brochure.
-
-**2. The "Why Dubai" section looks like 2022**
-- Bordered cards with icons in a 4-column grid is the most overused layout in real estate. Every portal does this. In 2026, this should be a cinematic, scroll-driven experience.
-
-**3. The "Browse by Interest" collections are generic stock photos**
-- Unsplash images of random buildings destroy the premium feel. In 2026, this should use actual project imagery or have a more editorial/magazine layout.
-
-**4. The Investment Math section is one big number -- no context**
-- "+70%" in massive text looks impressive but lacks trust. Where does this number come from? No source citation, no comparison. A Bayut exec would call this "unverified marketing."
-
-**5. Footer is functional but forgettable**
-- No brand moment. Apple's footer tells a story. This is just links.
-
-**6. The "Trusted by Investors" testimonials look template-ish**
-- Plain text quotes with stars. Every Squarespace template does this. Needs a more editorial treatment.
-
-**7. Property cards lack differentiation**
-- All cards look identical. No visual hierarchy between a AED 500K studio and a AED 15M penthouse. No "New" badges, no "Price Drop" indicators, no urgency signals at all.
-
-**8. The Off-Plan Collection on homepage shows ALL properties with a sort bar**
-- This is a listing page inside a homepage. It should be a curated "Editor's Picks" of 4-6 properties max, not the full database.
+The site currently reads as a well-executed tech startup with good typography. Hermes does not read as "tech." Hermes reads as **heritage, restraint, and an almost uncomfortable level of confidence**. Here is what changes.
 
 ---
 
-## 2026 Modern Dubai Design Refresh
+## The Core Problem
 
-### Design Principles for 2026
-- **Bento grid layouts** over traditional grids (Apple's influence)
-- **Scroll-driven animations** over simple fade-ins (parallax, sticky reveals)
-- **Dynamic data** over static content (live market feeds, "updated today" timestamps)
-- **Editorial photography** over stock -- or abstract/geometric when no real images exist
-- **Larger touch targets and gesture-first** mobile interactions
-- **Glass morphism and blur effects** for overlays and floating elements
-- **Variable font weights** and more dramatic type scale contrasts
+The site has good bones but commits three cardinal sins against Hermes-level luxury:
+
+1. **It talks too much.** Hermes never explains why you should buy. It shows, then waits. The homepage currently has ~10 sections screaming for attention. Hermes.com has about 4.
+2. **It moves too fast.** Every section has a motion animation. The pulse animations on the stats bar, the counter animations, the scale-ins -- it feels like a tech demo, not a maison. Hermes uses movement like a whisper: one slow crossfade, one gentle parallax. That is all.
+3. **It lacks material.** Hermes digital feels tactile -- grain, texture, weight. This site is flat CSS on a white/dark background. No depth, no craft, no sense that a human touched it.
 
 ---
 
-## Changes To Implement
+## What Changes
 
-### 1. Homepage "Why Dubai" Section -- Cinematic Scroll Reveal
-**Problem:** Generic 4-card grid looks dated.
-**Solution:** Transform into a horizontal scroll or sticky-section reveal where each benefit gets a full-width moment with a large stat, a one-liner, and a subtle background treatment. Think Apple's "Environment" page scroll.
-- Each benefit gets its own viewport-height section
-- Stats animate in on scroll with a counter
-- Remove the bordered card containers entirely
-- Add subtle gradient backgrounds per section
+### 1. Radical Content Reduction -- The Homepage as a Gallery, Not a Brochure
 
-**File:** `src/components/sections/WhyDubaiSection.tsx`
+**Current state:** Hero -> Stats Bar -> Why Dubai (4 sticky sections) -> Investment Math -> Collections -> Properties (6 cards) -> Developers -> Testimonials -> Quiz -> Footer = **10 sections**
 
-### 2. Collections Section -- Magazine Editorial Layout
-**Problem:** 2x2 grid of stock photos is forgettable.
-**Solution:** Asymmetric bento layout with text-forward cards that don't depend on imagery. One large feature card + 3 smaller cards. Monochrome treatment on hover.
-- Replace Unsplash images with CSS gradient backgrounds + bold typography
-- "Golden Visa Eligible" becomes a large hero card with the stat "10yr Residency" as the visual
-- Other cards are text-forward with subtle accent borders
+**Hermes state:** Hero -> One editorial statement -> Curated glimpse (3 properties max) -> Brand moment footer = **4 sections**
 
-**File:** `src/components/sections/CollectionsSection.tsx`
+Move "Why Dubai," "Investment Math," "Market Stats," and "Testimonials" to dedicated inner pages. The homepage should feel like walking into a Hermes store: you see one beautiful object in an enormous space, not a showroom floor.
 
-### 3. Investment Math -- Add Trust Layer
-**Problem:** Unverified "+70%" feels like marketing.
-**Solution:** Add source citation, comparison context, and a small disclaimer.
-- Add "Based on DLD data, 2020-2025" below the stat
-- Add a subtle comparison: "vs. S&P 500: +62% | vs. London RE: +18%"
-- Add a small "Past performance..." disclaimer
-- Make the CTA more prominent
+**Changes:**
+- `Index.tsx`: Remove `MarketStatsBar`, `WhyDubaiSection`, `InvestmentMathSection`, `TrustedDevelopersStrip`, `TestimonialsSection`, `InvestmentQuiz` from homepage
+- Add a new `EditorialStatement` section between hero and properties -- a single large serif sentence with generous whitespace
+- Limit `OffPlanProjectsSection` to 3 properties in an asymmetric editorial layout (1 large + 2 small)
+- The "Browse by Interest" collections section stays but is stripped down to text-only links with no cards
 
-**File:** `src/components/sections/InvestmentMathSection.tsx`
+### 2. Hero -- One Word, One Image, Infinite Space
 
-### 4. Off-Plan Projects Homepage Section -- "Editor's Picks" (6 max)
-**Problem:** Showing the entire database on the homepage dilutes curation.
-**Solution:** Limit to 6 featured properties. Add a "View All X Projects" link. Remove the sort bar from the homepage (sorting belongs on /properties).
-- Show only 6 properties max
-- Add "Explore All Projects" CTA at the bottom
-- Cleaner, magazine-like grid (2 large + 4 small or 3x2)
+**Current state:** Two headline blocks ("TURN AED 500K" / "INTO A PORTFOLIO"), a diamond ornament, subtext, and a CTA. Too many elements competing.
 
-**File:** `src/components/sections/OffPlanProjectsSection.tsx`
+**Hermes state:** One word. Maybe two. Enormous letterform. A single perfect image. Nothing else.
 
-### 5. Property Cards -- Visual Hierarchy + Smart Badges
-**Problem:** Every card looks identical. No way to distinguish luxury from affordable.
-**Solution:** Add contextual badges and price-tier visual differentiation.
-- "New" badge for properties added in last 14 days
-- "Golden Visa" small badge if eligible
-- "Near Handover" if completion within 6 months
-- Price tier subtle treatment: properties over AED 5M get a slightly different card style (serif font on price)
-- Add "from AED X/mo" below the price (estimated mortgage)
+**Changes to `HeroSection.tsx`:**
+- Replace the split headline with a single word or phrase: "Possess." or "Own." or the brand name in massive display type
+- Remove the diamond ornament, the subtitle ("Invest With Confidence"), and the CTA text
+- Keep only the "Scroll to Explore" at the very bottom in near-invisible type
+- Slow the Ken Burns to 40s and reduce scale to 1.02 (barely perceptible)
+- Reduce the gradient overlay opacity -- let the image breathe
 
-**File:** `src/components/properties/CleanPropertyCard.tsx`
+### 3. Typography -- Introduce a Third Typeface for Display
 
-### 6. Testimonials -- Editorial Quote Design
-**Problem:** Star ratings + plain text looks like every template.
-**Solution:** Remove star ratings (they add nothing when all are 5-star). Go editorial.
-- Large decorative opening quote mark (already partially done but too subtle)
-- Larger, more prominent quote text
-- Add investor type context: "First-time Investor" or "Portfolio Expansion"
-- Horizontal scroll on mobile instead of stacking
+**Current state:** Cormorant Garamond (serif) + Inter (sans). Good but common.
 
-**File:** `src/components/sections/TestimonialsSection.tsx`
+**Hermes-level:** Add a display weight -- either use Cormorant at an extreme size with increased letter-spacing, or introduce a geometric display face for single-word moments.
 
-### 7. Market Stats Bar -- Live Pulse Feel
-**Problem:** Static numbers with no context.
-**Solution:** Add "Updated" timestamp and subtle pulse animation to make it feel live.
-- Add "Market data as of Feb 2026" in small text
-- Subtle breathing/pulse animation on the numbers
-- Add one more stat: property count "120+ Projects"
+**Changes to `index.css` and `tailwind.config.ts`:**
+- Add a `.font-display` class for hero/brand moments using ultra-light Cormorant at massive scale with `tracking-[0.15em]`
+- Reduce base body `letter-spacing` from `0.01em` to `0` -- Inter is already well-spaced
+- Increase line-height on body text from `1.75` to `1.85` for more air
+- Remove ALL uppercase tracking on section headers. Hermes uses sentence case, not UPPERCASE TRACKING. That is a tech/startup convention.
 
-**File:** `src/components/sections/MarketStatsBar.tsx`
+### 4. Color -- Desaturate Everything, Then Add One Moment
 
-### 8. Header -- Modernize with Transparent-to-Solid
-**Problem:** Header transition is fine but the logo treatment is too small.
-**Solution:** 
-- Increase logo size slightly and add a wordmark variation
-- Add a subtle bottom border on scroll instead of shadow
-- Make the search icon slightly larger for better discoverability
+**Current state:** Warm champagne/gold accent throughout. Used on badges, links, CTAs, borders, focus rings.
 
-**File:** `src/components/layout/Header.tsx`
+**Hermes state:** Pure grayscale everywhere. The accent color appears exactly once per page -- on a single interactive element. This is how Hermes uses its orange: sparingly, surgically.
 
-### 9. Footer -- Brand Moment
-**Problem:** Forgettable 4-column footer.
-**Solution:** Add a pre-footer brand statement section.
-- Full-width pre-footer with a large serif headline: "Your next property decision, informed."
-- Then the standard footer links below
-- Add a subtle Dubai skyline silhouette or geometric pattern
+**Changes to `index.css`:**
+- Dark mode: Remove warm tones from accent. Make accent a pure warm white (`0 0% 85%`) instead of gold
+- Reserve the gold/champagne tone for exactly one element: the "Request Consultation" button on property detail
+- Stats bar: Remove the inverted black/white bar. Replace with a thin horizontal divider and inline stats in muted text
+- Remove `animate-[pulse_4s_...]` from stat numbers -- pulse animation is antithetical to luxury calm
 
-**File:** `src/components/layout/Footer.tsx`
+### 5. Animation Philosophy -- From "Look at Me" to "Was That Even Moving?"
 
-### 10. Global CSS -- 2026 Polish
-**Problem:** Some utilities and base styles feel 2023.
-**Solution:**
-- Update border-radius from 0.125rem to 0.25rem (slightly softer)
-- Add smooth scrollbar styling for webkit
-- Update selection color to be more subtle
-- Add a subtle grain/noise texture option for backgrounds
-- Improve input focus states with a smoother ring animation
+**Current state:** Every section has `initial={{ opacity: 0, y: 30 }}` with `whileInView`. Cards bounce in. Numbers count up. Stats pulse.
 
-**File:** `src/index.css`, `tailwind.config.ts`
+**Hermes state:** No scroll-triggered animations for content blocks. Content is simply there when you arrive. The only motion is:
+- A single slow crossfade on the hero image (already have Ken Burns -- keep it)
+- Hover states: subtle opacity shifts (0.7 on hover, not scale transforms)
+- Page transitions: a gentle full-page fade between routes (200ms)
 
-### 11. Trusted Developers Strip -- Upgrade
-**Problem:** Developer names as plain text when no logos exist looks bare.
-**Solution:** Style text-only developers as pill badges with subtle backgrounds instead of raw text.
+**Changes across all section components:**
+- Remove `motion.div` with `whileInView` from `CollectionsSection`, `OffPlanProjectsSection`, `InvestmentMathSection`, `TestimonialsSection`
+- Replace `whileTap={{ scale: 0.985 }}` on property cards with a pure opacity hover
+- Remove `AnimatedStat` counter animations from `WhyDubaiSection`
+- Keep only hero entrance animation (delay 0.4-0.6s)
 
-**File:** `src/components/sections/TrustedDevelopersStrip.tsx`
+### 6. Property Cards -- Object Photography, Not Real Estate Listings
 
-### 12. Contact Page -- Tighten Visual Hierarchy
-**Problem:** The conversational form works well but the right-side info panel looks like an afterthought with generic circular icons.
-**Solution:** 
-- Make the info panel more integrated with the form flow
-- Replace circular colored icon backgrounds with minimal line icons inline with text
-- Add a subtle "Average response time: 2 hours" social proof line
+**Current state:** Image + badges + save/compare icons + name + developer + price + monthly estimate + differentiator. Dense.
 
-**File:** `src/pages/Contact.tsx`
+**Hermes state:** Image + Name + Location. That is it. Price is revealed on hover or on the detail page. No badges, no monthly estimates, no compare buttons cluttering the visual surface. Think Hermes product grid: image and name, nothing else.
+
+**Changes to `CleanPropertyCard.tsx`:**
+- Remove smart badges overlay
+- Remove compare button
+- Remove save (heart) button from the card surface (move to detail page)
+- Remove estimated monthly text
+- Remove differentiator line
+- Show only: image, property name (serif), area (small, muted)
+- Price appears as a subtle reveal on hover (opacity transition from 0 to 1)
+- Remove image dot indicators
+
+### 7. The Header -- Barely There
+
+**Current state:** Brand name + 4 nav links + search icon. The mobile menu is a full-screen overlay with social icons.
+
+**Hermes state:** Brand name (centered) + a single "Menu" text link that opens a full-screen overlay. No visible navigation links in the header bar. Search is inside the menu overlay, not in the header.
+
+**Changes to `Header.tsx`:**
+- Center the brand name
+- Replace the nav items with a single "Menu" text on the right
+- Move search inside the full-screen menu overlay
+- Remove Instagram/Facebook icons from the menu -- social media presence does not belong in a Hermes-level experience
+
+### 8. Footer -- Whisper, Do Not Shout
+
+**Current state:** Pre-footer brand moment with a large serif headline + CTA button, then a 4-column link grid.
+
+**Hermes state:** A single line: the brand name, the year, and a "Contact" link. That is the entire footer. No 4-column grid, no CTA button, no regulatory information (move to a dedicated legal page).
+
+**Changes to `Footer.tsx`:**
+- Remove the pre-footer brand statement section
+- Replace the entire 4-column grid with a single centered line
+- Brand name, copyright year, and three text links: Contact, Privacy, Terms
+- Add generous vertical padding (py-20) to make even this small footer feel spacious
+
+### 9. The Quiz Section -- Remove It From the Homepage
+
+**Current state:** "Find Your Match" quiz with budget/priority/email steps.
+
+**Hermes state:** Hermes does not quiz you. If you are on the site, you already know what you want. The quiz belongs on a dedicated page accessible from the menu, not interrupting the homepage flow.
+
+**Changes:**
+- Remove from `Index.tsx`
+- Create a route `/discover` that houses the quiz experience full-screen
+- Add "Discover" to the menu overlay
+
+### 10. Page Transitions -- The Hermes Fade
+
+**Current state:** Instant route changes with no transition.
+
+**Hermes state:** Every page change has a 200ms fade-to-white (or fade-to-black in dark mode) transition. This single detail makes the entire experience feel more considered.
+
+**Changes:**
+- Add a `PageTransition` wrapper component using `framer-motion` `AnimatePresence`
+- Wrap route children in `App.tsx` with this transition
+- Use `opacity: 0 -> 1` with a 200ms ease-out
+
+### 11. Cursor -- Custom Minimal Dot
+
+**Current state:** Default browser cursor.
+
+**Hermes state:** A small custom circle cursor (8px) that scales up slightly on interactive elements. Subtle, but immediately signals "this is crafted."
+
+**Changes:**
+- New `CustomCursor.tsx` component (desktop only, hidden on touch devices)
+- CSS: `cursor: none` on body, custom div follows pointer with `framer-motion`
+- Scale from 8px to 24px on hover over links/buttons
+
+### 12. Micro-Texture -- Subtle Grain Overlay
+
+**Current state:** Pure flat backgrounds.
+
+**Hermes state:** A barely-visible noise/grain texture over the background. This single detail adds the "paper" feel that separates digital luxury from digital flat.
+
+**Changes to `index.css`:**
+- Add a CSS `::before` pseudo-element on body with a tiny SVG noise pattern at 3-5% opacity
+- This gives every surface a subtle tactile quality
 
 ---
 
-## Technical Summary
+## Files Modified
 
-| Change | File(s) | Impact | Effort |
-|--------|---------|--------|--------|
-| Why Dubai cinematic scroll | WhyDubaiSection.tsx | High | Medium |
-| Collections editorial layout | CollectionsSection.tsx | High | Medium |
-| Investment Math trust layer | InvestmentMathSection.tsx | High | Low |
-| Editor's Picks (6 max) | OffPlanProjectsSection.tsx | Medium | Low |
-| Property card badges | CleanPropertyCard.tsx | High | Medium |
-| Testimonials editorial | TestimonialsSection.tsx | Medium | Low |
-| Market stats live pulse | MarketStatsBar.tsx | Low | Low |
-| Header refinement | Header.tsx | Low | Low |
-| Footer brand moment | Footer.tsx | Medium | Low |
-| Global CSS modernization | index.css, tailwind.config.ts | Medium | Low |
-| Developer strip upgrade | TrustedDevelopersStrip.tsx | Low | Low |
-| Contact page tightening | Contact.tsx | Low | Low |
+| File | Change |
+|------|--------|
+| `src/pages/Index.tsx` | Strip to 4 sections: Hero, Editorial Statement, 3 Properties, Footer |
+| `src/components/sections/HeroSection.tsx` | Single word/phrase hero, remove ornaments and CTAs |
+| `src/components/sections/EditorialStatement.tsx` | **New** -- one sentence, massive whitespace |
+| `src/components/sections/OffPlanProjectsSection.tsx` | Limit to 3 properties, asymmetric layout |
+| `src/components/sections/CollectionsSection.tsx` | Strip to text-only links |
+| `src/components/properties/CleanPropertyCard.tsx` | Image + name + area only, price on hover |
+| `src/components/layout/Header.tsx` | Center brand, single "Menu" link, hide nav |
+| `src/components/layout/Footer.tsx` | Single centered line |
+| `src/components/ui/CustomCursor.tsx` | **New** -- minimal dot cursor |
+| `src/components/ui/PageTransition.tsx` | **New** -- route fade transition |
+| `src/App.tsx` | Wrap routes in PageTransition |
+| `src/index.css` | Grain texture, desaturated colors, remove uppercase defaults, increase line-height |
+| `tailwind.config.ts` | Add display font class, adjust spacing |
 
-Total: ~14 files modified, 0 new files. No new dependencies. Uses existing framer-motion capabilities for scroll-driven animations.
+**No new dependencies.** Everything uses existing framer-motion and CSS.
+
+---
+
+## What This Means for the User
+
+The homepage goes from a 10-section information-dense experience to a 4-section gallery. Users who want data (Why Dubai, Investment Math, Testimonials) find it through the menu. The first impression shifts from "this is a smart real estate portal" to "this is something I have never seen before in property." That is the Hermes effect: making people feel they have entered a different category entirely.
+
