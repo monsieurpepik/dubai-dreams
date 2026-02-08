@@ -82,7 +82,7 @@ export const PropertyFilters = ({ filters, onChange, resultCount }: PropertyFilt
               {/* Bedrooms */}
               <div>
                 <label className="label-editorial mb-2 block">Bedrooms</label>
-                <div className="flex gap-1">
+                <div className="flex flex-wrap gap-1">
                   {BEDROOMS.map(b => (
                     <button
                       key={b}
