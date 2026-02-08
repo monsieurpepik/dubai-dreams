@@ -1,153 +1,53 @@
 
 
-## Dubai Launch Readiness: Product Gaps to Close
+# Elevated Mobile Experience + Social Presence
 
-A prioritized implementation plan based on what Zillow and Airbnb proved drives conversion in real estate marketplaces.
-
----
-
-### Priority 1: Trust & Conversion (Must-Have for Launch)
-
-#### 1A. Social Proof Section on Homepage
-Add a "Trusted by Investors" section with:
-- Investor count or transaction volume (even if seeded: "Helping 200+ international investors")
-- 2-3 testimonial cards with name, country, and quote
-- A new `testimonials` database table to make these manageable
-
-**Files:** New `src/components/sections/TestimonialsSection.tsx`, database migration for `testimonials` table
-
-#### 1B. Save/Shortlist Properties
-- Heart icon on property cards
-- Saved properties stored in localStorage (no auth required)
-- `/saved` page showing shortlisted properties
-- "Share your shortlist" link generation for WhatsApp
-
-**Files:** New `src/hooks/useSavedProperties.ts`, new `src/pages/SavedProperties.tsx`, modify `CleanPropertyCard.tsx`
-
-#### 1C. Property Search & Filters
-Add filter bar to Properties page:
-- Area dropdown (extracted from existing data)
-- Bedroom selector (Studio, 1, 2, 3, 4+)
-- Price range slider
-- Status filter (Selling / Upcoming)
-
-**Files:** New `src/components/properties/PropertyFilters.tsx`, modify `src/pages/Properties.tsx`
-
-#### 1D. Fix Dead Links & Empty States
-- Create minimal `/privacy` and `/terms` pages
-- Replace placeholder developer logos with real ones or remove the generic image
-- Add meaningful empty states for zero-result filters
-
-**Files:** New `src/pages/Privacy.tsx`, `src/pages/Terms.tsx`, modify Footer links, database update for developer logos
+Inspired by the Uptown reference, here are the key patterns we can adopt while staying true to the existing Apple-level minimalist aesthetic:
 
 ---
 
-### Priority 2: Engagement & Return Visits (Week 2)
+## 1. Premium Full-Screen Mobile Menu
 
-#### 2A. Property Comparison Tool
-- "Compare" checkbox on property cards (max 3)
-- Sticky comparison bar at bottom when 2+ selected
-- `/compare` page with side-by-side table: price, ROI, bedrooms, payment plan, completion, area
+The current mobile menu is centered text links on a plain background. The reference shows a much richer experience with:
+- **Left-aligned, large serif typography** with staggered opacity (active item bold/white, others dimmed)
+- **Social media links** at the bottom of the menu
+- **A contextual CTA** ("Get a project in mind?") pinned to the bottom
 
-**Files:** New `src/hooks/useCompare.ts`, new `src/pages/Compare.tsx`, new `src/components/properties/CompareBar.tsx`
-
-#### 2B. WhatsApp-Optimized Sharing
-- "Share via WhatsApp" button on property detail
-- Pre-formatted message with property name, price, ROI, and link
-- og:image meta tags already exist (good) -- verify they render correctly in WhatsApp previews
-
-**Files:** Modify `PropertyDetail.tsx` to add share button, new `src/utils/sharing.ts`
-
-#### 2C. Area Guide Pages
-- `/areas/:slug` pages for key Dubai areas (Palm Jumeirah, Business Bay, Dubai Marina, etc.)
-- Average prices, lifestyle description, nearby properties
-- Driven by existing `area_market_data` table
-
-**Files:** New `src/pages/AreaGuide.tsx`, route registration in App.tsx
+**Implementation:**
+- Redesign the mobile menu in `Header.tsx` with left-aligned nav items, editorial typography hierarchy, and staggered entrance animations
+- Add social media icons (Instagram, Facebook/X) at the bottom of the menu
+- Add a bottom CTA bar: "Have a project in mind?" linking to `/contact`
+- Active route highlighting with bold weight
 
 ---
 
-### Priority 3: Platform Polish (Week 3)
+## 2. Social Media Links in Footer
 
-#### 3A. Map View for Properties
-- Toggle between grid and map view on Properties page
-- Interactive map showing property pins with price labels
-- Click pin to see property card preview
-- Use a free map library (Leaflet / MapLibre)
+The footer currently has no social media presence. Add social icons (Instagram, Facebook, X/Twitter) to the footer, sourced from tenant config.
 
-**Files:** New `src/components/properties/PropertyMap.tsx`, modify Properties page, database migration to add `latitude`/`longitude` columns to properties
-
-#### 3B. Email Nurture Automation
-- Post-lead-capture email sequence via edge function
-- Email 1 (immediate): "Your Investment Report" with property details
-- Email 2 (Day 3): Market insights for their area of interest
-- Email 3 (Day 7): Similar properties recommendation
-
-**Files:** New edge function `supabase/functions/send-nurture-email/index.ts`, database migration for `email_sequences` tracking table
-
-#### 3C. Analytics Dashboard Enhancement
-- Track property views, inquiry clicks, calculator usage
-- Add `property_views` table for view tracking
-- Show view counts on developer dashboard
-
-**Files:** Database migration for `property_views`, modify `PropertyDetail.tsx` to log views, modify developer Dashboard
+**Implementation:**
+- Add social media icon links to `Footer.tsx`
+- Pull URLs from tenant config (with sensible defaults)
 
 ---
 
-### Implementation Order
+## 3. Hero Section -- Geometric Accent Element
 
-```text
-Week 1 (Launch Blockers):
-  1. Privacy/Terms pages + fix dead links
-  2. Property filters on Properties page
-  3. Save/shortlist with localStorage
-  4. Social proof / testimonials section
+The reference uses a decorative diamond/geometric shape overlaid on the hero. A subtle geometric accent can add visual sophistication.
 
-Week 2 (Engagement):
-  5. Property comparison tool
-  6. WhatsApp sharing optimization
-  7. Area guide pages
-
-Week 3 (Platform):
-  8. Map view
-  9. Email nurture sequences
-  10. Analytics / view tracking
-```
+**Implementation:**
+- Add a subtle animated geometric line element (diamond or angular frame) to `HeroSection.tsx`, rendered as SVG with a fade-in animation
+- Keeps the premium feel without cluttering
 
 ---
 
-### Technical Details
+## Technical Details
 
-**Database Migrations Needed:**
-- `testimonials` table (id, name, country, quote, property_name, rating, is_featured, created_at)
-- `property_views` table (id, property_id, session_id, referrer, created_at)
-- Add `latitude`, `longitude` columns to `properties` table
-- `email_sequences` table for nurture tracking
+### Files to modify:
+- `src/components/layout/Header.tsx` -- Redesign mobile menu with left-aligned layout, social links, bottom CTA
+- `src/components/layout/Footer.tsx` -- Add social media icon row
+- `src/components/sections/HeroSection.tsx` -- Add subtle geometric accent overlay
+- `src/types/tenant.ts` -- Add optional `social_links` to tenant type if not present
 
-**New Pages:**
-- `/saved` -- Saved/shortlisted properties
-- `/compare` -- Side-by-side comparison
-- `/privacy` -- Privacy policy
-- `/terms` -- Terms of service
-- `/areas/:slug` -- Area guide pages
-
-**New Components:**
-- `PropertyFilters.tsx` -- Search and filter bar
-- `TestimonialsSection.tsx` -- Social proof
-- `CompareBar.tsx` -- Sticky comparison bar
-- `PropertyMap.tsx` -- Map view
-
-**Dependencies:**
-- No new npm packages needed for Priority 1
-- Leaflet or MapLibre for map view (Priority 3)
-
----
-
-### The Zillow Lesson
-
-Zillow won not because they had the most listings, but because they made the *search experience* feel trustworthy and intelligent. Zestimate was just a number -- but it made people feel smart. Your ROI estimates and affordability verdicts are your Zestimates. Now you need the surrounding experience (filters, saves, comparison) to make people feel in control of a high-stakes decision.
-
-### The Airbnb Lesson
-
-Airbnb won because they reduced anxiety for first-time users. For a Dubai off-plan buyer (who is likely overseas, investing remotely), anxiety is even higher. Every missing trust signal (no reviews, placeholder logos, dead links) amplifies that anxiety. Fix trust first, features second.
+### No new dependencies needed. Uses existing `framer-motion` and `lucide-react`.
 
