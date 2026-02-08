@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 
 export function EditorialStatement() {
   return (
-    <section className="py-32 md:py-44 lg:py-56 bg-background">
+    <section className="py-16 md:py-24 bg-background">
       <div className="container-wide">
         <motion.p
           initial={{ opacity: 0 }}
