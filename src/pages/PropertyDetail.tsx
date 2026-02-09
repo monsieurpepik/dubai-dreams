@@ -20,6 +20,8 @@ import { DocumentDownload } from '@/components/properties/DocumentDownload';
 import { PaymentPlanBreakdown } from '@/components/properties/PaymentPlanBreakdown';
 import { WhyThisProject } from '@/components/properties/WhyThisProject';
 import { NeighborhoodContext } from '@/components/properties/NeighborhoodContext';
+import { InvestorProfile } from '@/components/properties/InvestorProfile';
+import { RiskSignals } from '@/components/properties/RiskSignals';
 import { CleanPropertyCard } from '@/components/properties/CleanPropertyCard';
 import { BackToTop } from '@/components/ui/BackToTop';
 import { Button } from '@/components/ui/button';
@@ -321,6 +323,24 @@ const PropertyDetail = () => {
                   propertyName={property.name}
                 />
               )}
+
+              {/* Who This Is For */}
+              <InvestorProfile
+                priceFrom={property.price_from}
+                roiEstimate={property.roi_estimate}
+                goldenVisaEligible={property.golden_visa_eligible}
+                completionDate={property.completion_date}
+              />
+
+              {/* Transparency Notes */}
+              <RiskSignals
+                completionDate={property.completion_date}
+                constructionPercent={property.construction_percent}
+                constructionStage={property.construction_stage}
+                developerName={property.developer?.name || null}
+                developerYearsActive={property.developer?.years_active || null}
+                developerTotalProjects={property.developer?.total_projects || null}
+              />
             </div>
 
             <div className="space-y-6">

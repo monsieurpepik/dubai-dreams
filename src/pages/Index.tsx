@@ -5,6 +5,7 @@ import { SearchEntry } from "@/components/properties/SearchEntry";
 import { QuickCategories } from "@/components/sections/QuickCategories";
 import { EditorialStatement } from "@/components/sections/EditorialStatement";
 import { OffPlanProjectsSection } from "@/components/sections/OffPlanProjectsSection";
+import { WhyOwningDubaiSection } from "@/components/sections/WhyOwningDubaiSection";
 import { RecentlyAddedSection } from "@/components/sections/RecentlyAddedSection";
 import { BackToTop } from "@/components/ui/BackToTop";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
@@ -24,6 +25,7 @@ const Index = () => {
         <EditorialStatement />
         <OffPlanProjectsSection />
         <RecentlyAddedSection />
+        <WhyOwningDubaiSection />
       </main>
       <Footer />
       <BackToTop />
