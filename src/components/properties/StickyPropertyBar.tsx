@@ -41,7 +41,7 @@ export const StickyPropertyBar = ({ propertyName, price, onRequestReport }: Stic
               onClick={onRequestReport}
               className="h-9 px-5 text-xs uppercase tracking-wider bg-foreground text-background hover:bg-foreground/90 shrink-0"
             >
-              Request Report
+              Request Access
             </Button>
           </div>
         </motion.div>

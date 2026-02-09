@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Share2, Eye } from 'lucide-react';
+import { ArrowLeft, Share2 } from 'lucide-react';
 import { useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Header } from '@/components/layout/Header';
@@ -13,7 +13,6 @@ import { AffordabilityCTA } from '@/components/properties/AffordabilityCTA';
 import { SimpleMarketContext } from '@/components/properties/SimpleMarketContext';
 import { DeveloperTrustCard } from '@/components/properties/DeveloperTrustCard';
 import { ConstructionProgress } from '@/components/properties/ConstructionProgress';
-import { WhatsAppButton } from '@/components/properties/WhatsAppButton';
 import { StickyPropertyBar } from '@/components/properties/StickyPropertyBar';
 import { MobileCTABar } from '@/components/properties/MobileCTABar';
 import { FloorPlans } from '@/components/properties/FloorPlans';
@@ -26,9 +25,7 @@ import { BackToTop } from '@/components/ui/BackToTop';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTenant } from '@/hooks/useTenant';
-import { generateWhatsAppShareUrl } from '@/utils/sharing';
 import { useTrackView } from '@/hooks/useTrackView';
-import { usePropertyViewCount } from '@/hooks/usePropertyPopularity';
 
 const formatBedrooms = (bedrooms: number[]): string => {
   if (!bedrooms || bedrooms.length === 0) return 'TBA';
@@ -73,7 +70,6 @@ const PropertyDetail = () => {
   });
 
   useTrackView(property?.id);
-  const { data: viewCount } = usePropertyViewCount(property?.id);
 
   // Fetch area market data
   const { data: areaData } = useQuery({
@@ -204,23 +200,19 @@ const PropertyDetail = () => {
             <ArrowLeft className="w-4 h-4" />
             <span>Back</span>
           </Link>
-          <div className="flex items-center gap-4">
-            {viewCount && viewCount > 5 && (
-              <span className="text-xs text-muted-foreground flex items-center gap-1.5">
-                <Eye className="w-3.5 h-3.5" />
-                Viewed {viewCount} times this month
-              </span>
-            )}
-            <a
-              href={generateWhatsAppShareUrl(property, formatPrice)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <Share2 className="w-4 h-4" />
-              <span className="hidden sm:inline">Share via WhatsApp</span>
-            </a>
-          </div>
+          <button
+            onClick={() => {
+              if (navigator.share) {
+                navigator.share({ title: property.name, url: window.location.href });
+              } else {
+                navigator.clipboard.writeText(window.location.href);
+              }
+            }}
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <Share2 className="w-4 h-4" />
+            <span className="hidden sm:inline">Share</span>
+          </button>
         </div>
 
         {/* Full-width cinematic hero image */}
@@ -377,7 +369,7 @@ const PropertyDetail = () => {
           <section className="border-t border-border/30 py-16 md:py-24">
             <div className="container-wide">
               <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-10">
-                You Might Also Like
+                Similar Projects
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {similarProperties.slice(0, 3).map((p: any, i: number) => (
@@ -389,7 +381,6 @@ const PropertyDetail = () => {
         )}
       </main>
       <Footer />
-      <WhatsAppButton propertyName={property.name} />
       <MobileCTABar
         propertyName={property.name}
         priceFrom={property.price_from}
