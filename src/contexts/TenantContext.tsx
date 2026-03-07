@@ -33,6 +33,7 @@ export function TenantProvider({ children }: TenantProviderProps) {
   const [tenant, setTenant] = useState<Tenant | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const { displayCurrency, formatDisplayPrice } = useDisplayCurrency();
 
   useEffect(() => {
     async function loadTenant() {
