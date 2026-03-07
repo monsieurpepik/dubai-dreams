@@ -73,7 +73,6 @@ const PropertyDetail = () => {
 
   useTrackView(property?.id);
 
-  // Fetch area market data
   const { data: areaData } = useQuery({
     queryKey: ['area-market-data', property?.area],
     queryFn: async () => {
@@ -88,7 +87,6 @@ const PropertyDetail = () => {
     enabled: !!property?.area,
   });
 
-  // Fetch similar properties (same area OR similar price range)
   const { data: similarProperties } = useQuery({
     queryKey: ['similar-properties', property?.id, property?.area, property?.price_from],
     queryFn: async () => {
@@ -101,7 +99,6 @@ const PropertyDetail = () => {
 
       if (error) throw error;
 
-      // If not enough from same area, supplement with similar price
       if ((data?.length || 0) < 4) {
         const priceMin = property!.price_from * 0.7;
         const priceMax = property!.price_from * 1.3;
@@ -129,10 +126,9 @@ const PropertyDetail = () => {
     return (
       <div className="min-h-screen bg-background">
         <Header />
-        <main className="pt-24 pb-20">
-          <div className="container-wide">
-            <Skeleton className="h-8 w-32 mb-8" />
-            <Skeleton className="aspect-[16/9] mb-12" />
+        <main className="pt-20">
+          <Skeleton className="h-[70vh] w-full" />
+          <div className="container-wide py-16">
             <div className="grid lg:grid-cols-3 gap-12">
               <div className="lg:col-span-2 space-y-8">
                 <Skeleton className="h-16 w-3/4" />
@@ -185,7 +181,6 @@ const PropertyDetail = () => {
       />
       <Header />
       
-      {/* Sticky Product Bar (Apple pattern) */}
       <StickyPropertyBar
         propertyName={property.name}
         price={formatPrice(property.price_from, { compact: true })}
@@ -193,47 +188,91 @@ const PropertyDetail = () => {
       />
 
       <main className="pt-20 pb-20 md:pb-0">
-        {/* Back Navigation + Share */}
-        <div className="container-wide py-6 flex items-center justify-between">
-          <Link
-            to="/properties"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back</span>
-          </Link>
-          <button
-            onClick={() => {
-              if (navigator.share) {
-                navigator.share({ title: property.name, url: window.location.href });
-              } else {
-                navigator.clipboard.writeText(window.location.href);
-              }
-            }}
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <Share2 className="w-4 h-4" />
-            <span className="hidden sm:inline">Share</span>
-          </button>
-        </div>
-
-        {/* Full-width cinematic hero image */}
-        <div className="relative h-[60vh] overflow-hidden">
-          <img
+        {/* Full-Bleed Cinematic Hero Gallery */}
+        <section className="relative h-[70vh] md:h-[75vh] overflow-hidden">
+          <motion.img
             src={primaryImage}
             alt={property.name}
-            className="w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover"
+            initial={{ scale: 1 }}
+            animate={{ scale: 1.02 }}
+            transition={{ duration: 20, ease: 'linear' }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-          <div className="absolute bottom-8 left-0 container-wide">
-            <h1 className="font-serif text-3xl md:text-5xl text-white mb-2">
-              {property.name}
-            </h1>
-            <p className="text-white/70 text-sm">
-              {property.area}, {property.location}
-            </p>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10" />
+
+          {/* Back + Share overlay */}
+          <div className="absolute top-6 left-0 right-0 z-20 container-wide flex items-center justify-between">
+            <Link
+              to="/properties"
+              className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded-full"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back</span>
+            </Link>
+            <button
+              onClick={() => {
+                if (navigator.share) {
+                  navigator.share({ title: property.name, url: window.location.href });
+                } else {
+                  navigator.clipboard.writeText(window.location.href);
+                }
+              }}
+              className="inline-flex items-center gap-2 text-sm text-white/60 hover:text-white transition-colors bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded-full"
+            >
+              <Share2 className="w-4 h-4" />
+              <span className="hidden sm:inline">Share</span>
+            </button>
           </div>
-        </div>
+
+          {/* Floating Glassmorphic Info Card */}
+          <div className="absolute bottom-8 left-0 right-0 z-10">
+            <div className="container-wide">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                className="flex flex-col md:flex-row md:items-end md:justify-between gap-6"
+              >
+                {/* Left: Title */}
+                <div>
+                  {property.developer && (
+                    <p className="text-[10px] tracking-[0.25em] text-white/40 mb-2">
+                      {property.developer.name}
+                    </p>
+                  )}
+                  <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl text-white font-light leading-[1.1]">
+                    {property.name}
+                  </h1>
+                  <p className="text-white/50 text-sm mt-2 font-light">
+                    {property.area}, {property.location}
+                  </p>
+                </div>
+
+                {/* Right: Glassmorphic specs card */}
+                <div className="bg-white/[0.08] backdrop-blur-xl border border-white/[0.08] rounded-lg px-6 py-5 flex gap-8 shrink-0">
+                  <div>
+                    <p className="text-[9px] tracking-[0.15em] uppercase text-white/30 mb-1">From</p>
+                    <p className="font-serif text-lg text-white">{formatPrice(property.price_from, { compact: true })}</p>
+                  </div>
+                  <div>
+                    <p className="text-[9px] tracking-[0.15em] uppercase text-white/30 mb-1">Bedrooms</p>
+                    <p className="font-serif text-lg text-white">{formatBedrooms(property.bedrooms || [])}</p>
+                  </div>
+                  <div>
+                    <p className="text-[9px] tracking-[0.15em] uppercase text-white/30 mb-1">Handover</p>
+                    <p className="font-serif text-lg text-white">{formatDate(property.completion_date)}</p>
+                  </div>
+                  {property.payment_plan && (
+                    <div className="hidden md:block">
+                      <p className="text-[9px] tracking-[0.15em] uppercase text-white/30 mb-1">Plan</p>
+                      <p className="font-serif text-lg text-white">{property.payment_plan}</p>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
 
         <ImmersiveGallery
           images={property.property_images || []}
@@ -242,53 +281,7 @@ const PropertyDetail = () => {
 
         <div className="container-wide py-16 md:py-24">
           <div className="grid lg:grid-cols-3 gap-12 lg:gap-16">
-            <div className="lg:col-span-2 space-y-12">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-              {property.developer && (
-                  <Link
-                    to={`/properties?developer=${property.developer.slug}`}
-                    className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-4 block hover:text-foreground transition-colors"
-                  >
-                    {property.developer.name}
-                  </Link>
-                )}
-                <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-4">
-                  {property.name}
-                </h1>
-                <p className="text-lg text-muted-foreground">
-                  {property.area}, {property.location}
-                </p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="grid grid-cols-2 md:grid-cols-4 gap-8 py-8 border-y border-border/30"
-              >
-                <div>
-                  <span className="text-xs uppercase tracking-wider text-muted-foreground block mb-2">Starting Price</span>
-                  <span className="text-xl text-foreground font-medium">{formatPrice(property.price_from, { compact: true })}</span>
-                </div>
-                <div>
-                  <span className="text-xs uppercase tracking-wider text-muted-foreground block mb-2">Bedrooms</span>
-                  <span className="text-xl text-foreground font-medium">{formatBedrooms(property.bedrooms || [])}</span>
-                </div>
-                <div>
-                  <span className="text-xs uppercase tracking-wider text-muted-foreground block mb-2">Completion</span>
-                  <span className="text-xl text-foreground font-medium">{formatDate(property.completion_date)}</span>
-                </div>
-                {property.payment_plan && (
-                  <div>
-                    <span className="text-xs uppercase tracking-wider text-muted-foreground block mb-2">Payment Plan</span>
-                    <span className="text-xl text-foreground font-medium">{property.payment_plan}</span>
-                  </div>
-                )}
-              </motion.div>
-
+            <div className="lg:col-span-2 space-y-16">
               {(property.lifestyle_description || property.description) && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -309,14 +302,12 @@ const PropertyDetail = () => {
                 />
               )}
 
-              {/* Neighborhood Context */}
               <NeighborhoodContext
                 area={property.area}
                 areaData={areaData}
                 propertyPriceFrom={property.price_from}
               />
 
-              {/* Floor Plans */}
               {property.bedrooms && property.bedrooms.length > 0 && (
                 <FloorPlans
                   bedrooms={property.bedrooms}
@@ -324,7 +315,6 @@ const PropertyDetail = () => {
                 />
               )}
 
-              {/* Who This Is For */}
               <InvestorProfile
                 priceFrom={property.price_from}
                 roiEstimate={property.roi_estimate}
@@ -332,7 +322,6 @@ const PropertyDetail = () => {
                 completionDate={property.completion_date}
               />
 
-              {/* Transparency Notes */}
               <RiskSignals
                 completionDate={property.completion_date}
                 constructionPercent={property.construction_percent}
@@ -343,8 +332,7 @@ const PropertyDetail = () => {
               />
             </div>
 
-            <div className="space-y-6">
-              {/* Why This Project */}
+            <div className="space-y-8">
               <WhyThisProject
                 roiEstimate={property.roi_estimate}
                 goldenVisaEligible={property.golden_visa_eligible}
@@ -356,7 +344,6 @@ const PropertyDetail = () => {
 
               <SimpleMarketContext area={property.area} propertyPriceFrom={property.price_from} />
               
-              {/* Payment Plan Breakdown */}
               {property.payment_plan && (
                 <PaymentPlanBreakdown
                   paymentPlan={property.payment_plan}
@@ -369,7 +356,6 @@ const PropertyDetail = () => {
 
               {property.developer && <DeveloperTrustCard developer={property.developer} />}
 
-              {/* Document Download */}
               <DocumentDownload
                 propertyId={property.id}
                 propertyName={property.name}
