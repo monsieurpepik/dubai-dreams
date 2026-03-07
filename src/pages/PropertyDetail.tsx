@@ -167,9 +167,26 @@ const PropertyDetail = () => {
     );
   }
 
-  const primaryImage = property.property_images?.find((img: { is_primary?: boolean }) => img.is_primary)?.url || 
-    property.property_images?.[0]?.url || 
+  const allImages = (property.property_images || [])
+    .sort((a: any, b: any) => (a.is_primary ? -1 : b.is_primary ? 1 : (a.display_order || 0) - (b.display_order || 0)))
+    .map((img: any) => img.url)
+    .filter(Boolean);
+
+  const primaryImage = allImages[0] || 
     'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&h=630&fit=crop';
+
+  const [heroImageIndex, setHeroImageIndex] = useState(0);
+
+  const nextHeroImage = useCallback(() => {
+    if (allImages.length <= 1) return;
+    setHeroImageIndex((i) => (i + 1) % allImages.length);
+  }, [allImages.length]);
+
+  useEffect(() => {
+    if (allImages.length <= 1) return;
+    const timer = setInterval(nextHeroImage, 6000);
+    return () => clearInterval(timer);
+  }, [nextHeroImage, allImages.length]);
 
   return (
     <div className="min-h-screen bg-background">
