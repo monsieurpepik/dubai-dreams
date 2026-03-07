@@ -400,6 +400,42 @@ const PropertyDetail = () => {
             </div>
 
             <div className="space-y-8">
+              {/* Multi-CTA Actions */}
+              <div className="bg-card border border-border/50 rounded-xl p-6 space-y-3">
+                <h3 className="text-sm font-medium text-foreground mb-4">Get in Touch</h3>
+                <div className="flex flex-col gap-2">
+                  {tenant?.phone && (
+                    <a
+                      href={`tel:${tenant.phone}`}
+                      className="flex items-center gap-3 px-4 py-3 border border-border/50 rounded-lg text-sm text-foreground hover:bg-muted/50 transition-colors"
+                    >
+                      <Phone className="w-4 h-4" />
+                      Schedule a Call
+                    </a>
+                  )}
+                  <a
+                    href={getPropertyWhatsAppUrl(property.name)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 px-4 py-3 border border-border/50 rounded-lg text-sm text-emerald-500 hover:bg-emerald-500/5 transition-colors"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    WhatsApp
+                  </a>
+                  {property.brochure_url && (
+                    <a
+                      href={property.brochure_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 px-4 py-3 border border-border/50 rounded-lg text-sm text-foreground hover:bg-muted/50 transition-colors"
+                    >
+                      <FileDown className="w-4 h-4" />
+                      Download Brochure
+                    </a>
+                  )}
+                </div>
+              </div>
+
               <WhyThisProject
                 roiEstimate={property.roi_estimate}
                 goldenVisaEligible={property.golden_visa_eligible}
