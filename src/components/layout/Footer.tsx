@@ -131,6 +131,13 @@ export function Footer() {
         </div>
       </div>
 
+      {/* RERA Disclaimer */}
+      <div className="container-wide py-4 border-t border-border/10">
+        <p className="text-[11px] text-muted-foreground/40 leading-relaxed">
+          Prices and availability are subject to change without notice. All off-plan purchases are regulated by the Dubai Land Department (DLD) and payments are made through DLD-approved escrow accounts. Regulated by the Real Estate Regulatory Agency (RERA).
+        </p>
+      </div>
+
       {/* Bottom Bar */}
       <div className="container-wide py-6 border-t border-border/10">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">

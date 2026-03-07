@@ -13,6 +13,7 @@ import { RecentlyAddedSection } from "@/components/sections/RecentlyAddedSection
 import { LatestInsightsSection } from "@/components/sections/LatestInsightsSection";
 import { HowItWorksMini } from "@/components/sections/HowItWorksMini";
 import { PrivateAdvisorSection } from "@/components/sections/PrivateAdvisorSection";
+import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { BackToTop } from "@/components/ui/BackToTop";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import { SEO } from "@/components/SEO";
@@ -32,12 +33,13 @@ const Index = () => {
         <WhyDubaiStrip />
         <EditorialStatement />
         <ThemedCollections />
+        <PrivateAdvisorSection />
         <OffPlanProjectsSection />
         <TrustedDevelopersStrip />
         <RecentlyAddedSection />
+        <TestimonialsSection />
         <LatestInsightsSection />
         <HowItWorksMini />
-        <PrivateAdvisorSection />
       </main>
       <Footer />
       <BackToTop />

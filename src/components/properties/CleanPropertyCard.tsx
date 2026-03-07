@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Heart } from 'lucide-react';
+import { Heart, Eye } from 'lucide-react';
 import { useTenant } from '@/hooks/useTenant';
 import { useSavedProperties } from '@/hooks/useSavedProperties';
 import { ImageHoverCarousel } from './ImageHoverCarousel';
@@ -43,9 +43,10 @@ interface CleanPropertyCardProps {
   property: Property;
   index: number;
   variant?: 'default' | 'compact';
+  viewCount?: number;
 }
 
-export const CleanPropertyCard = ({ property, variant = 'default' }: CleanPropertyCardProps) => {
+export const CleanPropertyCard = ({ property, variant = 'default', viewCount }: CleanPropertyCardProps) => {
   const { formatPrice } = useTenant();
   const { isSaved, toggleSave } = useSavedProperties();
   const saved = isSaved(property.id);
@@ -104,7 +105,7 @@ export const CleanPropertyCard = ({ property, variant = 'default' }: CleanProper
     <Link to={`/properties/${property.slug}`} className="group block">
       <article className="space-y-4">
         {/* Image with carousel */}
-        <div className="relative rounded-lg overflow-hidden" data-cursor="view">
+        <div className="relative rounded-xl overflow-hidden" data-cursor="view">
           <ImageHoverCarousel
             images={sortedImages}
             className={variant === 'compact' ? 'aspect-[4/3]' : 'aspect-[3/2]'}
@@ -176,6 +177,14 @@ export const CleanPropertyCard = ({ property, variant = 'default' }: CleanProper
               {bedroomLabel}
               {bedroomLabel && property.completion_date && ' · '}
               {property.completion_date && `Handover ${new Date(property.completion_date).getFullYear()}`}
+            </p>
+          )}
+
+          {/* Social proof */}
+          {viewCount && viewCount > 3 && (
+            <p className="flex items-center gap-1 text-[11px] text-muted-foreground/60 mt-1">
+              <Eye className="w-3 h-3" />
+              {viewCount} investors viewed
             </p>
           )}
         </div>

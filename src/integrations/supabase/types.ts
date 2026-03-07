@@ -504,8 +504,10 @@ export type Database = {
           created_at: string
           description: string | null
           developer_id: string | null
+          dld_registration_number: string | null
           exclusive_amenities: Json | null
           features: Json | null
+          furnishing_status: string | null
           golden_visa_eligible: boolean | null
           id: string
           last_edited_by: string | null
@@ -516,17 +518,24 @@ export type Database = {
           location: string
           longitude: number | null
           name: string
+          parking_included: boolean | null
           payment_plan: string | null
           post_handover_percent: number | null
           post_handover_years: number | null
           price_from: number
           price_to: number | null
+          property_type: string | null
+          rera_permit_number: string | null
           roi_estimate: number | null
+          service_charge_sqft: number | null
+          size_sqft_from: number | null
+          size_sqft_to: number | null
           slug: string
           status: string | null
           submitted_by: string | null
           tagline: string | null
           tenant_id: string | null
+          total_units: number | null
           updated_at: string
           view_type: string[] | null
           virtual_tour_url: string | null
@@ -543,8 +552,10 @@ export type Database = {
           created_at?: string
           description?: string | null
           developer_id?: string | null
+          dld_registration_number?: string | null
           exclusive_amenities?: Json | null
           features?: Json | null
+          furnishing_status?: string | null
           golden_visa_eligible?: boolean | null
           id?: string
           last_edited_by?: string | null
@@ -555,17 +566,24 @@ export type Database = {
           location: string
           longitude?: number | null
           name: string
+          parking_included?: boolean | null
           payment_plan?: string | null
           post_handover_percent?: number | null
           post_handover_years?: number | null
           price_from: number
           price_to?: number | null
+          property_type?: string | null
+          rera_permit_number?: string | null
           roi_estimate?: number | null
+          service_charge_sqft?: number | null
+          size_sqft_from?: number | null
+          size_sqft_to?: number | null
           slug: string
           status?: string | null
           submitted_by?: string | null
           tagline?: string | null
           tenant_id?: string | null
+          total_units?: number | null
           updated_at?: string
           view_type?: string[] | null
           virtual_tour_url?: string | null
@@ -582,8 +600,10 @@ export type Database = {
           created_at?: string
           description?: string | null
           developer_id?: string | null
+          dld_registration_number?: string | null
           exclusive_amenities?: Json | null
           features?: Json | null
+          furnishing_status?: string | null
           golden_visa_eligible?: boolean | null
           id?: string
           last_edited_by?: string | null
@@ -594,17 +614,24 @@ export type Database = {
           location?: string
           longitude?: number | null
           name?: string
+          parking_included?: boolean | null
           payment_plan?: string | null
           post_handover_percent?: number | null
           post_handover_years?: number | null
           price_from?: number
           price_to?: number | null
+          property_type?: string | null
+          rera_permit_number?: string | null
           roi_estimate?: number | null
+          service_charge_sqft?: number | null
+          size_sqft_from?: number | null
+          size_sqft_to?: number | null
           slug?: string
           status?: string | null
           submitted_by?: string | null
           tagline?: string | null
           tenant_id?: string | null
+          total_units?: number | null
           updated_at?: string
           view_type?: string[] | null
           virtual_tour_url?: string | null

@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Share2 } from 'lucide-react';
+import { ArrowLeft, Share2, ChevronRight } from 'lucide-react';
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Header } from '@/components/layout/Header';
@@ -44,6 +44,30 @@ const formatDate = (dateString: string | null): string => {
   const date = new Date(dateString);
   const quarter = Math.ceil((date.getMonth() + 1) / 3);
   return `Q${quarter} ${date.getFullYear()}`;
+};
+const ExpandableDescription = ({ text }: { text: string }) => {
+  const [expanded, setExpanded] = useState(false);
+  const isLong = text.length > 280;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+    >
+      <p className={`text-muted-foreground leading-relaxed text-lg max-w-2xl ${!expanded && isLong ? 'line-clamp-4' : ''}`}>
+        {text}
+      </p>
+      {isLong && (
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="mt-2 text-sm font-medium text-foreground underline underline-offset-4 hover:no-underline transition-colors"
+        >
+          {expanded ? 'Show less' : 'Show more'}
+        </button>
+      )}
+    </motion.div>
+  );
 };
 
 const PropertyDetail = () => {
@@ -206,6 +230,17 @@ const PropertyDetail = () => {
       />
 
       <main className="pt-20 pb-20 md:pb-0">
+        {/* Breadcrumbs */}
+        <nav className="container-wide py-3 flex items-center gap-1.5 text-xs text-muted-foreground" aria-label="Breadcrumb">
+          <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
+          <ChevronRight className="w-3 h-3" />
+          <Link to="/properties" className="hover:text-foreground transition-colors">Properties</Link>
+          <ChevronRight className="w-3 h-3" />
+          <Link to={`/areas/${property.area?.toLowerCase().replace(/\s+/g, '-')}`} className="hover:text-foreground transition-colors">{property.area}</Link>
+          <ChevronRight className="w-3 h-3" />
+          <span className="text-foreground truncate max-w-[200px]">{property.name}</span>
+        </nav>
+
         {/* Full-Bleed Cinematic Hero Gallery */}
         <section className="relative h-[70vh] md:h-[75vh] overflow-hidden">
           {/* Crossfading image layers */}
@@ -312,15 +347,18 @@ const PropertyDetail = () => {
           <div className="grid lg:grid-cols-3 gap-12 lg:gap-16">
             <div className="lg:col-span-2 space-y-16">
               {(property.lifestyle_description || property.description) && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                >
-                  <p className="text-muted-foreground leading-relaxed text-lg max-w-2xl">
-                    {property.lifestyle_description || property.description}
-                  </p>
-                </motion.div>
+                <ExpandableDescription text={property.lifestyle_description || property.description || ''} />
+              )}
+
+              {/* View Type Badges */}
+              {property.view_type && property.view_type.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {property.view_type.map((v: string) => (
+                    <span key={v} className="px-3 py-1.5 text-xs border border-border/50 text-muted-foreground rounded-full">
+                      {v} View
+                    </span>
+                  ))}
+                </div>
               )}
 
               {property.status !== 'ready' && (
@@ -406,7 +444,7 @@ const PropertyDetail = () => {
               <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-10">
                 Similar Projects
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {similarProperties.slice(0, 3).map((p: any, i: number) => (
                   <CleanPropertyCard key={p.id} property={p} index={i} />
                 ))}
