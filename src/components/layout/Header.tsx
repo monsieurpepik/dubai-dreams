@@ -5,6 +5,7 @@ import { X, Search } from 'lucide-react';
 import { useTenant } from '@/hooks/useTenant';
 import { SearchOverlay } from '@/components/properties/SearchOverlay';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { CurrencySwitcher } from '@/components/ui/CurrencySwitcher';
 
 const allNavItems = [
   { label: 'Properties', href: '/properties' },
