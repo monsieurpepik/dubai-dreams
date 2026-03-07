@@ -114,7 +114,7 @@ export function HeroSection() {
                 transition={{ duration: 0.8, delay: 1 }}
                 className="w-full md:w-[340px] lg:w-[380px] shrink-0"
               >
-                <div className="bg-white/[0.08] backdrop-blur-xl border border-white/[0.08] rounded-lg overflow-hidden">
+                <div className="bg-white/[0.1] backdrop-blur-2xl border border-white/[0.12] rounded-2xl overflow-hidden shadow-2xl">
                   {/* Thumbnail */}
                   <AnimatePresence mode="wait">
                     <motion.div

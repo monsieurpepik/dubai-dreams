@@ -101,7 +101,7 @@ export const ExclusiveSelectionsSection = () => {
             >
               <Link to={`/properties/${property.slug}`} className="group block">
                 {/* Image */}
-                <div className="relative overflow-hidden rounded-sm">
+                <div className="relative overflow-hidden rounded-xl">
                   {image ? (
                     <img
                       src={image}

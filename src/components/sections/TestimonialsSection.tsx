@@ -78,7 +78,7 @@ export const TestimonialsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className="relative min-w-[300px] md:min-w-0 snap-start bg-card border border-border/30 p-8 md:p-10 flex flex-col justify-between"
+              className="relative min-w-[300px] md:min-w-0 snap-start bg-card border border-border/30 rounded-2xl p-8 md:p-10 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow duration-300"
             >
               {/* Large decorative quote */}
               <span className="text-8xl font-serif text-muted-foreground/15 leading-none select-none absolute top-4 left-6">
