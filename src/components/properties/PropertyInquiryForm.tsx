@@ -223,13 +223,11 @@ export const PropertyInquiryForm = ({
             <Phone className="w-4 h-4 text-muted-foreground" />
             Phone Number
           </Label>
-          <Input
+          <PhoneInput
             id="phone"
-            type="tel"
-            placeholder="+971 50 123 4567"
-            value={formData.phone}
-            onChange={(e) => handleInputChange('phone', e.target.value)}
-            className={errors.phone ? 'border-red-500' : ''}
+            value={formData.phone || ''}
+            onChange={(val) => handleInputChange('phone', val)}
+            error={!!errors.phone}
             disabled={isSubmitting}
           />
           {errors.phone && (
