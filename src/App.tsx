@@ -23,6 +23,10 @@ import SavedProperties from "./pages/SavedProperties";
 import Compare from "./pages/Compare";
 import AreaGuide from "./pages/AreaGuide";
 import Discover from "./pages/Discover";
+import Insights from "./pages/Insights";
+import InsightDetail from "./pages/InsightDetail";
+import Advisor from "./pages/Advisor";
+import DeveloperProfilePage from "./pages/DeveloperProfile";
 import DeveloperLogin from "./pages/developer/Login";
 import DeveloperDashboard from "./pages/developer/Dashboard";
 import DeveloperProperties from "./pages/developer/Properties";
@@ -64,6 +68,10 @@ const AnimatedRoutes = () => {
         <Route path="/compare" element={<PageTransition><Compare /></PageTransition>} />
         <Route path="/areas/:slug" element={<PageTransition><AreaGuide /></PageTransition>} />
         <Route path="/discover" element={<PageTransition><Discover /></PageTransition>} />
+        <Route path="/insights" element={<PageTransition><Insights /></PageTransition>} />
+        <Route path="/insights/:slug" element={<PageTransition><InsightDetail /></PageTransition>} />
+        <Route path="/advisor" element={<PageTransition><Advisor /></PageTransition>} />
+        <Route path="/developers/:slug" element={<PageTransition><DeveloperProfilePage /></PageTransition>} />
         
         {/* Developer Portal Routes */}
         <Route path="/developer/login" element={<PageTransition><DeveloperLogin /></PageTransition>} />

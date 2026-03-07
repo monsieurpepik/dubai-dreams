@@ -7,11 +7,12 @@ import { SearchOverlay } from '@/components/properties/SearchOverlay';
 
 const allNavItems = [
   { label: 'Properties', href: '/properties' },
+  { label: 'Intelligence', href: '/insights' },
+  { label: 'Private Advisor', href: '/advisor' },
   { label: 'Calculator', href: '/calculator' },
   { label: 'About', href: '/about' },
   { label: 'How It Works', href: '/how-it-works' },
   { label: 'Contact', href: '/contact' },
-  { label: 'Discover', href: '/discover' },
 ];
 
 export function Header() {
