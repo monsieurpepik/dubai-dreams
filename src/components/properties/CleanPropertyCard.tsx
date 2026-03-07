@@ -105,7 +105,7 @@ export const CleanPropertyCard = ({ property, variant = 'default', viewCount }: 
     <Link to={`/properties/${property.slug}`} className="group block">
       <article className="space-y-4">
         {/* Image with carousel */}
-        <div className="relative rounded-lg overflow-hidden" data-cursor="view">
+        <div className="relative rounded-xl overflow-hidden" data-cursor="view">
           <ImageHoverCarousel
             images={sortedImages}
             className={variant === 'compact' ? 'aspect-[4/3]' : 'aspect-[3/2]'}
