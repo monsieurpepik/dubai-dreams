@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { Phone, Mail } from "lucide-react";
 import { useTenant } from "@/hooks/useTenant";
 import { toast } from "sonner";
 
@@ -62,6 +63,10 @@ function FooterColumn({ title, links }: { title: string; links: { label: string;
 export function Footer() {
   const { tenant } = useTenant();
   const brandName = tenant?.brand_name || 'OwningDubai';
+  const contactPhone = tenant?.phone;
+  const contactEmail = tenant?.email || 'hello@owningdubai.com';
+  const regulatoryBody = tenant?.regulatory_body;
+  const regulatoryNumber = tenant?.regulatory_number;
   const [email, setEmail] = useState('');
 
   const handleNewsletter = (e: React.FormEvent) => {
@@ -100,6 +105,22 @@ export function Footer() {
         </div>
       </div>
 
+      {/* Contact Row */}
+      <div className="container-wide py-8 border-b border-border/10">
+        <div className="flex flex-wrap items-center gap-6 md:gap-10">
+          {contactPhone && (
+            <a href={`tel:${contactPhone}`} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <Phone className="w-4 h-4" />
+              <span>{contactPhone}</span>
+            </a>
+          )}
+          <a href={`mailto:${contactEmail}`} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Mail className="w-4 h-4" />
+            <span>{contactEmail}</span>
+          </a>
+        </div>
+      </div>
+
       {/* Columns */}
       <div className="container-wide py-14 md:py-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-8">
@@ -120,6 +141,9 @@ export function Footer() {
             <span>© {new Date().getFullYear()}</span>
           </div>
           <div className="flex items-center gap-6">
+            {regulatoryBody && regulatoryNumber && (
+              <span>{regulatoryBody} ORN: {regulatoryNumber}</span>
+            )}
             <Link to="/privacy" className="hover:text-foreground transition-colors duration-300">
               Privacy
             </Link>

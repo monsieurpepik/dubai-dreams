@@ -147,7 +147,7 @@ const Properties = () => {
       <Header />
       <main className="pt-20">
         {/* Cinematic Hero Banner */}
-        <section className="relative h-[50vh] md:h-[55vh] overflow-hidden">
+        <section className="relative h-[30vh] md:h-[32vh] overflow-hidden">
           <motion.img
             src={heroImage}
             alt={`${cityName} skyline`}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, MapPin, Mail, Clock, ArrowRight } from 'lucide-react';
+import { CheckCircle2, MapPin, Mail, Clock, ArrowRight, Phone } from 'lucide-react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { SEO } from '@/components/SEO';
@@ -36,6 +36,7 @@ const Contact = () => {
   const officeArea = tenant?.office_location?.area || 'Dubai Marina';
   const officeCountry = tenant?.office_location?.country || 'United Arab Emirates';
   const contactEmail = tenant?.email || 'hello@owning.com';
+  const contactPhone = tenant?.phone;
   const workingHours = tenant?.working_hours;
 
   const canProceedStep2 = !!intent;
@@ -298,11 +299,20 @@ const Contact = () => {
                       <p className="text-sm text-muted-foreground">{officeArea}, {cityName}<br />{officeCountry}</p>
                     </div>
                   </div>
+                  {contactPhone && (
+                    <div className="flex items-start gap-3">
+                      <Phone className="w-4 h-4 text-muted-foreground mt-1 shrink-0" />
+                      <div>
+                        <h3 className="text-sm font-medium text-foreground mb-1">Phone</h3>
+                        <a href={`tel:${contactPhone}`} className="text-sm text-muted-foreground hover:text-foreground transition-colors">{contactPhone}</a>
+                      </div>
+                    </div>
+                  )}
                   <div className="flex items-start gap-3">
                     <Mail className="w-4 h-4 text-muted-foreground mt-1 shrink-0" />
                     <div>
                       <h3 className="text-sm font-medium text-foreground mb-1">Email</h3>
-                      <p className="text-sm text-muted-foreground">{contactEmail}</p>
+                      <a href={`mailto:${contactEmail}`} className="text-sm text-muted-foreground hover:text-foreground transition-colors">{contactEmail}</a>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">

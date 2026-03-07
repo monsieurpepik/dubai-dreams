@@ -8,7 +8,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { SEO } from '@/components/SEO';
 import { ImmersiveGallery } from '@/components/properties/ImmersiveGallery';
-import { InquiryForm } from '@/components/properties/InquiryForm';
+import { PropertyInquiryForm } from '@/components/properties/PropertyInquiryForm';
 import { AffordabilityCTA } from '@/components/properties/AffordabilityCTA';
 import { SimpleMarketContext } from '@/components/properties/SimpleMarketContext';
 import { DeveloperTrustCard } from '@/components/properties/DeveloperTrustCard';
@@ -393,7 +393,7 @@ const PropertyDetail = () => {
 
               <AffordabilityCTA priceFrom={property.price_from} />
               <div ref={inquiryFormRef}>
-                <InquiryForm propertyId={property.id} propertyName={property.name} />
+                <PropertyInquiryForm propertyId={property.id} propertyName={property.name} goldenVisaEligible={property.golden_visa_eligible || false} />
               </div>
             </div>
           </div>
