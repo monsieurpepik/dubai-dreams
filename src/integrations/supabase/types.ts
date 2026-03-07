@@ -134,8 +134,11 @@ export type Database = {
       }
       developers: {
         Row: {
+          banner_image_url: string | null
           created_at: string
           description: string | null
+          founded_year: number | null
+          headquarters: string | null
           id: string
           is_merchant: boolean | null
           logo_url: string | null
@@ -145,11 +148,16 @@ export type Database = {
           subscription_tier: string | null
           tenant_id: string | null
           total_projects: number | null
+          track_record_summary: string | null
+          website_url: string | null
           years_active: number | null
         }
         Insert: {
+          banner_image_url?: string | null
           created_at?: string
           description?: string | null
+          founded_year?: number | null
+          headquarters?: string | null
           id?: string
           is_merchant?: boolean | null
           logo_url?: string | null
@@ -159,11 +167,16 @@ export type Database = {
           subscription_tier?: string | null
           tenant_id?: string | null
           total_projects?: number | null
+          track_record_summary?: string | null
+          website_url?: string | null
           years_active?: number | null
         }
         Update: {
+          banner_image_url?: string | null
           created_at?: string
           description?: string | null
+          founded_year?: number | null
+          headquarters?: string | null
           id?: string
           is_merchant?: boolean | null
           logo_url?: string | null
@@ -173,6 +186,8 @@ export type Database = {
           subscription_tier?: string | null
           tenant_id?: string | null
           total_projects?: number | null
+          track_record_summary?: string | null
+          website_url?: string | null
           years_active?: number | null
         }
         Relationships: [
