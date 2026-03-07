@@ -206,6 +206,17 @@ const PropertyDetail = () => {
       />
 
       <main className="pt-20 pb-20 md:pb-0">
+        {/* Breadcrumbs */}
+        <nav className="container-wide py-3 flex items-center gap-1.5 text-xs text-muted-foreground" aria-label="Breadcrumb">
+          <Link to="/" className="hover:text-foreground transition-colors">Home</Link>
+          <ChevronRight className="w-3 h-3" />
+          <Link to="/properties" className="hover:text-foreground transition-colors">Properties</Link>
+          <ChevronRight className="w-3 h-3" />
+          <Link to={`/areas/${property.area?.toLowerCase().replace(/\s+/g, '-')}`} className="hover:text-foreground transition-colors">{property.area}</Link>
+          <ChevronRight className="w-3 h-3" />
+          <span className="text-foreground truncate max-w-[200px]">{property.name}</span>
+        </nav>
+
         {/* Full-Bleed Cinematic Hero Gallery */}
         <section className="relative h-[70vh] md:h-[75vh] overflow-hidden">
           {/* Crossfading image layers */}
