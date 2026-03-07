@@ -70,7 +70,7 @@ const ExpandableDescription = ({ text }: { text: string }) => {
   );
 };
 
-
+const PropertyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const inquiryFormRef = useRef<HTMLDivElement>(null);
   const { formatPrice, tenant } = useTenant();
