@@ -58,6 +58,80 @@ export type Database = {
           },
         ]
       }
+      articles: {
+        Row: {
+          author_name: string
+          author_role: string | null
+          category: Database["public"]["Enums"]["article_category"]
+          content: string
+          cover_image_url: string | null
+          created_at: string
+          excerpt: string | null
+          id: string
+          is_featured: boolean | null
+          published_at: string | null
+          reading_time_min: number | null
+          related_property_ids: Json | null
+          seo_description: string | null
+          seo_title: string | null
+          slug: string
+          subtitle: string | null
+          tenant_id: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_name?: string
+          author_role?: string | null
+          category?: Database["public"]["Enums"]["article_category"]
+          content: string
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          is_featured?: boolean | null
+          published_at?: string | null
+          reading_time_min?: number | null
+          related_property_ids?: Json | null
+          seo_description?: string | null
+          seo_title?: string | null
+          slug: string
+          subtitle?: string | null
+          tenant_id?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_name?: string
+          author_role?: string | null
+          category?: Database["public"]["Enums"]["article_category"]
+          content?: string
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          is_featured?: boolean | null
+          published_at?: string | null
+          reading_time_min?: number | null
+          related_property_ids?: Json | null
+          seo_description?: string | null
+          seo_title?: string | null
+          slug?: string
+          subtitle?: string | null
+          tenant_id?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "articles_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       developers: {
         Row: {
           created_at: string
@@ -868,6 +942,11 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "editor" | "viewer"
+      article_category:
+        | "market_pulse"
+        | "project_analysis"
+        | "area_intelligence"
+        | "investor_playbook"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -996,6 +1075,12 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "editor", "viewer"],
+      article_category: [
+        "market_pulse",
+        "project_analysis",
+        "area_intelligence",
+        "investor_playbook",
+      ],
     },
   },
 } as const
