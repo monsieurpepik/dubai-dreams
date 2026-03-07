@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Heart } from 'lucide-react';
+import { Heart, Eye } from 'lucide-react';
 import { useTenant } from '@/hooks/useTenant';
 import { useSavedProperties } from '@/hooks/useSavedProperties';
 import { ImageHoverCarousel } from './ImageHoverCarousel';
