@@ -4,10 +4,11 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+const INTERNAL_SECRET = Deno.env.get("INTERNAL_FUNCTION_SECRET");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-internal-secret, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 async function sendEmail(to: string[], subject: string, html: string) {
@@ -31,20 +32,47 @@ async function sendEmail(to: string[], subject: string, html: string) {
   return res.json();
 }
 
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
 
+  // Authenticate: require internal secret or Supabase anon key
+  const internalSecret = req.headers.get("x-internal-secret");
+  const apikey = req.headers.get("apikey");
+  const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY");
+
+  let authenticated = false;
+  if (INTERNAL_SECRET && internalSecret === INTERNAL_SECRET) {
+    authenticated = true;
+  }
+  if (!authenticated && apikey && SUPABASE_ANON_KEY && apikey === SUPABASE_ANON_KEY) {
+    authenticated = true;
+  }
+
+  if (!authenticated) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json", ...corsHeaders },
+    });
+  }
+
   try {
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
-    // Check for action: schedule (from lead capture) or process (from cron)
     const body = await req.json();
     const action = body.action || "process";
 
     if (action === "schedule") {
-      // Schedule nurture sequence for a new lead
       const { leadId } = body;
       if (!leadId) throw new Error("Missing leadId");
 
@@ -98,23 +126,26 @@ const handler = async (req: Request): Promise<Response> => {
       if (!lead?.email) continue;
 
       const property = lead.property as any;
-      const name = lead.name || "Investor";
+      const name = escapeHtml(lead.name || "Investor");
       let subject = "";
       let html = "";
 
+      const propertyName = property?.name ? escapeHtml(property.name) : null;
+      const propertyArea = property?.area ? escapeHtml(property.area) : null;
+
       switch (seq.email_type) {
         case "investment_report":
-          subject = `Your Investment Report${property ? `: ${property.name}` : ""}`;
+          subject = `Your Investment Report${propertyName ? `: ${propertyName}` : ""}`;
           html = `
             <div style="font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;padding:24px;">
               <h1 style="font-size:24px;font-weight:300;letter-spacing:1px;">OWNING DUBAI</h1>
               <p>Dear ${name},</p>
-              <p>Thank you for your interest${property ? ` in <strong>${property.name}</strong> (${property.area})` : ""}.</p>
+              <p>Thank you for your interest${propertyName ? ` in <strong>${propertyName}</strong> (${propertyArea})` : ""}.</p>
               ${property ? `
                 <div style="background:#f9f9f9;padding:20px;margin:16px 0;">
                   <p style="margin:4px 0;"><strong>Starting from:</strong> AED ${(property.price_from / 1000000).toFixed(1)}M</p>
                   ${property.roi_estimate ? `<p style="margin:4px 0;"><strong>Estimated Yield:</strong> ${property.roi_estimate}%</p>` : ""}
-                  <p style="margin:4px 0;"><strong>Location:</strong> ${property.area}</p>
+                  <p style="margin:4px 0;"><strong>Location:</strong> ${propertyArea}</p>
                 </div>
               ` : ""}
               <p>Our investment advisory team will be in touch within 24 hours to discuss your goals and provide personalized recommendations.</p>
@@ -123,12 +154,12 @@ const handler = async (req: Request): Promise<Response> => {
           break;
 
         case "market_insights":
-          subject = `Dubai Market Update: ${property?.area || "Latest Trends"}`;
+          subject = `Dubai Market Update: ${propertyArea || "Latest Trends"}`;
           html = `
             <div style="font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;padding:24px;">
               <h1 style="font-size:24px;font-weight:300;letter-spacing:1px;">OWNING DUBAI</h1>
               <p>Dear ${name},</p>
-              <p>Here's a quick market update for ${property?.area || "Dubai"}:</p>
+              <p>Here's a quick market update for ${propertyArea || "Dubai"}:</p>
               <ul>
                 <li>Dubai property transactions hit record highs in 2024</li>
                 <li>Off-plan properties offer 10-18% discount vs. ready market</li>
@@ -145,7 +176,7 @@ const handler = async (req: Request): Promise<Response> => {
             <div style="font-family:-apple-system,sans-serif;max-width:600px;margin:0 auto;padding:24px;">
               <h1 style="font-size:24px;font-weight:300;letter-spacing:1px;">OWNING DUBAI</h1>
               <p>Dear ${name},</p>
-              <p>Based on your interest${property ? ` in ${property.area}` : ""}, we've curated similar projects you might like.</p>
+              <p>Based on your interest${propertyArea ? ` in ${propertyArea}` : ""}, we've curated similar projects you might like.</p>
               <p><a href="https://owningdubai.com/properties" style="color:#D4AF37;text-decoration:none;font-weight:600;">Browse Curated Projects →</a></p>
               <p>Our advisors are available for a private consultation to walk you through the best options for your investment goals.</p>
               <p><a href="https://owningdubai.com/contact" style="color:#D4AF37;text-decoration:none;">Schedule a Consultation →</a></p>
@@ -176,7 +207,7 @@ const handler = async (req: Request): Promise<Response> => {
     });
   } catch (error: any) {
     console.error("Error in send-nurture-email:", error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: "Internal server error" }), {
       status: 500,
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });

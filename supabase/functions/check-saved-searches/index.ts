@@ -2,14 +2,36 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.90.0";
 import { Resend } from "npm:resend@2.0.0";
 
+const INTERNAL_SECRET = Deno.env.get("INTERNAL_FUNCTION_SECRET");
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-internal-secret, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
 serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
+  }
+
+  // Authenticate: require internal secret or Supabase anon key
+  const internalSecret = req.headers.get("x-internal-secret");
+  const apikey = req.headers.get("apikey");
+  const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY");
+
+  let authenticated = false;
+  if (INTERNAL_SECRET && internalSecret === INTERNAL_SECRET) {
+    authenticated = true;
+  }
+  if (!authenticated && apikey && SUPABASE_ANON_KEY && apikey === SUPABASE_ANON_KEY) {
+    authenticated = true;
+  }
+
+  if (!authenticated) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 
   try {
@@ -21,7 +43,6 @@ serve(async (req: Request) => {
 
     console.log('Checking saved searches for new matches...');
 
-    // Get all active saved searches
     const { data: savedSearches, error: searchError } = await supabase
       .from('saved_searches')
       .select('*')
@@ -45,7 +66,6 @@ serve(async (req: Request) => {
       const sinceDate = search.last_notified_at || search.created_at;
       const filters = search.filters as Record<string, any>;
 
-      // Build query for new properties since last notification
       let query = supabase
         .from('properties')
         .select('id, name, slug, area, price_from, developer:developers(name)')
@@ -53,7 +73,6 @@ serve(async (req: Request) => {
         .order('created_at', { ascending: false })
         .limit(10);
 
-      // Apply saved filters
       if (filters.area && filters.area !== 'All Areas') {
         query = query.eq('area', filters.area);
       }
@@ -88,9 +107,8 @@ serve(async (req: Request) => {
         continue;
       }
 
-      console.log(`Found ${newProperties.length} new matches for search ${search.id} (${search.email})`);
+      console.log(`Found ${newProperties.length} new matches for search ${search.id}`);
 
-      // Send email notification
       if (resendApiKey) {
         const resend = new Resend(resendApiKey);
 
@@ -128,7 +146,6 @@ serve(async (req: Request) => {
         }
       }
 
-      // Update last_notified_at
       await supabase
         .from('saved_searches')
         .update({ last_notified_at: new Date().toISOString() })
@@ -144,7 +161,7 @@ serve(async (req: Request) => {
   } catch (error: any) {
     console.error('Error in check-saved-searches:', error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: "Internal server error" }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }

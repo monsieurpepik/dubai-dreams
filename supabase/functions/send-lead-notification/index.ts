@@ -1,10 +1,26 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-
 const NOTIFICATION_EMAIL = Deno.env.get("NOTIFICATION_EMAIL") || "hello@owningdubai.com";
+const INTERNAL_SECRET = Deno.env.get("INTERNAL_FUNCTION_SECRET");
 
-// Resend API helper function
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function validateEmail(email: string): boolean {
+  return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email) && email.length <= 255;
+}
+
+function validatePhone(phone: string): boolean {
+  return /^[+\d\s\-().]{5,20}$/.test(phone);
+}
+
 async function sendEmail(to: string[], subject: string, html: string): Promise<{ id: string }> {
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -30,7 +46,7 @@ async function sendEmail(to: string[], subject: string, html: string): Promise<{
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-internal-secret",
 };
 
 interface LeadNotificationRequest {
@@ -45,51 +61,88 @@ interface LeadNotificationRequest {
 }
 
 const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Authenticate: require internal secret OR valid Supabase JWT
+  const internalSecret = req.headers.get("x-internal-secret");
+  const authHeader = req.headers.get("authorization");
+
+  let authenticated = false;
+
+  // Check internal secret first
+  if (INTERNAL_SECRET && internalSecret === INTERNAL_SECRET) {
+    authenticated = true;
+  }
+
+  // Fall back to Supabase anon key (client calls include apikey header)
+  if (!authenticated) {
+    const apikey = req.headers.get("apikey");
+    const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY");
+    if (apikey && SUPABASE_ANON_KEY && apikey === SUPABASE_ANON_KEY) {
+      authenticated = true;
+    }
+  }
+
+  if (!authenticated) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json", ...corsHeaders },
+    });
+  }
+
   try {
     const data: LeadNotificationRequest = await req.json();
-    
-    console.log("Received lead notification request:", JSON.stringify(data, null, 2));
 
-    const { 
-      leadName, 
-      leadEmail, 
-      leadPhone, 
-      propertyName, 
-      propertyId,
-      source, 
-      message,
-      goldenVisaInterest 
-    } = data;
+    // Validate required fields
+    if (!data.leadEmail || !validateEmail(data.leadEmail)) {
+      return new Response(JSON.stringify({ error: "Invalid email address" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
 
-    // Format the notification email
-    const propertyInfo = propertyName 
-      ? `<p><strong>Property:</strong> ${propertyName}</p>` 
+    if (data.leadPhone && !validatePhone(data.leadPhone)) {
+      return new Response(JSON.stringify({ error: "Invalid phone number" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json", ...corsHeaders },
+      });
+    }
+
+    // Enforce length limits
+    const leadName = data.leadName ? escapeHtml(data.leadName.substring(0, 100)) : null;
+    const leadEmail = escapeHtml(data.leadEmail);
+    const leadPhone = data.leadPhone ? escapeHtml(data.leadPhone.substring(0, 20)) : null;
+    const propertyName = data.propertyName ? escapeHtml(data.propertyName.substring(0, 200)) : null;
+    const message = data.message ? escapeHtml(data.message.substring(0, 2000)) : null;
+    const source = escapeHtml((data.source || 'unknown').substring(0, 50));
+    const goldenVisaInterest = data.goldenVisaInterest === true;
+
+    console.log("Processing lead notification for:", leadEmail);
+
+    const propertyInfo = propertyName
+      ? `<p><strong>Property:</strong> ${propertyName}</p>`
       : '<p><strong>Property:</strong> General inquiry</p>';
-    
-    const phoneInfo = leadPhone 
-      ? `<p><strong>Phone:</strong> <a href="tel:${leadPhone}">${leadPhone}</a></p>` 
-      : '';
-    
-    const messageInfo = message 
-      ? `<p><strong>Message:</strong></p><p style="background:#f5f5f5;padding:12px;border-radius:4px;">${message}</p>` 
-      : '';
-    
-    const goldenVisaInfo = goldenVisaInterest 
-      ? '<p style="color:#D4AF37;font-weight:bold;">🏆 Interested in Golden Visa</p>' 
+
+    const phoneInfo = leadPhone
+      ? `<p><strong>Phone:</strong> <a href="tel:${leadPhone}">${leadPhone}</a></p>`
       : '';
 
-    const timestamp = new Date().toLocaleString('en-AE', { 
+    const messageInfo = message
+      ? `<p><strong>Message:</strong></p><p style="background:#f5f5f5;padding:12px;border-radius:4px;">${message}</p>`
+      : '';
+
+    const goldenVisaInfo = goldenVisaInterest
+      ? '<p style="color:#D4AF37;font-weight:bold;">🏆 Interested in Golden Visa</p>'
+      : '';
+
+    const timestamp = new Date().toLocaleString('en-AE', {
       timeZone: 'Asia/Dubai',
       dateStyle: 'full',
       timeStyle: 'short'
     });
 
-    // Build email HTML
     const emailHtml = `
       <!DOCTYPE html>
       <html>
@@ -141,7 +194,6 @@ const handler = async (req: Request): Promise<Response> => {
       </html>
     `;
 
-    // Send notification to sales team
     const salesEmailResponse = await sendEmail(
       [NOTIFICATION_EMAIL],
       `🏠 New Lead: ${leadName || leadEmail} ${propertyName ? `- ${propertyName}` : ''}`,
@@ -150,21 +202,11 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Sales notification email sent:", salesEmailResponse);
 
-    // Send confirmation to the lead (optional - uncomment if needed)
-    /*
-    const leadConfirmationResponse = await resend.emails.send({
-      from: "OwningDubai <noreply@owningdubai.com>",
-      to: [leadEmail],
-      subject: `Thank you for your inquiry${propertyName ? ` about ${propertyName}` : ''}`,
-      html: `...`
-    });
-    */
-
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         message: "Lead notification sent successfully",
-        salesEmailId: salesEmailResponse.id 
+        salesEmailId: salesEmailResponse.id
       }),
       {
         status: 200,
@@ -173,10 +215,10 @@ const handler = async (req: Request): Promise<Response> => {
     );
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-    console.error("Error in send-lead-notification function:", error);
-    
+    console.error("Error in send-lead-notification function:", errorMessage);
+
     return new Response(
-      JSON.stringify({ success: false, error: errorMessage }),
+      JSON.stringify({ success: false, error: "Internal server error" }),
       {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },
