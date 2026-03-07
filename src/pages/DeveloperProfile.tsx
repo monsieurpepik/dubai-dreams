@@ -163,9 +163,10 @@ export default function DeveloperProfile() {
 
         {/* Track Record */}
         {dev.track_record_summary && (
-          <section className="py-12 md:py-16 border-b border-border/10 bg-secondary/30">
+          <section className="py-12 md:py-16 border-2 border-red-500 bg-secondary/30">
             <div className="container-wide max-w-3xl">
               <h2 className="font-serif text-xl text-foreground mb-6">Track Record</h2>
+              <p className="text-red-500 text-lg font-bold mb-4">DEBUG: Track record content below:</p>
               <div className="max-w-none text-sm text-foreground/70 leading-relaxed [&_strong]:text-foreground [&_h3]:text-foreground [&_h3]:font-serif [&_h3]:text-lg [&_h3]:mt-8 [&_h3]:mb-3 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:space-y-1.5 [&_ul]:my-4 [&_li]:text-foreground/70 [&_blockquote]:border-l-2 [&_blockquote]:border-border/30 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-foreground/60 [&_blockquote]:my-6 [&_p]:my-3">
                 <ReactMarkdown>{dev.track_record_summary}</ReactMarkdown>
               </div>
