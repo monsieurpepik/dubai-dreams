@@ -36,6 +36,7 @@ const Contact = () => {
   const officeArea = tenant?.office_location?.area || 'Dubai Marina';
   const officeCountry = tenant?.office_location?.country || 'United Arab Emirates';
   const contactEmail = tenant?.email || 'hello@owning.com';
+  const contactPhone = tenant?.phone;
   const workingHours = tenant?.working_hours;
 
   const canProceedStep2 = !!intent;
