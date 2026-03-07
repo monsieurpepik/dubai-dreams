@@ -101,6 +101,7 @@ const App = () => (
               <AnalyticsWrapper>
                 <CustomCursor />
                 <AnimatedRoutes />
+                <MobileTabBar />
               </AnalyticsWrapper>
             </BrowserRouter>
           </TooltipProvider>

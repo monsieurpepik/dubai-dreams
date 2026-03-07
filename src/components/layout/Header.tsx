@@ -38,6 +38,13 @@ export function Header() {
     return () => { document.body.style.overflow = ''; };
   }, [isMenuOpen]);
 
+  // Listen for mobile tab bar menu trigger
+  useEffect(() => {
+    const handler = () => setIsMenuOpen(true);
+    window.addEventListener('open-mobile-menu', handler);
+    return () => window.removeEventListener('open-mobile-menu', handler);
+  }, []);
+
   const handleNavClick = (href: string) => {
     setIsMenuOpen(false);
     navigate(href);
