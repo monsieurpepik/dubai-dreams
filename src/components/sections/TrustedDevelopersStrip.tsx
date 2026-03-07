@@ -44,6 +44,7 @@ export const TrustedDevelopersStrip = () => {
                 animate={inView ? { opacity: 1 } : {}}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
+              <Link to={`/developers/${developer.slug}`}>
                 {developer.logo_url ? (
                   <img
                     src={developer.logo_url}
@@ -55,6 +56,7 @@ export const TrustedDevelopersStrip = () => {
                     {developer.name}
                   </span>
                 )}
+              </Link>
               </motion.div>
             ))}
           </div>
