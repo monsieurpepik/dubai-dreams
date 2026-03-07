@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useTenant } from '@/hooks/useTenant';
 import { SearchOverlay } from '@/components/properties/SearchOverlay';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { CurrencySwitcher } from '@/components/ui/CurrencySwitcher';
+import { MenuOverlay } from '@/components/layout/MenuOverlay';
 
 const allNavItems = [
   { label: 'Properties', href: '/properties' },
