@@ -1,7 +1,9 @@
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { ArrowRight } from 'lucide-react';
 
 export const TrustedDevelopersStrip = () => {
   const [ref, inView] = useInView({ threshold: 0.3, triggerOnce: true });
