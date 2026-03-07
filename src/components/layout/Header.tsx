@@ -118,6 +118,7 @@ export function Header() {
             <button
               onClick={() => setIsMenuOpen(true)}
               className="text-[11px] tracking-[0.15em] text-muted-foreground hover:text-foreground transition-opacity duration-300"
+              aria-label="Open navigation menu"
             >
               Menu
             </button>
