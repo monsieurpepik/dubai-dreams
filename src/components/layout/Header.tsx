@@ -5,6 +5,7 @@ import { X, Search } from 'lucide-react';
 import { useTenant } from '@/hooks/useTenant';
 import { SearchOverlay } from '@/components/properties/SearchOverlay';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { CurrencySwitcher } from '@/components/ui/CurrencySwitcher';
 
 const allNavItems = [
   { label: 'Properties', href: '/properties' },
@@ -104,7 +105,8 @@ export function Header() {
           </AnimatePresence>
 
           {/* Mobile search icon + Menu — right */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <CurrencySwitcher />
             {showSearchPill && isMobile && (
               <motion.button
                 initial={{ opacity: 0 }}

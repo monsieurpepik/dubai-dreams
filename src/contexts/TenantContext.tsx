@@ -3,6 +3,7 @@ import type { Tenant } from '@/types/tenant';
 import { DEFAULT_TENANT_SLUG } from '@/types/tenant';
 import { detectTenantSlug, fetchTenant } from '@/services/tenantService';
 import { formatPrice, formatPriceRange, getCurrencySymbol } from '@/utils/currency';
+import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 
 interface TenantContextValue {
   tenant: Tenant | null;
@@ -32,6 +33,7 @@ export function TenantProvider({ children }: TenantProviderProps) {
   const [tenant, setTenant] = useState<Tenant | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const { displayCurrency, formatDisplayPrice } = useDisplayCurrency();
 
   useEffect(() => {
     async function loadTenant() {
@@ -70,6 +72,10 @@ export function TenantProvider({ children }: TenantProviderProps) {
 
   // Helper functions that use current tenant
   const contextFormatPrice = (amount: number, options?: { compact?: boolean; showSymbol?: boolean }) => {
+    // If display currency is not AED, use the display currency formatter
+    if (displayCurrency !== 'AED') {
+      return formatDisplayPrice(amount, options);
+    }
     return formatPrice(amount, tenant, options);
   };
 

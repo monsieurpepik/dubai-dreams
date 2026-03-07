@@ -6,6 +6,7 @@ import { Footer } from '@/components/layout/Footer';
 import { SEO } from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PhoneInput } from '@/components/ui/PhoneInput';
 import { Slider } from '@/components/ui/slider';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -250,12 +251,9 @@ const Contact = () => {
                             </div>
                             <div>
                               <label className="text-sm font-medium text-foreground mb-2 block">Phone</label>
-                              <Input
-                                type="tel"
+                              <PhoneInput
                                 value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                                placeholder="+971 50 XXX XXXX"
-                                className="h-12 bg-background border-border/50 focus:border-accent"
+                                onChange={setPhone}
                               />
                             </div>
                           </div>

@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
+import { PhoneInput } from '@/components/ui/PhoneInput';
 import { toast } from 'sonner';
 import { analytics } from '@/lib/analytics';
 
@@ -223,13 +224,11 @@ export const PropertyInquiryForm = ({
             <Phone className="w-4 h-4 text-muted-foreground" />
             Phone Number
           </Label>
-          <Input
+          <PhoneInput
             id="phone"
-            type="tel"
-            placeholder="+971 50 123 4567"
-            value={formData.phone}
-            onChange={(e) => handleInputChange('phone', e.target.value)}
-            className={errors.phone ? 'border-red-500' : ''}
+            value={formData.phone || ''}
+            onChange={(val) => handleInputChange('phone', val)}
+            error={!!errors.phone}
             disabled={isSubmitting}
           />
           {errors.phone && (
