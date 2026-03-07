@@ -208,14 +208,25 @@ const PropertyDetail = () => {
       <main className="pt-20 pb-20 md:pb-0">
         {/* Full-Bleed Cinematic Hero Gallery */}
         <section className="relative h-[70vh] md:h-[75vh] overflow-hidden">
-          <motion.img
-            src={primaryImage}
-            alt={property.name}
-            className="absolute inset-0 w-full h-full object-cover"
-            initial={{ scale: 1 }}
-            animate={{ scale: 1.02 }}
-            transition={{ duration: 20, ease: 'linear' }}
-          />
+          {/* Crossfading image layers */}
+          {allImages.length > 0 ? (
+            allImages.map((src: string, i: number) => (
+              <motion.img
+                key={src}
+                src={src}
+                alt={`${property.name} ${i + 1}`}
+                className="absolute inset-0 w-full h-full object-cover"
+                initial={false}
+                animate={{
+                  opacity: i === heroImageIndex ? 1 : 0,
+                  scale: i === heroImageIndex ? 1.02 : 1,
+                }}
+                transition={{ opacity: { duration: 1.5, ease: 'easeInOut' }, scale: { duration: 20, ease: 'linear' } }}
+              />
+            ))
+          ) : (
+            <img src={primaryImage} alt={property.name} className="absolute inset-0 w-full h-full object-cover" />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10" />
 
           {/* Back + Share overlay */}
