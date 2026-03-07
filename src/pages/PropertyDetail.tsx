@@ -323,15 +323,18 @@ const PropertyDetail = () => {
           <div className="grid lg:grid-cols-3 gap-12 lg:gap-16">
             <div className="lg:col-span-2 space-y-16">
               {(property.lifestyle_description || property.description) && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                >
-                  <p className="text-muted-foreground leading-relaxed text-lg max-w-2xl">
-                    {property.lifestyle_description || property.description}
-                  </p>
-                </motion.div>
+                <ExpandableDescription text={property.lifestyle_description || property.description || ''} />
+              )}
+
+              {/* View Type Badges */}
+              {property.view_type && property.view_type.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {property.view_type.map((v: string) => (
+                    <span key={v} className="px-3 py-1.5 text-xs border border-border/50 text-muted-foreground rounded-full">
+                      {v} View
+                    </span>
+                  ))}
+                </div>
               )}
 
               {property.status !== 'ready' && (
