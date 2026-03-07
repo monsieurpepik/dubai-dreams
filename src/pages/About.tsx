@@ -40,6 +40,10 @@ const steps = [
 ];
 
 const About = () => {
+  const { tenant } = useTenant();
+  const regulatoryBody = tenant?.regulatory_body;
+  const regulatoryNumber = tenant?.regulatory_number;
+
   return (
     <div className="min-h-screen bg-background">
       <SEO
