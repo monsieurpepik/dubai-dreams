@@ -57,6 +57,10 @@ export function Header() {
 
   return (
     <>
+      {/* Skip to content */}
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[70] focus:bg-foreground focus:text-background focus:px-4 focus:py-2 focus:text-xs">
+        Skip to content
+      </a>
       <motion.header
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
