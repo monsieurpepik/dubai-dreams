@@ -33,12 +33,13 @@ const Index = () => {
         <WhyDubaiStrip />
         <EditorialStatement />
         <ThemedCollections />
+        <PrivateAdvisorSection />
         <OffPlanProjectsSection />
         <TrustedDevelopersStrip />
         <RecentlyAddedSection />
+        <TestimonialsSection />
         <LatestInsightsSection />
         <HowItWorksMini />
-        <PrivateAdvisorSection />
       </main>
       <Footer />
       <BackToTop />

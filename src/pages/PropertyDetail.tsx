@@ -420,7 +420,7 @@ const PropertyDetail = () => {
               <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-10">
                 Similar Projects
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {similarProperties.slice(0, 3).map((p: any, i: number) => (
                   <CleanPropertyCard key={p.id} property={p} index={i} />
                 ))}

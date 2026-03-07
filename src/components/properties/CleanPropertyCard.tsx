@@ -179,6 +179,14 @@ export const CleanPropertyCard = ({ property, variant = 'default', viewCount }: 
               {property.completion_date && `Handover ${new Date(property.completion_date).getFullYear()}`}
             </p>
           )}
+
+          {/* Social proof */}
+          {viewCount && viewCount > 3 && (
+            <p className="flex items-center gap-1 text-[11px] text-muted-foreground/60 mt-1">
+              <Eye className="w-3 h-3" />
+              {viewCount} investors viewed
+            </p>
+          )}
         </div>
       </article>
     </Link>

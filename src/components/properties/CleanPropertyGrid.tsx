@@ -43,6 +43,9 @@ interface CleanPropertyGridProps {
 }
 
 export const CleanPropertyGrid = ({ properties, isLoading }: CleanPropertyGridProps) => {
+  const propertyIds = properties.map(p => p.id);
+  const { data: viewCounts } = usePropertyViewCounts(propertyIds);
+
   if (isLoading) {
     return <PropertyGridSkeleton />;
   }
@@ -62,12 +65,13 @@ export const CleanPropertyGrid = ({ properties, isLoading }: CleanPropertyGridPr
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {properties.map((property, index) => (
         <CleanPropertyCard
           key={property.id}
           property={property}
           index={index}
+          viewCount={viewCounts?.[property.id]}
         />
       ))}
     </div>
