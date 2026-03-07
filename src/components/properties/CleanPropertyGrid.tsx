@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { CleanPropertyCard } from './CleanPropertyCard';
 import { PropertyGridSkeleton } from './PropertyCardSkeleton';
+import { usePropertyViewCounts } from '@/hooks/usePropertyPopularity';
 
 interface PropertyImage {
   id: string;
