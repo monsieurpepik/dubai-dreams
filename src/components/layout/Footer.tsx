@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { Phone, Mail } from "lucide-react";
 import { useTenant } from "@/hooks/useTenant";
 import { toast } from "sonner";
 
