@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Share2, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Share2, ChevronRight, Phone, MessageCircle, FileDown } from 'lucide-react';
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Header } from '@/components/layout/Header';
