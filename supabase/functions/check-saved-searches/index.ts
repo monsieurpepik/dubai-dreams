@@ -14,20 +14,10 @@ serve(async (req: Request) => {
     return new Response('ok', { headers: corsHeaders });
   }
 
-  // Authenticate: require internal secret or Supabase anon key
+  // Authenticate: require internal secret only (cron-only function)
   const internalSecret = req.headers.get("x-internal-secret");
-  const apikey = req.headers.get("apikey");
-  const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY");
 
-  let authenticated = false;
-  if (INTERNAL_SECRET && internalSecret === INTERNAL_SECRET) {
-    authenticated = true;
-  }
-  if (!authenticated && apikey && SUPABASE_ANON_KEY && apikey === SUPABASE_ANON_KEY) {
-    authenticated = true;
-  }
-
-  if (!authenticated) {
+  if (!INTERNAL_SECRET || internalSecret !== INTERNAL_SECRET) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
