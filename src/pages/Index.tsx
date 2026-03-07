@@ -25,6 +25,7 @@ const Index = () => {
       <Header />
       <main>
         <HeroSection />
+        <ExclusiveSelectionsSection />
         <SearchEntry />
         <QuickCategories />
         <WhyDubaiStrip />
