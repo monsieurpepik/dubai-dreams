@@ -63,6 +63,10 @@ function FooterColumn({ title, links }: { title: string; links: { label: string;
 export function Footer() {
   const { tenant } = useTenant();
   const brandName = tenant?.brand_name || 'OwningDubai';
+  const contactPhone = tenant?.phone;
+  const contactEmail = tenant?.email || 'hello@owningdubai.com';
+  const regulatoryBody = tenant?.regulatory_body;
+  const regulatoryNumber = tenant?.regulatory_number;
   const [email, setEmail] = useState('');
 
   const handleNewsletter = (e: React.FormEvent) => {
