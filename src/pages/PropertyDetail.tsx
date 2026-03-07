@@ -494,6 +494,7 @@ const PropertyDetail = () => {
         propertyName={property.name}
         priceFrom={property.price_from}
         onInquireClick={scrollToInquiry}
+        brochureUrl={property.brochure_url}
       />
       <BackToTop />
     </div>
