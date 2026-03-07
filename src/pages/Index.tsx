@@ -7,6 +7,7 @@ import { EditorialStatement } from "@/components/sections/EditorialStatement";
 import { OffPlanProjectsSection } from "@/components/sections/OffPlanProjectsSection";
 import { WhyOwningDubaiSection } from "@/components/sections/WhyOwningDubaiSection";
 import { RecentlyAddedSection } from "@/components/sections/RecentlyAddedSection";
+import { LatestInsightsSection } from "@/components/sections/LatestInsightsSection";
 import { BackToTop } from "@/components/ui/BackToTop";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import { SEO } from "@/components/SEO";
