@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { LayoutGrid, Map, Columns, Search } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Header } from '@/components/layout/Header';
@@ -16,7 +16,7 @@ import { SaveSearchButton } from '@/components/properties/SaveSearchButton';
 import { CleanPropertyCard } from '@/components/properties/CleanPropertyCard';
 import { useTenant } from '@/hooks/useTenant';
 import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import heroImage from '@/assets/hero-dubai-skyline.jpeg';
 
 const collectionMeta: Record<string, { title: string; description: string }> = {
   'golden-visa': { title: 'Golden Visa Eligible', description: 'Properties qualifying for 10-year UAE residency' },
@@ -146,22 +146,83 @@ const Properties = () => {
       />
       <Header />
       <main className="pt-20">
-        <section className="py-12 md:py-16 border-b border-border/30">
-          <div className="container-wide">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-              {currentCollection && (
-                <a href="/properties" className="text-xs font-medium uppercase tracking-luxury text-muted-foreground mb-3 block hover:text-foreground transition-colors">
-                  ← All Projects
-                </a>
-              )}
-              <p className="text-xs font-medium uppercase tracking-luxury text-muted-foreground mb-3">
-                {propertyCount} {propertyCount === 1 ? 'Project' : 'Projects'}
-              </p>
-              <h1 className="font-serif text-3xl md:text-4xl text-foreground">{pageTitle}</h1>
-              {currentCollection && (
-                <p className="text-muted-foreground mt-3 max-w-xl">{currentCollection.description}</p>
-              )}
-            </motion.div>
+        {/* Cinematic Hero Banner */}
+        <section className="relative h-[50vh] md:h-[55vh] overflow-hidden">
+          <motion.img
+            src={heroImage}
+            alt={`${cityName} skyline`}
+            className="absolute inset-0 w-full h-full object-cover"
+            initial={{ scale: 1 }}
+            animate={{ scale: 1.03 }}
+            transition={{ duration: 30, ease: 'linear' }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20" />
+
+          {/* Hero Content */}
+          <div className="relative z-10 h-full flex flex-col justify-end">
+            <div className="container-wide pb-16 md:pb-20">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                {currentCollection && (
+                  <Link to="/properties" className="text-[10px] tracking-[0.25em] text-white/40 mb-3 block hover:text-white/60 transition-colors">
+                    ← ALL PROJECTS
+                  </Link>
+                )}
+                <p className="text-[10px] tracking-[0.3em] text-white/40 mb-4">
+                  {propertyCount} {propertyCount === 1 ? 'PROJECT' : 'PROJECTS'}
+                </p>
+                <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white font-light leading-[1.1]">
+                  {pageTitle}
+                </h1>
+                {currentCollection && (
+                  <p className="text-white/40 mt-3 max-w-xl text-sm font-light">
+                    {currentCollection.description}
+                  </p>
+                )}
+              </motion.div>
+            </div>
+
+            {/* Glassmorphic Filter Bar */}
+            <div className="absolute bottom-0 left-0 right-0">
+              <div className="container-wide">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.5 }}
+                  className="bg-white/[0.06] backdrop-blur-xl border-t border-white/[0.08] px-6 py-3.5 flex items-center justify-between gap-4"
+                >
+                  <div className="flex items-center gap-4 flex-wrap">
+                    <PropertyFilters filters={filters} onChange={setFilters} resultCount={propertyCount} />
+                    <SaveSearchButton
+                      filters={{ ...filters, category }}
+                      hasActiveFilters={
+                        category !== 'all' ||
+                        filters.area !== 'All Areas' ||
+                        filters.bedrooms !== 'Any' ||
+                        filters.priceRange[0] > 500000 ||
+                        filters.priceRange[1] < 50000000 ||
+                        filters.status !== 'All'
+                      }
+                    />
+                  </div>
+                  <div className="flex items-center gap-1 border border-white/10 rounded">
+                    {viewButtons.map(({ mode, icon: Icon, label }) => (
+                      <button
+                        key={mode}
+                        onClick={() => setViewMode(mode)}
+                        className={`p-2 transition-colors ${viewMode === mode ? 'bg-white/20 text-white' : 'text-white/40 hover:text-white/70'}`}
+                        aria-label={label}
+                      >
+                        <Icon className="w-4 h-4" />
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -169,35 +230,6 @@ const Properties = () => {
 
         <section className="py-12 md:py-16">
           <div className="container-wide">
-            <div className="flex items-center justify-between gap-4 mb-6">
-              <div className="flex items-center gap-4 flex-wrap">
-                <PropertyFilters filters={filters} onChange={setFilters} resultCount={propertyCount} />
-                <SaveSearchButton
-                  filters={{ ...filters, category }}
-                  hasActiveFilters={
-                    category !== 'all' ||
-                    filters.area !== 'All Areas' ||
-                    filters.bedrooms !== 'Any' ||
-                    filters.priceRange[0] > 500000 ||
-                    filters.priceRange[1] < 50000000 ||
-                    filters.status !== 'All'
-                  }
-                />
-              </div>
-              <div className="flex items-center gap-1 border border-border/50">
-                {viewButtons.map(({ mode, icon: Icon, label }) => (
-                  <button
-                    key={mode}
-                    onClick={() => setViewMode(mode)}
-                    className={`p-2 transition-colors ${viewMode === mode ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground'}`}
-                    aria-label={label}
-                  >
-                    <Icon className="w-4 h-4" />
-                  </button>
-                ))}
-              </div>
-            </div>
-
             {viewMode === 'grid' && (
               <>
                 <SmartSortBar activeSort={sortBy} onSortChange={setSortBy} propertyCount={propertyCount} />
