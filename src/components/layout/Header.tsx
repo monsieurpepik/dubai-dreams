@@ -105,7 +105,8 @@ export function Header() {
           </AnimatePresence>
 
           {/* Mobile search icon + Menu — right */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <CurrencySwitcher />
             {showSearchPill && isMobile && (
               <motion.button
                 initial={{ opacity: 0 }}

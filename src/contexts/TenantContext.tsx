@@ -72,6 +72,10 @@ export function TenantProvider({ children }: TenantProviderProps) {
 
   // Helper functions that use current tenant
   const contextFormatPrice = (amount: number, options?: { compact?: boolean; showSymbol?: boolean }) => {
+    // If display currency is not AED, use the display currency formatter
+    if (displayCurrency !== 'AED') {
+      return formatDisplayPrice(amount, options);
+    }
     return formatPrice(amount, tenant, options);
   };
 

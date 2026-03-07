@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Phone } from 'lucide-react';
+import { Phone, MessageCircle, FileDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTenant } from '@/hooks/useTenant';
 
@@ -7,18 +7,13 @@ interface MobileCTABarProps {
   propertyName: string;
   priceFrom: number;
   onInquireClick: () => void;
+  brochureUrl?: string | null;
 }
 
-const formatPrice = (price: number): string => {
-  if (price >= 1000000) {
-    return `AED ${(price / 1000000).toFixed(1)}M`;
-  }
-  return `AED ${(price / 1000).toFixed(0)}K`;
-};
-
-export const MobileCTABar = ({ propertyName, priceFrom, onInquireClick }: MobileCTABarProps) => {
-  const { tenant } = useTenant();
+export const MobileCTABar = ({ propertyName, priceFrom, onInquireClick, brochureUrl }: MobileCTABarProps) => {
+  const { tenant, formatPrice, getPropertyWhatsAppUrl } = useTenant();
   const contactPhone = tenant?.phone;
+  const whatsappUrl = getPropertyWhatsAppUrl(propertyName);
 
   return (
     <motion.div
@@ -33,7 +28,7 @@ export const MobileCTABar = ({ propertyName, priceFrom, onInquireClick }: Mobile
         <div className="flex items-center justify-between mb-3">
           <div>
             <span className="text-xs text-muted-foreground uppercase tracking-wide">From</span>
-            <p className="text-lg font-medium text-foreground">{formatPrice(priceFrom)}</p>
+            <p className="text-lg font-medium text-foreground">{formatPrice(priceFrom, { compact: true })}</p>
           </div>
           <span className="text-xs text-muted-foreground">Off-plan</span>
         </div>
@@ -42,17 +37,37 @@ export const MobileCTABar = ({ propertyName, priceFrom, onInquireClick }: Mobile
           {contactPhone && (
             <a
               href={`tel:${contactPhone}`}
-              className="flex items-center justify-center h-12 w-12 border border-border/50 text-foreground shrink-0"
+              className="flex items-center justify-center h-12 w-12 border border-border/50 text-foreground shrink-0 rounded-md"
               aria-label="Call"
             >
               <Phone className="w-4 h-4" />
+            </a>
+          )}
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center h-12 w-12 border border-border/50 text-emerald-500 shrink-0 rounded-md"
+            aria-label="WhatsApp"
+          >
+            <MessageCircle className="w-4 h-4" />
+          </a>
+          {brochureUrl && (
+            <a
+              href={brochureUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center h-12 w-12 border border-border/50 text-foreground shrink-0 rounded-md"
+              aria-label="Download Brochure"
+            >
+              <FileDown className="w-4 h-4" />
             </a>
           )}
           <Button 
             onClick={onInquireClick}
             className="flex-1 h-12 bg-foreground text-background hover:bg-foreground/90 text-xs uppercase tracking-wide"
           >
-            Request Access
+            Schedule Call
           </Button>
         </div>
       </div>
