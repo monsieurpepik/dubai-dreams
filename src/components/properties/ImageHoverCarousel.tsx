@@ -1,5 +1,6 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface PropertyImage {
   id: string;
@@ -15,28 +16,44 @@ interface ImageHoverCarouselProps {
   featured?: boolean;
 }
 
-export const ImageHoverCarousel = ({ images, className = '', featured = false }: ImageHoverCarouselProps) => {
+export const ImageHoverCarousel = ({ images, className = '' }: ImageHoverCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const touchStartX = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  
-  const sortedImages = [...images].sort((a, b) => a.display_order - b.display_order);
+
+  const sortedImages = [...images].sort((a, b) => {
+    if (a.is_primary && !b.is_primary) return -1;
+    if (!a.is_primary && b.is_primary) return 1;
+    return (a.display_order || 0) - (b.display_order || 0);
+  });
   const maxImages = Math.min(sortedImages.length, 5);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current || sortedImages.length <= 1) return;
-    
-    const { left, width } = containerRef.current.getBoundingClientRect();
-    const x = e.clientX - left;
-    const percentage = x / width;
-    const newIndex = Math.min(Math.floor(percentage * maxImages), maxImages - 1);
-    
-    if (newIndex !== currentIndex && newIndex >= 0) {
-      setCurrentIndex(newIndex);
-    }
+  const goTo = useCallback((index: number) => {
+    setCurrentIndex(Math.max(0, Math.min(index, maxImages - 1)));
+  }, [maxImages]);
+
+  const handlePrev = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    goTo(currentIndex - 1);
   };
 
-  const handleMouseLeave = () => {
-    setCurrentIndex(0);
+  const handleNext = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    goTo(currentIndex + 1);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      goTo(diff > 0 ? currentIndex + 1 : currentIndex - 1);
+    }
   };
 
   if (sortedImages.length === 0) {
@@ -48,80 +65,74 @@ export const ImageHoverCarousel = ({ images, className = '', featured = false }:
   }
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className={`relative overflow-hidden ${className}`}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => { setIsHovered(false); setCurrentIndex(0); }}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
-      {/* Main Image with Parallax Effect */}
+      {/* Images */}
       <AnimatePresence mode="wait">
-        <motion.div
+        <motion.img
           key={currentIndex}
-          initial={{ opacity: 0, scale: 1.05 }}
-          animate={{ opacity: 1, scale: 1 }}
+          src={sortedImages[currentIndex].url}
+          alt={sortedImages[currentIndex].alt_text || 'Property image'}
+          className="absolute inset-0 w-full h-full object-cover"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute inset-0"
-        >
-          <motion.img
-            src={sortedImages[currentIndex].url}
-            alt={sortedImages[currentIndex].alt_text || 'Property image'}
-            className="w-full h-full object-cover"
-            initial={{ scale: 1.1 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          />
-        </motion.div>
+          transition={{ duration: 0.25 }}
+        />
       </AnimatePresence>
 
-      {/* Gradient Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20 pointer-events-none" />
+      {/* Subtle gradient */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
 
-      {/* Progress Dots - Modern Airbnb Style */}
-      {sortedImages.length > 1 && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
-          {sortedImages.slice(0, maxImages).map((_, index) => (
-            <motion.div
-              key={index}
-              className="relative"
-              initial={false}
+      {/* Left/Right arrow buttons — Airbnb style */}
+      {sortedImages.length > 1 && isHovered && (
+        <>
+          {currentIndex > 0 && (
+            <button
+              onClick={handlePrev}
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-background/90 border border-border/50 flex items-center justify-center shadow-md hover:shadow-lg hover:scale-105 transition-all"
             >
-              <motion.div
-                className="h-1 rounded-full bg-white/40"
-                animate={{
-                  width: index === currentIndex ? 24 : 6,
-                  backgroundColor: index === currentIndex ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.4)',
-                }}
-                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              />
-            </motion.div>
+              <ChevronLeft className="w-4 h-4 text-foreground" />
+            </button>
+          )}
+          {currentIndex < maxImages - 1 && (
+            <button
+              onClick={handleNext}
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-background/90 border border-border/50 flex items-center justify-center shadow-md hover:shadow-lg hover:scale-105 transition-all"
+            >
+              <ChevronRight className="w-4 h-4 text-foreground" />
+            </button>
+          )}
+        </>
+      )}
+
+      {/* Dot indicators — Airbnb round dots */}
+      {sortedImages.length > 1 && (
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-[5px] z-10">
+          {sortedImages.slice(0, maxImages).map((_, index) => (
+            <button
+              key={index}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); goTo(index); }}
+              className={`w-[6px] h-[6px] rounded-full transition-all duration-300 ${
+                index === currentIndex
+                  ? 'bg-white scale-110'
+                  : 'bg-white/50 hover:bg-white/70'
+              }`}
+            />
           ))}
         </div>
       )}
 
       {/* Image Count Badge */}
       {sortedImages.length > maxImages && (
-        <motion.div 
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="absolute bottom-4 right-4 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md text-white text-xs font-medium z-10"
-        >
-          +{sortedImages.length - maxImages} more
-        </motion.div>
-      )}
-
-      {/* Hover Zone Indicators (subtle) */}
-      {sortedImages.length > 1 && (
-        <div className="absolute inset-0 flex opacity-0 hover:opacity-100 transition-opacity duration-300">
-          {sortedImages.slice(0, maxImages).map((_, index) => (
-            <div
-              key={index}
-              className="flex-1 cursor-pointer"
-              style={{ width: `${100 / maxImages}%` }}
-            />
-          ))}
+        <div className="absolute bottom-3 right-3 px-2 py-1 rounded-full bg-black/50 backdrop-blur-sm text-white text-[10px] z-10">
+          +{sortedImages.length - maxImages}
         </div>
       )}
     </div>
