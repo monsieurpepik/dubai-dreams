@@ -43,9 +43,10 @@ interface CleanPropertyCardProps {
   property: Property;
   index: number;
   variant?: 'default' | 'compact';
+  viewCount?: number;
 }
 
-export const CleanPropertyCard = ({ property, variant = 'default' }: CleanPropertyCardProps) => {
+export const CleanPropertyCard = ({ property, variant = 'default', viewCount }: CleanPropertyCardProps) => {
   const { formatPrice } = useTenant();
   const { isSaved, toggleSave } = useSavedProperties();
   const saved = isSaved(property.id);
