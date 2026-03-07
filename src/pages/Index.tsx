@@ -11,7 +11,7 @@ import { TrustedDevelopersStrip } from "@/components/sections/TrustedDevelopersS
 import { RecentlyAddedSection } from "@/components/sections/RecentlyAddedSection";
 import { LatestInsightsSection } from "@/components/sections/LatestInsightsSection";
 import { HowItWorksMini } from "@/components/sections/HowItWorksMini";
-import { WhyOwningDubaiSection } from "@/components/sections/WhyOwningDubaiSection";
+import { PrivateAdvisorSection } from "@/components/sections/PrivateAdvisorSection";
 import { BackToTop } from "@/components/ui/BackToTop";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import { SEO } from "@/components/SEO";
@@ -35,7 +35,7 @@ const Index = () => {
         <RecentlyAddedSection />
         <LatestInsightsSection />
         <HowItWorksMini />
-        <WhyOwningDubaiSection />
+        <PrivateAdvisorSection />
       </main>
       <Footer />
       <BackToTop />
