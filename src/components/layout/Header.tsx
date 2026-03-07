@@ -8,16 +8,6 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { CurrencySwitcher } from '@/components/ui/CurrencySwitcher';
 import { MenuOverlay } from '@/components/layout/MenuOverlay';
 
-const allNavItems = [
-  { label: 'Properties', href: '/properties' },
-  { label: 'Developers', href: '/developers' },
-  { label: 'Intelligence', href: '/insights' },
-  { label: 'Private Advisor', href: '/advisor' },
-  { label: 'Calculator', href: '/calculator' },
-  { label: 'About', href: '/about' },
-  { label: 'How It Works', href: '/how-it-works' },
-  { label: 'Contact', href: '/contact' },
-];
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
