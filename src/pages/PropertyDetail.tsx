@@ -2,7 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Share2 } from 'lucide-react';
-import { useRef } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -118,6 +118,27 @@ const PropertyDetail = () => {
     enabled: !!property?.id,
   });
 
+  const allImages = (property?.property_images || [])
+    .sort((a: any, b: any) => (a.is_primary ? -1 : b.is_primary ? 1 : (a.display_order || 0) - (b.display_order || 0)))
+    .map((img: any) => img.url)
+    .filter(Boolean);
+
+  const primaryImage = allImages[0] || 
+    'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&h=630&fit=crop';
+
+  const [heroImageIndex, setHeroImageIndex] = useState(0);
+
+  const nextHeroImage = useCallback(() => {
+    if (allImages.length <= 1) return;
+    setHeroImageIndex((i) => (i + 1) % allImages.length);
+  }, [allImages.length]);
+
+  useEffect(() => {
+    if (allImages.length <= 1) return;
+    const timer = setInterval(nextHeroImage, 6000);
+    return () => clearInterval(timer);
+  }, [nextHeroImage, allImages.length]);
+
   const scrollToInquiry = () => {
     inquiryFormRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -167,9 +188,6 @@ const PropertyDetail = () => {
     );
   }
 
-  const primaryImage = property.property_images?.find((img: { is_primary?: boolean }) => img.is_primary)?.url || 
-    property.property_images?.[0]?.url || 
-    'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&h=630&fit=crop';
 
   return (
     <div className="min-h-screen bg-background">
@@ -190,14 +208,25 @@ const PropertyDetail = () => {
       <main className="pt-20 pb-20 md:pb-0">
         {/* Full-Bleed Cinematic Hero Gallery */}
         <section className="relative h-[70vh] md:h-[75vh] overflow-hidden">
-          <motion.img
-            src={primaryImage}
-            alt={property.name}
-            className="absolute inset-0 w-full h-full object-cover"
-            initial={{ scale: 1 }}
-            animate={{ scale: 1.02 }}
-            transition={{ duration: 20, ease: 'linear' }}
-          />
+          {/* Crossfading image layers */}
+          {allImages.length > 0 ? (
+            allImages.map((src: string, i: number) => (
+              <motion.img
+                key={src}
+                src={src}
+                alt={`${property.name} ${i + 1}`}
+                className="absolute inset-0 w-full h-full object-cover"
+                initial={false}
+                animate={{
+                  opacity: i === heroImageIndex ? 1 : 0,
+                  scale: i === heroImageIndex ? 1.02 : 1,
+                }}
+                transition={{ opacity: { duration: 1.5, ease: 'easeInOut' }, scale: { duration: 20, ease: 'linear' } }}
+              />
+            ))
+          ) : (
+            <img src={primaryImage} alt={property.name} className="absolute inset-0 w-full h-full object-cover" />
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/10" />
 
           {/* Back + Share overlay */}
