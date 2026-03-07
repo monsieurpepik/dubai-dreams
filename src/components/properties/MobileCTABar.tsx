@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
+import { Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useTenant } from '@/hooks/useTenant';
 
 interface MobileCTABarProps {
   propertyName: string;
