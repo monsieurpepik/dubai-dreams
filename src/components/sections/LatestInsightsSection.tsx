@@ -47,7 +47,7 @@ export function LatestInsightsSection() {
             <Link
               key={article.id}
               to={`/insights/${article.slug}`}
-              className="group bg-background p-6 md:p-8 hover:bg-secondary/30 transition-colors duration-300"
+              className="group bg-background p-6 md:p-8 rounded-xl hover:bg-secondary/30 hover:shadow-md transition-all duration-300"
             >
               <span className="text-[10px] tracking-[0.15em] text-muted-foreground uppercase">
                 {categoryLabels[article.category]}
