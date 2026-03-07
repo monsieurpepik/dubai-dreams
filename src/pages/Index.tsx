@@ -8,6 +8,7 @@ import { WhyDubaiStrip } from "@/components/sections/WhyDubaiStrip";
 import { EditorialStatement } from "@/components/sections/EditorialStatement";
 import { OffPlanProjectsSection } from "@/components/sections/OffPlanProjectsSection";
 import { TrustedDevelopersStrip } from "@/components/sections/TrustedDevelopersStrip";
+import { ThemedCollections } from "@/components/sections/ThemedCollections";
 import { RecentlyAddedSection } from "@/components/sections/RecentlyAddedSection";
 import { LatestInsightsSection } from "@/components/sections/LatestInsightsSection";
 import { HowItWorksMini } from "@/components/sections/HowItWorksMini";
@@ -30,6 +31,7 @@ const Index = () => {
         <QuickCategories />
         <WhyDubaiStrip />
         <EditorialStatement />
+        <ThemedCollections />
         <OffPlanProjectsSection />
         <TrustedDevelopersStrip />
         <RecentlyAddedSection />
