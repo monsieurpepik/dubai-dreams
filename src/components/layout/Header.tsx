@@ -13,7 +13,6 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const navigate = useNavigate();
   const location = useLocation();
   const { tenant } = useTenant();
   const isMobile = useIsMobile();
