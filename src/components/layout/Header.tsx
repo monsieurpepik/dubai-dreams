@@ -36,10 +36,6 @@ export function Header() {
     return () => window.removeEventListener('open-mobile-menu', handler);
   }, []);
 
-  const handleNavClick = (href: string) => {
-    setIsMenuOpen(false);
-    navigate(href);
-  };
 
   const brandName = tenant?.brand_name || 'OwningDubai';
 
