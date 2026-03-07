@@ -13,7 +13,7 @@ export const TrustedDevelopersStrip = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('developers')
-        .select('id, name, logo_url')
+        .select('id, name, logo_url, slug')
         .order('total_projects', { ascending: false })
         .limit(6);
       if (error) throw error;
