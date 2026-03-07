@@ -3,6 +3,7 @@ import type { Tenant } from '@/types/tenant';
 import { DEFAULT_TENANT_SLUG } from '@/types/tenant';
 import { detectTenantSlug, fetchTenant } from '@/services/tenantService';
 import { formatPrice, formatPriceRange, getCurrencySymbol } from '@/utils/currency';
+import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
 
 interface TenantContextValue {
   tenant: Tenant | null;
