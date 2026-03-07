@@ -1,7 +1,9 @@
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { ArrowRight } from 'lucide-react';
 
 export const TrustedDevelopersStrip = () => {
   const [ref, inView] = useInView({ threshold: 0.3, triggerOnce: true });
@@ -11,7 +13,7 @@ export const TrustedDevelopersStrip = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('developers')
-        .select('id, name, logo_url')
+        .select('id, name, logo_url, slug')
         .order('total_projects', { ascending: false })
         .limit(6);
       if (error) throw error;
@@ -42,6 +44,7 @@ export const TrustedDevelopersStrip = () => {
                 animate={inView ? { opacity: 1 } : {}}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
+              <Link to={`/developers/${developer.slug}`}>
                 {developer.logo_url ? (
                   <img
                     src={developer.logo_url}
@@ -53,8 +56,16 @@ export const TrustedDevelopersStrip = () => {
                     {developer.name}
                   </span>
                 )}
+              </Link>
               </motion.div>
             ))}
+          </div>
+
+          <div className="mt-8 text-center">
+            <Link to="/developers" className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors group">
+              <span>View all developers</span>
+              <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
         </motion.div>
       </div>

@@ -27,6 +27,7 @@ import Insights from "./pages/Insights";
 import InsightDetail from "./pages/InsightDetail";
 import Advisor from "./pages/Advisor";
 import DeveloperProfilePage from "./pages/DeveloperProfile";
+import DevelopersIndex from "./pages/Developers";
 import DeveloperLogin from "./pages/developer/Login";
 import DeveloperDashboard from "./pages/developer/Dashboard";
 import DeveloperProperties from "./pages/developer/Properties";
@@ -71,6 +72,7 @@ const AnimatedRoutes = () => {
         <Route path="/insights" element={<PageTransition><Insights /></PageTransition>} />
         <Route path="/insights/:slug" element={<PageTransition><InsightDetail /></PageTransition>} />
         <Route path="/advisor" element={<PageTransition><Advisor /></PageTransition>} />
+        <Route path="/developers" element={<PageTransition><DevelopersIndex /></PageTransition>} />
         <Route path="/developers/:slug" element={<PageTransition><DeveloperProfilePage /></PageTransition>} />
         
         {/* Developer Portal Routes */}
