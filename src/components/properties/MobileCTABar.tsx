@@ -17,6 +17,9 @@ const formatPrice = (price: number): string => {
 };
 
 export const MobileCTABar = ({ propertyName, priceFrom, onInquireClick }: MobileCTABarProps) => {
+  const { tenant } = useTenant();
+  const contactPhone = tenant?.phone;
+
   return (
     <motion.div
       initial={{ y: 100, opacity: 0 }}
@@ -35,12 +38,23 @@ export const MobileCTABar = ({ propertyName, priceFrom, onInquireClick }: Mobile
           <span className="text-xs text-muted-foreground">Off-plan</span>
         </div>
         
-        <Button 
-          onClick={onInquireClick}
-          className="w-full h-12 bg-foreground text-background hover:bg-foreground/90 text-xs uppercase tracking-wide"
-        >
-          Request Access
-        </Button>
+        <div className="flex gap-2">
+          {contactPhone && (
+            <a
+              href={`tel:${contactPhone}`}
+              className="flex items-center justify-center h-12 w-12 border border-border/50 text-foreground shrink-0"
+              aria-label="Call"
+            >
+              <Phone className="w-4 h-4" />
+            </a>
+          )}
+          <Button 
+            onClick={onInquireClick}
+            className="flex-1 h-12 bg-foreground text-background hover:bg-foreground/90 text-xs uppercase tracking-wide"
+          >
+            Request Access
+          </Button>
+        </div>
       </div>
     </motion.div>
   );

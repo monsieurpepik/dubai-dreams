@@ -141,6 +141,9 @@ export function Footer() {
             <span>© {new Date().getFullYear()}</span>
           </div>
           <div className="flex items-center gap-6">
+            {regulatoryBody && regulatoryNumber && (
+              <span>{regulatoryBody} ORN: {regulatoryNumber}</span>
+            )}
             <Link to="/privacy" className="hover:text-foreground transition-colors duration-300">
               Privacy
             </Link>

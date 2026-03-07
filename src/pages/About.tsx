@@ -196,6 +196,25 @@ const About = () => {
           </div>
         </section>
 
+        {/* Regulatory Compliance */}
+        {regulatoryBody && regulatoryNumber && (
+          <section className="py-12 md:py-16 bg-muted/30">
+            <div className="container-wide">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-center"
+              >
+                <p className="text-[10px] tracking-[0.2em] uppercase text-muted-foreground/50 mb-3">Regulatory Compliance</p>
+                <p className="text-sm text-muted-foreground">
+                  Licensed by {regulatoryBody} — Office Registration Number (ORN): <span className="text-foreground font-medium">{regulatoryNumber}</span>
+                </p>
+              </motion.div>
+            </div>
+          </section>
+        )}
+
         {/* CTA — cinematic band */}
         <section className="relative py-20 md:py-28 overflow-hidden">
           <div className="absolute inset-0">

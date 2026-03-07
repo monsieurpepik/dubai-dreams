@@ -393,7 +393,7 @@ const PropertyDetail = () => {
 
               <AffordabilityCTA priceFrom={property.price_from} />
               <div ref={inquiryFormRef}>
-                <InquiryForm propertyId={property.id} propertyName={property.name} />
+                <PropertyInquiryForm propertyId={property.id} propertyName={property.name} goldenVisaEligible={property.golden_visa_eligible || false} />
               </div>
             </div>
           </div>

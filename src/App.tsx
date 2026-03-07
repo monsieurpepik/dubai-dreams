@@ -103,6 +103,7 @@ const App = () => (
                 <CustomCursor />
                 <AnimatedRoutes />
                 <MobileTabBar />
+                <WhatsAppButton />
               </AnalyticsWrapper>
             </BrowserRouter>
           </TooltipProvider>
