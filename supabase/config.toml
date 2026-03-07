@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.check-saved-searches]
 verify_jwt = false
+
+[functions.qualify-lead]
+verify_jwt = false

@@ -26,6 +26,7 @@ const Index = () => {
         <EditorialStatement />
         <OffPlanProjectsSection />
         <RecentlyAddedSection />
+        <LatestInsightsSection />
         <WhyOwningDubaiSection />
       </main>
       <Footer />

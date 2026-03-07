@@ -37,7 +37,7 @@ export default function Insights() {
         .order('published_at', { ascending: false });
 
       if (activeCategory !== 'all') {
-        query = query.eq('category', activeCategory);
+        query = query.eq('category', activeCategory as any);
       }
 
       const { data, error } = await query;
