@@ -73,7 +73,7 @@ const ExpandableDescription = ({ text }: { text: string }) => {
 const PropertyDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const inquiryFormRef = useRef<HTMLDivElement>(null);
-  const { formatPrice, tenant } = useTenant();
+  const { formatPrice, tenant, getPropertyWhatsAppUrl } = useTenant();
   const cityName = tenant?.office_location?.city || 'Dubai';
 
   const { data: property, isLoading, error } = useQuery({
