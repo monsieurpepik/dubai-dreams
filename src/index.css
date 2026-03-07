@@ -232,8 +232,8 @@
   }
 
   .card-premium {
-    @apply bg-card overflow-hidden transition-opacity duration-500
-           hover:opacity-90;
+    @apply bg-card overflow-hidden rounded-xl transition-all duration-500
+           hover:opacity-90 hover:shadow-md;
   }
 
   .glass {
