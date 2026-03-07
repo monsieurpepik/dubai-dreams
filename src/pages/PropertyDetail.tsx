@@ -45,8 +45,32 @@ const formatDate = (dateString: string | null): string => {
   const quarter = Math.ceil((date.getMonth() + 1) / 3);
   return `Q${quarter} ${date.getFullYear()}`;
 };
+const ExpandableDescription = ({ text }: { text: string }) => {
+  const [expanded, setExpanded] = useState(false);
+  const isLong = text.length > 280;
 
-const PropertyDetail = () => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+    >
+      <p className={`text-muted-foreground leading-relaxed text-lg max-w-2xl ${!expanded && isLong ? 'line-clamp-4' : ''}`}>
+        {text}
+      </p>
+      {isLong && (
+        <button
+          onClick={() => setExpanded(!expanded)}
+          className="mt-2 text-sm font-medium text-foreground underline underline-offset-4 hover:no-underline transition-colors"
+        >
+          {expanded ? 'Show less' : 'Show more'}
+        </button>
+      )}
+    </motion.div>
+  );
+};
+
+
   const { slug } = useParams<{ slug: string }>();
   const inquiryFormRef = useRef<HTMLDivElement>(null);
   const { formatPrice, tenant } = useTenant();
