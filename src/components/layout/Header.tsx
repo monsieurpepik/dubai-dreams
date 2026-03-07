@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, Search } from 'lucide-react';
 import { useTenant } from '@/hooks/useTenant';
 import { SearchOverlay } from '@/components/properties/SearchOverlay';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const allNavItems = [
   { label: 'Properties', href: '/properties' },
@@ -23,6 +24,8 @@ export function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const { tenant } = useTenant();
+  const isMobile = useIsMobile();
+  const isHomepage = location.pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -42,6 +45,9 @@ export function Header() {
 
   const brandName = tenant?.brand_name || 'OwningDubai';
 
+  // Show search pill when scrolled on homepage, or always on other pages
+  const showSearchPill = (!isHomepage || isScrolled);
+
   return (
     <>
       <motion.header
@@ -55,24 +61,56 @@ export function Header() {
         }`}
       >
         <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 lg:px-12 h-16 md:h-20">
-          {/* Empty left spacer for centering */}
-          <div className="w-16" />
-
-          {/* Brand — centered */}
+          {/* Brand — left on desktop when pill is showing, centered otherwise */}
           <Link
             to="/"
-            className="absolute left-1/2 -translate-x-1/2 font-serif text-lg md:text-xl font-light tracking-[0.08em] text-foreground hover:opacity-70 transition-opacity duration-300"
+            className={`font-serif text-lg md:text-xl font-light tracking-[0.08em] text-foreground hover:opacity-70 transition-all duration-300 ${
+              showSearchPill ? 'relative' : 'absolute left-1/2 -translate-x-1/2'
+            }`}
           >
             {brandName}
           </Link>
 
-          {/* Menu — right */}
-          <button
-            onClick={() => setIsMenuOpen(true)}
-            className="text-[11px] tracking-[0.15em] text-muted-foreground hover:text-foreground transition-opacity duration-300"
-          >
-            Menu
-          </button>
+          {/* Search Pill — center */}
+          <AnimatePresence>
+            {showSearchPill && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.9, y: -10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: -10 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                onClick={() => setIsSearchOpen(true)}
+                className="hidden md:flex items-center gap-3 px-5 py-2 border border-border/40 rounded-full bg-background/60 backdrop-blur-sm hover:shadow-md hover:border-border/60 transition-all duration-300 group"
+              >
+                <Search className="w-3.5 h-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
+                <div className="flex items-center gap-0 text-xs text-muted-foreground">
+                  <span className="pr-3 border-r border-border/40">Area</span>
+                  <span className="px-3 border-r border-border/40">Bedrooms</span>
+                  <span className="pl-3">Budget</span>
+                </div>
+              </motion.button>
+            )}
+          </AnimatePresence>
+
+          {/* Mobile search icon + Menu — right */}
+          <div className="flex items-center gap-4">
+            {showSearchPill && isMobile && (
+              <motion.button
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                onClick={() => setIsSearchOpen(true)}
+                className="p-2 -mr-2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Search className="w-4 h-4" />
+              </motion.button>
+            )}
+            <button
+              onClick={() => setIsMenuOpen(true)}
+              className="text-[11px] tracking-[0.15em] text-muted-foreground hover:text-foreground transition-opacity duration-300"
+            >
+              Menu
+            </button>
+          </div>
         </div>
       </motion.header>
 
