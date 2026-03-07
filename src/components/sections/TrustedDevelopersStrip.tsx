@@ -60,6 +60,13 @@ export const TrustedDevelopersStrip = () => {
               </motion.div>
             ))}
           </div>
+
+          <div className="mt-8 text-center">
+            <Link to="/developers" className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors group">
+              <span>View all developers</span>
+              <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
         </motion.div>
       </div>
     </section>

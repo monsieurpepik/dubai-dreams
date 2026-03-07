@@ -72,6 +72,7 @@ const AnimatedRoutes = () => {
         <Route path="/insights" element={<PageTransition><Insights /></PageTransition>} />
         <Route path="/insights/:slug" element={<PageTransition><InsightDetail /></PageTransition>} />
         <Route path="/advisor" element={<PageTransition><Advisor /></PageTransition>} />
+        <Route path="/developers" element={<PageTransition><DevelopersIndex /></PageTransition>} />
         <Route path="/developers/:slug" element={<PageTransition><DeveloperProfilePage /></PageTransition>} />
         
         {/* Developer Portal Routes */}
