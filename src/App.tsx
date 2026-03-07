@@ -9,6 +9,7 @@ import { TenantProvider } from "@/contexts/TenantContext";
 import { DeveloperProvider } from "@/contexts/DeveloperContext";
 import { usePageTracking } from "@/hooks/usePageTracking";
 import { CustomCursor } from "@/components/ui/CustomCursor";
+import { MobileTabBar } from "@/components/layout/MobileTabBar";
 import Index from "./pages/Index";
 import Properties from "./pages/Properties";
 import PropertyDetail from "./pages/PropertyDetail";
