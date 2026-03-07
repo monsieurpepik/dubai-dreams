@@ -53,31 +53,45 @@ export default function Insights() {
     <div className="min-h-screen bg-background">
       <SEO title="Market Intelligence — OwningDubai" description="Weekly briefings, project deep-dives, and investor playbooks for Dubai off-plan real estate." />
       <Header />
-      <main className="pt-20 md:pt-24">
-        {/* Hero */}
-        <section className="py-16 md:py-24 border-b border-border/10">
-          <div className="container-wide">
-            <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl text-foreground mb-4">
-              Intelligence
-            </h1>
-            <p className="text-muted-foreground text-sm max-w-lg">
-              Market briefings, project analysis, and investor playbooks — curated weekly by our research team.
-            </p>
+      <main>
+        {/* Cinematic Hero */}
+        <section className="relative h-[50vh] min-h-[400px] flex items-end overflow-hidden">
+          <div className="absolute inset-0">
+            <img
+              src="/hero-dubai-skyline.jpeg"
+              alt="Dubai skyline"
+              className="w-full h-full object-cover scale-105 animate-[kenburns_20s_ease-in-out_infinite_alternate]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-foreground via-foreground/60 to-foreground/20" />
           </div>
-        </section>
 
-        {/* Category Tabs */}
-        <section className="border-b border-border/10">
-          <div className="container-wide">
-            <div className="flex gap-6 overflow-x-auto scrollbar-hide py-4">
+          <div className="relative container-wide pb-12 md:pb-16 z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <p className="text-[10px] tracking-[0.2em] uppercase text-background/50 mb-3">
+                Research & Analysis
+              </p>
+              <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-background mb-3">
+                Intelligence
+              </h1>
+              <p className="text-background/50 text-sm max-w-lg">
+                Market briefings, project analysis, and investor playbooks — curated weekly by our research team.
+              </p>
+            </motion.div>
+
+            {/* Category Tabs — glassmorphic bar */}
+            <div className="mt-8 inline-flex gap-1 bg-white/[0.08] backdrop-blur-xl border border-white/[0.1] rounded-sm p-1.5">
               {categories.map((cat) => (
                 <button
                   key={cat.value}
                   onClick={() => setActiveCategory(cat.value)}
-                  className={`text-xs tracking-[0.1em] whitespace-nowrap transition-colors duration-300 pb-1 border-b ${
+                  className={`px-4 py-2 text-[10px] tracking-[0.12em] uppercase whitespace-nowrap transition-all duration-300 rounded-sm ${
                     activeCategory === cat.value
-                      ? 'text-foreground border-foreground'
-                      : 'text-muted-foreground border-transparent hover:text-foreground'
+                      ? 'bg-background text-foreground'
+                      : 'text-background/60 hover:text-background'
                   }`}
                 >
                   {cat.label}
@@ -87,36 +101,39 @@ export default function Insights() {
           </div>
         </section>
 
-        {/* Featured Article */}
+        {/* Featured Article — Full-width cinematic card */}
         {featured && (
           <section className="py-16 md:py-20 border-b border-border/10">
             <div className="container-wide">
               <Link to={`/insights/${featured.slug}`} className="group block">
-                <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+                <div className="relative aspect-[21/9] overflow-hidden bg-muted rounded-sm">
                   {featured.cover_image_url && (
-                    <div className="aspect-[4/3] overflow-hidden bg-muted">
-                      <img
-                        src={featured.cover_image_url}
-                        alt={featured.title}
-                        className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
-                      />
-                    </div>
+                    <img
+                      src={featured.cover_image_url}
+                      alt={featured.title}
+                      className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-1000"
+                    />
                   )}
-                  <div>
-                    <span className="text-[10px] tracking-[0.15em] text-muted-foreground uppercase">
-                      {categoryLabels[featured.category]} · Featured
-                    </span>
-                    <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl text-foreground mt-3 mb-4 group-hover:opacity-70 transition-opacity duration-300">
-                      {featured.title}
-                    </h2>
-                    {featured.excerpt && (
-                      <p className="text-muted-foreground text-sm leading-relaxed mb-4">
-                        {featured.excerpt}
-                      </p>
-                    )}
-                    <span className="text-[11px] text-muted-foreground">
-                      {featured.published_at && format(new Date(featured.published_at), 'MMM d, yyyy')} · {featured.reading_time_min} min read
-                    </span>
+                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/90 via-foreground/30 to-transparent" />
+
+                  {/* Glassmorphic overlay card */}
+                  <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
+                    <div className="max-w-2xl">
+                      <span className="inline-block px-3 py-1 text-[10px] tracking-[0.15em] uppercase bg-white/[0.1] backdrop-blur-md border border-white/[0.1] text-background/80 rounded-sm mb-4">
+                        {categoryLabels[featured.category]} · Featured
+                      </span>
+                      <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl text-background mb-3 group-hover:opacity-80 transition-opacity duration-300">
+                        {featured.title}
+                      </h2>
+                      {featured.excerpt && (
+                        <p className="text-background/60 text-sm leading-relaxed mb-4 max-w-xl">
+                          {featured.excerpt}
+                        </p>
+                      )}
+                      <span className="text-[11px] text-background/40">
+                        {featured.published_at && format(new Date(featured.published_at), 'MMM d, yyyy')} · {featured.reading_time_min} min read
+                      </span>
+                    </div>
                   </div>
                 </div>
               </Link>
@@ -124,17 +141,17 @@ export default function Insights() {
           </section>
         )}
 
-        {/* Article Grid */}
+        {/* Article Grid — image-forward with hover scale */}
         <section className="py-16 md:py-20">
           <div className="container-wide">
             {isLoading ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {[1, 2, 3].map((i) => (
                   <div key={i} className="animate-pulse">
-                    <div className="aspect-[3/2] bg-muted mb-4" />
-                    <div className="h-3 bg-muted w-24 mb-3" />
-                    <div className="h-5 bg-muted w-3/4 mb-2" />
-                    <div className="h-3 bg-muted w-1/2" />
+                    <div className="aspect-[3/2] bg-muted mb-4 rounded-sm" />
+                    <div className="h-3 bg-muted w-24 mb-3 rounded-sm" />
+                    <div className="h-5 bg-muted w-3/4 mb-2 rounded-sm" />
+                    <div className="h-3 bg-muted w-1/2 rounded-sm" />
                   </div>
                 ))}
               </div>
@@ -153,12 +170,13 @@ export default function Insights() {
                   >
                     <Link to={`/insights/${article.slug}`} className="group block">
                       {article.cover_image_url && (
-                        <div className="aspect-[3/2] overflow-hidden bg-muted mb-4">
+                        <div className="relative aspect-[3/2] overflow-hidden bg-muted mb-4 rounded-sm">
                           <img
                             src={article.cover_image_url}
                             alt={article.title}
-                            className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
+                            className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-700"
                           />
+                          <div className="absolute inset-0 bg-gradient-to-t from-foreground/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                         </div>
                       )}
                       <span className="text-[10px] tracking-[0.15em] text-muted-foreground uppercase">
