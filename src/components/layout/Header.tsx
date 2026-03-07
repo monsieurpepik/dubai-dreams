@@ -141,6 +141,7 @@ export function Header() {
               <button
                 onClick={() => setIsMenuOpen(false)}
                 className="text-muted-foreground hover:text-foreground transition-opacity duration-300"
+                aria-label="Close navigation menu"
               >
                 <X className="w-5 h-5" />
               </button>
