@@ -38,6 +38,13 @@ export function Header() {
     return () => { document.body.style.overflow = ''; };
   }, [isMenuOpen]);
 
+  // Listen for mobile tab bar menu trigger
+  useEffect(() => {
+    const handler = () => setIsMenuOpen(true);
+    window.addEventListener('open-mobile-menu', handler);
+    return () => window.removeEventListener('open-mobile-menu', handler);
+  }, []);
+
   const handleNavClick = (href: string) => {
     setIsMenuOpen(false);
     navigate(href);
@@ -50,6 +57,10 @@ export function Header() {
 
   return (
     <>
+      {/* Skip to content */}
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[70] focus:bg-foreground focus:text-background focus:px-4 focus:py-2 focus:text-xs">
+        Skip to content
+      </a>
       <motion.header
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -107,6 +118,7 @@ export function Header() {
             <button
               onClick={() => setIsMenuOpen(true)}
               className="text-[11px] tracking-[0.15em] text-muted-foreground hover:text-foreground transition-opacity duration-300"
+              aria-label="Open navigation menu"
             >
               Menu
             </button>
@@ -129,6 +141,7 @@ export function Header() {
               <button
                 onClick={() => setIsMenuOpen(false)}
                 className="text-muted-foreground hover:text-foreground transition-opacity duration-300"
+                aria-label="Close navigation menu"
               >
                 <X className="w-5 h-5" />
               </button>

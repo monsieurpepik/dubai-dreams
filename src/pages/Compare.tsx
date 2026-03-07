@@ -1,12 +1,13 @@
 import { useSearchParams, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Columns } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { SEO } from '@/components/SEO';
 import { useTenant } from '@/hooks/useTenant';
+import { EmptyState } from '@/components/ui/EmptyState';
 
 const formatDate = (d: string | null) => {
   if (!d) return 'TBA';
@@ -68,10 +69,13 @@ const Compare = () => {
         <section className="py-12 md:py-16">
           <div className="container-wide">
             {ids.length === 0 ? (
-              <div className="text-center py-24">
-                <p className="text-muted-foreground text-lg mb-4">No properties selected for comparison.</p>
-                <Link to="/properties" className="btn-outline inline-block">Browse Properties</Link>
-              </div>
+              <EmptyState
+                icon={Columns}
+                title="No properties to compare"
+                description="Select 2–4 properties from the listings page to see them side by side."
+                actionLabel="Browse Properties"
+                actionHref="/properties"
+              />
             ) : isLoading ? (
               <div className="text-center py-24 text-muted-foreground">Loading...</div>
             ) : (
@@ -87,7 +91,7 @@ const Compare = () => {
                             <Link to={`/properties/${p.slug}`} className="group block">
                               {img && (
                                 <div className="aspect-[4/3] overflow-hidden mb-3 bg-muted">
-                                  <img src={img} alt={p.name} className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500" />
+                                  <img src={img} alt={p.name} className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500" loading="lazy" />
                                 </div>
                               )}
                               <span className="font-serif text-lg text-foreground group-hover:text-muted-foreground transition-colors">

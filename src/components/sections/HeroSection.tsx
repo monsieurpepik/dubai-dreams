@@ -80,7 +80,7 @@ export function HeroSection() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
-                className="text-[10px] tracking-[0.35em] text-white/40 mb-6"
+                className="text-[10px] tracking-[0.35em] text-white/60 mb-6"
               >
                 OFF-PLAN PROPERTIES
               </motion.p>
@@ -100,7 +100,7 @@ export function HeroSection() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
-                className="mt-5 text-sm md:text-base text-white/50 font-light max-w-lg leading-relaxed"
+                className="mt-5 text-sm md:text-base text-white/60 font-light max-w-lg leading-relaxed"
               >
                 Curated investment-grade projects from {cityName}'s most trusted developers
               </motion.p>
