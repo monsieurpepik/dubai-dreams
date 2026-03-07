@@ -105,6 +105,22 @@ export function Footer() {
         </div>
       </div>
 
+      {/* Contact Row */}
+      <div className="container-wide py-8 border-b border-border/10">
+        <div className="flex flex-wrap items-center gap-6 md:gap-10">
+          {contactPhone && (
+            <a href={`tel:${contactPhone}`} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <Phone className="w-4 h-4" />
+              <span>{contactPhone}</span>
+            </a>
+          )}
+          <a href={`mailto:${contactEmail}`} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <Mail className="w-4 h-4" />
+            <span>{contactEmail}</span>
+          </a>
+        </div>
+      </div>
+
       {/* Columns */}
       <div className="container-wide py-14 md:py-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-8">
