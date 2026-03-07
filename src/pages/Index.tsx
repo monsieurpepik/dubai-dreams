@@ -1,6 +1,7 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
+import { ExclusiveSelectionsSection } from "@/components/sections/ExclusiveSelectionsSection";
 import { SearchEntry } from "@/components/properties/SearchEntry";
 import { QuickCategories } from "@/components/sections/QuickCategories";
 import { WhyDubaiStrip } from "@/components/sections/WhyDubaiStrip";
@@ -24,6 +25,7 @@ const Index = () => {
       <Header />
       <main>
         <HeroSection />
+        <ExclusiveSelectionsSection />
         <SearchEntry />
         <QuickCategories />
         <WhyDubaiStrip />
