@@ -51,7 +51,7 @@ export const ExclusiveSelectionsSection = () => {
   if (properties.length === 0) return null;
 
   return (
-    <section className="py-20 md:py-28 bg-background overflow-hidden">
+    <section className="py-16 md:py-24 bg-background overflow-hidden">
       {/* Header */}
       <div className="container-wide flex items-end justify-between mb-10 md:mb-14">
         <div>

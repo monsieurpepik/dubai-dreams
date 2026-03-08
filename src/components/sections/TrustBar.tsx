@@ -1,18 +1,35 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Users, Building2, TrendingUp } from 'lucide-react';
-
-const stats = [
-  { icon: Users, value: '2,400+', label: 'Investors from 47 countries' },
-  { icon: TrendingUp, value: 'AED 1.2B+', label: 'In property matched' },
-  { icon: Building2, value: '50+', label: 'Verified developers' },
-];
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 
 export function TrustBar() {
   const [ref, inView] = useInView({ threshold: 0.5, triggerOnce: true });
 
+  const { data: counts } = useQuery({
+    queryKey: ['trust-bar-counts'],
+    queryFn: async () => {
+      const [devResult, propResult] = await Promise.all([
+        supabase.from('developers').select('id', { count: 'exact', head: true }),
+        supabase.from('properties').select('id', { count: 'exact', head: true }).eq('listing_status', 'published'),
+      ]);
+      return {
+        developers: devResult.count || 0,
+        properties: propResult.count || 0,
+      };
+    },
+    staleTime: 60_000,
+  });
+
+  const stats = [
+    { icon: Building2, value: `${counts?.developers || 0}+`, label: 'Verified developers' },
+    { icon: TrendingUp, value: `${counts?.properties || 0}+`, label: 'Off-plan projects listed' },
+    { icon: Users, value: '0%', label: 'Income tax on returns' },
+  ];
+
   return (
-    <section ref={ref} className="py-8 md:py-10 border-b border-border/10 bg-muted/30">
+    <section ref={ref} className="py-8 md:py-10 border-b border-border/30 bg-muted/30">
       <div className="container-wide">
         <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-16">
           {stats.map((stat, i) => (

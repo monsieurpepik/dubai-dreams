@@ -220,7 +220,8 @@ export function HeroSection() {
               </motion.div>
             </div>
 
-            {/* Right — Floating Property Card */}
+            {/* Right — Floating Property Card (hidden on mobile) */}
+            <div className="hidden md:block">
             <HeroPropertyCard
               properties={featuredProperties}
               activeIndex={activeIndex}
@@ -229,6 +230,7 @@ export function HeroSection() {
               goPrev={goPrev}
               formatPrice={formatPrice}
             />
+            </div>
           </div>
         </div>
       </div>

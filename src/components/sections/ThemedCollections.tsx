@@ -20,18 +20,6 @@ const collections: CollectionConfig[] = [
     filter: (q) => q.eq('golden_visa_eligible', true),
     link: '/properties?collection=golden-visa',
   },
-  {
-    title: 'Waterfront Living',
-    subtitle: 'Sea views and beachfront residences',
-    filter: (q) => q.contains('view_type', ['Sea View']),
-    link: '/properties?collection=waterfront',
-  },
-  {
-    title: 'High Yield Investments',
-    subtitle: 'Projected returns above 7%',
-    filter: (q) => q.gte('roi_estimate', 7),
-    link: '/properties?collection=high-yield',
-  },
 ];
 
 const CollectionRow = ({ config, index }: { config: CollectionConfig; index: number }) => {
@@ -79,7 +67,7 @@ const CollectionRow = ({ config, index }: { config: CollectionConfig; index: num
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-80px' }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
-      className="py-12 md:py-16 overflow-hidden"
+      className="py-16 md:py-24 overflow-hidden"
     >
       {/* Header */}
       <div className="container-wide flex items-end justify-between mb-8">

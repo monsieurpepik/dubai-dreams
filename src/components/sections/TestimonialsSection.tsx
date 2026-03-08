@@ -45,7 +45,7 @@ export const TestimonialsSection = () => {
   if (!isLoading && !testimonials?.length) return null;
 
   return (
-    <section className="py-28 md:py-36 lg:py-44 bg-secondary/30">
+    <section className="py-16 md:py-24 bg-secondary/30">
       <div className="container-wide mb-16 md:mb-20">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
