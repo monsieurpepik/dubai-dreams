@@ -133,6 +133,7 @@ const Areas = () => {
                   const tags = areaTags[area.area];
                   const count = propertyCounts?.[area.area] || 0;
                   const isPositive = area.trend_percentage >= 0;
+                  const isSelected = compareAreas.includes(area.area);
 
                   return (
                     <motion.div
@@ -141,7 +142,18 @@ const Areas = () => {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: index * 0.03 }}
+                      className="relative"
                     >
+                      {/* Compare checkbox */}
+                      <button
+                        onClick={(e) => { e.preventDefault(); toggleCompare(area.area); }}
+                        className={`absolute top-3 right-3 z-10 p-1 transition-colors ${
+                          isSelected ? 'text-accent' : 'text-muted-foreground/40 hover:text-muted-foreground'
+                        }`}
+                        title={isSelected ? 'Remove from comparison' : 'Add to comparison'}
+                      >
+                        {isSelected ? <CheckSquare className="w-4 h-4" /> : <Square className="w-4 h-4" />}
+                      </button>
                       <Link
                         to={`/areas/${slug}`}
                         className="group block border border-border/30 hover:border-border/60 transition-all duration-300 p-6 h-full"
