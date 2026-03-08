@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Plus, TrendingUp, TrendingDown, ArrowUpRight, Layers } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
@@ -19,8 +19,28 @@ const MAX_COMPARE = 3;
 
 export const AreaCompareTool = ({ allAreas, propertyCounts }: AreaCompareToolProps) => {
   const { formatPrice } = useTenant();
-  const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
+  const location = useLocation();
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Parse initial areas from URL search params
+  const initialAreas = useMemo(() => {
+    const params = new URLSearchParams(location.search);
+    const areas = params.get('compare')?.split(',').map(decodeURIComponent) || [];
+    return areas.filter(a => allAreas.some(d => d.area === a)).slice(0, MAX_COMPARE);
+  }, [location.search, allAreas]);
+
+  const [selectedAreas, setSelectedAreas] = useState<string[]>(initialAreas);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
+
+  // Scroll into view and pre-select when arriving with compare params
+  useEffect(() => {
+    if (initialAreas.length > 0 && containerRef.current) {
+      setSelectedAreas(initialAreas);
+      setTimeout(() => {
+        containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
+    }
+  }, [initialAreas]);
 
   const addArea = (areaName: string) => {
     if (selectedAreas.length < MAX_COMPARE && !selectedAreas.includes(areaName)) {
@@ -49,7 +69,7 @@ export const AreaCompareTool = ({ allAreas, propertyCounts }: AreaCompareToolPro
   const availableAreas = allAreas.filter(a => !selectedAreas.includes(a.area)).sort((a, b) => a.area.localeCompare(b.area));
 
   return (
-    <section className="py-12 md:py-16 border-b border-border/30">
+    <section ref={containerRef} id="compare" className="py-12 md:py-16 border-b border-border/30">
       <div className="container-wide">
         <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-2 flex items-center gap-3">
           <Layers className="w-5 h-5 text-accent" />

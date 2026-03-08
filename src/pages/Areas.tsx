@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { motion } from 'framer-motion';
-import { TrendingUp, TrendingDown, ArrowUpRight, SortAsc, MapPin } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { TrendingUp, TrendingDown, ArrowUpRight, SortAsc, MapPin, CheckSquare, Square, Layers } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
@@ -14,7 +14,22 @@ type SortOption = 'alphabetical' | 'price-high' | 'price-low' | 'growth';
 
 const Areas = () => {
   const [sort, setSort] = useState<SortOption>('growth');
+  const [compareAreas, setCompareAreas] = useState<string[]>([]);
   const { formatPrice } = useTenant();
+  const navigate = useNavigate();
+
+  const toggleCompare = (areaName: string) => {
+    setCompareAreas(prev =>
+      prev.includes(areaName)
+        ? prev.filter(a => a !== areaName)
+        : prev.length < 3 ? [...prev, areaName] : prev
+    );
+  };
+
+  const goToCompare = () => {
+    const params = compareAreas.map(encodeURIComponent).join(',');
+    navigate(`/market?compare=${params}#compare`);
+  };
 
   const { data: marketData, isLoading } = useQuery({
     queryKey: ['all-area-market-data'],
@@ -118,6 +133,7 @@ const Areas = () => {
                   const tags = areaTags[area.area];
                   const count = propertyCounts?.[area.area] || 0;
                   const isPositive = area.trend_percentage >= 0;
+                  const isSelected = compareAreas.includes(area.area);
 
                   return (
                     <motion.div
@@ -126,7 +142,18 @@ const Areas = () => {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: index * 0.03 }}
+                      className="relative"
                     >
+                      {/* Compare checkbox */}
+                      <button
+                        onClick={(e) => { e.preventDefault(); toggleCompare(area.area); }}
+                        className={`absolute top-3 right-3 z-10 p-1 transition-colors ${
+                          isSelected ? 'text-accent' : 'text-muted-foreground/40 hover:text-muted-foreground'
+                        }`}
+                        title={isSelected ? 'Remove from comparison' : 'Add to comparison'}
+                      >
+                        {isSelected ? <CheckSquare className="w-4 h-4" /> : <Square className="w-4 h-4" />}
+                      </button>
                       <Link
                         to={`/areas/${slug}`}
                         className="group block border border-border/30 hover:border-border/60 transition-all duration-300 p-6 h-full"
@@ -221,6 +248,27 @@ const Areas = () => {
             </div>
           </div>
         </section>
+
+        {/* Floating Compare CTA */}
+        <AnimatePresence>
+          {compareAreas.length >= 2 && (
+            <motion.div
+              initial={{ y: 80, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 80, opacity: 0 }}
+              className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50"
+            >
+              <button
+                onClick={goToCompare}
+                className="flex items-center gap-3 px-6 py-3 bg-foreground text-background text-sm font-medium tracking-wider uppercase shadow-lg hover:opacity-90 transition-opacity"
+              >
+                <Layers className="w-4 h-4" />
+                Compare {compareAreas.length} Areas
+                <ArrowUpRight className="w-4 h-4" />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
       <Footer />
     </div>
