@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { TenantProvider } from "@/contexts/TenantContext";
 import { DeveloperProvider } from "@/contexts/DeveloperContext";
 import { usePageTracking } from "@/hooks/usePageTracking";
-import { CustomCursor } from "@/components/ui/CustomCursor";
+
 import { MobileTabBar } from "@/components/layout/MobileTabBar";
 import { WhatsAppButton } from "@/components/properties/WhatsAppButton";
 import Index from "./pages/Index";
@@ -100,7 +100,7 @@ const App = () => (
             <Sonner />
             <BrowserRouter>
               <AnalyticsWrapper>
-                <CustomCursor />
+                
                 <AnimatedRoutes />
                 <MobileTabBar />
                 <WhatsAppButton />
