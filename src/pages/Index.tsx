@@ -32,6 +32,7 @@ const Index = () => {
         <ExclusiveSelectionsSection />
         <RecentlyAddedSection />
         <WhyDubaiStrip />
+        <MarketPulseSection />
         <ThemedCollections />
         <TrustedDevelopersStrip />
         <TestimonialsSection />
