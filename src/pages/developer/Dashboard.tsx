@@ -133,6 +133,19 @@ export default function DeveloperDashboard() {
       title="Dashboard"
       subtitle={`Welcome back${developer?.name ? `, ${developer.name}` : ''}`}
     >
+      {/* Refresh Data Button */}
+      <div className="flex justify-end mb-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleRefreshData}
+          disabled={refreshing}
+          className="gap-2"
+        >
+          <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+          {refreshing ? 'Importing...' : 'Refresh Property Data'}
+        </Button>
+      </div>
       {/* Stats Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat, index) => {
