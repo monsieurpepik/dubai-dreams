@@ -8,10 +8,12 @@ import { useSavedProperties } from '@/hooks/useSavedProperties';
 import { Heart } from 'lucide-react';
 import { useTenant } from '@/hooks/useTenant';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { useAuth } from '@/hooks/useAuth';
 
 const SavedProperties = () => {
   const { savedIds, clearAll } = useSavedProperties();
   const { tenant } = useTenant();
+  const { user } = useAuth();
   const whatsapp = tenant?.whatsapp_number || '';
 
   const { data: properties, isLoading } = useQuery({
@@ -47,6 +49,11 @@ const SavedProperties = () => {
             <h1 className="font-serif text-3xl md:text-4xl text-foreground">
               Your Shortlist
             </h1>
+            {user && (
+              <p className="text-sm text-muted-foreground mt-2">
+                Signed in as {user.email}
+              </p>
+            )}
           </div>
         </section>
 
