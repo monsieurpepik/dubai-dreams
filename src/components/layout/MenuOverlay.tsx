@@ -144,6 +144,34 @@ export function MenuOverlay({ isOpen, onClose, onSearchOpen }: MenuOverlayProps)
             </div>
 
             <div className="flex items-center gap-6">
+              {user ? (
+                <>
+                  <Link
+                    to="/saved"
+                    onClick={onClose}
+                    className="text-[11px] tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
+                  >
+                    <User className="w-3.5 h-3.5" />
+                    My Shortlist
+                  </Link>
+                  <button
+                    onClick={() => { signOut(); onClose(); }}
+                    className="text-[11px] tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/auth"
+                  onClick={onClose}
+                  className="text-[11px] tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
+                >
+                  <User className="w-3.5 h-3.5" />
+                  Sign In
+                </Link>
+              )}
               <span className="hidden md:inline text-[10px] tracking-[0.15em] text-muted-foreground/30">
                 Dubai, UAE
               </span>
