@@ -130,9 +130,9 @@ export const ImageHoverCarousel = ({ images, className = '' }: ImageHoverCarouse
       )}
 
       {/* Image Count Badge */}
-      {sortedImages.length > maxImages && (
+      {sortedImages.length > 1 && (
         <div className="absolute bottom-3 right-3 px-2 py-1 rounded-full bg-black/50 backdrop-blur-sm text-white text-[10px] z-10">
-          +{sortedImages.length - maxImages}
+          {currentIndex + 1}/{sortedImages.length}
         </div>
       )}
     </div>

@@ -76,7 +76,12 @@ export const CleanPropertyCard = ({ property, variant = 'default', viewCount }: 
   };
 
   // Build badges
-  const badges: { label: string; variant: 'gold' | 'default' | 'accent' }[] = [];
+  const badges: { label: string; variant: 'gold' | 'default' | 'accent' | 'exclusive' }[] = [];
+  // "Exclusive" label for premium developer properties (Emaar, Sobha, Omniyat)
+  const premiumSlugs = ['emaar', 'sobha', 'omniyat'];
+  if (property.developer && premiumSlugs.includes(property.developer.slug)) {
+    badges.push({ label: 'Exclusive', variant: 'exclusive' });
+  }
   if (property.golden_visa_eligible) {
     badges.push({ label: 'Golden Visa', variant: 'gold' });
   }
@@ -95,7 +100,8 @@ export const CleanPropertyCard = ({ property, variant = 'default', viewCount }: 
     badges.push({ label: 'New', variant: 'default' });
   }
 
-  const badgeStyles = {
+  const badgeStyles: Record<string, string> = {
+    exclusive: 'bg-white/90 text-black font-serif tracking-wide',
     gold: 'bg-amber-500/90 text-white',
     accent: 'bg-emerald-600/90 text-white',
     default: 'bg-black/50 backdrop-blur-sm text-white',

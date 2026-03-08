@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
-import { ChevronDown, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { ChevronDown, ChevronLeft, ChevronRight, ArrowRight, Search, BedDouble, Banknote } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useTenant } from '@/hooks/useTenant';
 import heroImage from '@/assets/hero-dubai-skyline.jpeg';
@@ -107,9 +107,30 @@ function HeroPropertyCard({
   );
 }
 
+const bedroomOptions = [
+  { label: 'Any Beds', value: '' },
+  { label: 'Studio', value: '0' },
+  { label: '1 BR', value: '1' },
+  { label: '2 BR', value: '2' },
+  { label: '3 BR', value: '3' },
+  { label: '4+ BR', value: '4' },
+];
+
+const priceOptions = [
+  { label: 'Any Budget', value: '' },
+  { label: 'Under AED 1M', value: '0-1000000' },
+  { label: 'AED 1M – 2M', value: '1000000-2000000' },
+  { label: 'AED 2M – 5M', value: '2000000-5000000' },
+  { label: 'AED 5M+', value: '5000000-' },
+];
+
 export function HeroSection() {
   const { tenant, formatPrice } = useTenant();
+  const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [bedrooms, setBedrooms] = useState('');
+  const [priceRange, setPriceRange] = useState('');
 
   const cityName = tenant?.office_location?.city || 'Dubai';
   const backgroundImage = tenant?.theme?.hero_image_url || heroImage;
@@ -147,6 +168,15 @@ export function HeroSection() {
     return () => clearInterval(timer);
   }, [goNext, featuredProperties.length]);
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    if (searchQuery.trim()) params.set('q', searchQuery.trim());
+    if (bedrooms) params.set('bedrooms', bedrooms);
+    if (priceRange) params.set('priceRange', priceRange);
+    navigate(`/properties${params.toString() ? `?${params.toString()}` : ''}`);
+  };
+
   return (
     <section className="relative h-screen w-full overflow-hidden flex flex-col">
       {/* Background — Ken Burns */}
@@ -166,7 +196,7 @@ export function HeroSection() {
       <div className="relative z-10 flex-1 flex items-end">
         <div className="container-wide w-full pb-20 md:pb-24">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 md:gap-12">
-            {/* Left — Headline + CTAs */}
+            {/* Left — Headline + Search */}
             <div className="flex-1 max-w-2xl">
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
@@ -197,27 +227,62 @@ export function HeroSection() {
                 Verified off-plan projects from {cityName}'s top developers. From AED 500K, with flexible payment plans.
               </motion.p>
 
-              {/* CTAs */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
+              {/* Glassmorphic Search Bar */}
+              <motion.form
+                onSubmit={handleSearch}
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1.1 }}
-                className="mt-8 flex flex-col sm:flex-row gap-3"
+                className="mt-8 bg-white/[0.08] backdrop-blur-xl border border-white/[0.12] rounded-xl p-1.5 flex flex-col sm:flex-row gap-1.5"
               >
-                <Link
-                  to="/properties"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-white text-black text-xs font-medium uppercase tracking-[0.15em] rounded-xl hover:bg-white/90 transition-colors duration-300"
+                {/* Text input */}
+                <div className="flex items-center gap-2 flex-1 px-4 py-2.5 bg-white/[0.06] rounded-lg">
+                  <Search className="w-4 h-4 text-white/40 shrink-0" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search by area, developer, or project"
+                    className="flex-1 bg-transparent text-sm text-white placeholder:text-white/30 focus:outline-none"
+                  />
+                </div>
+
+                {/* Beds dropdown */}
+                <div className="flex items-center gap-2 px-4 py-2.5 bg-white/[0.06] rounded-lg sm:w-32">
+                  <BedDouble className="w-4 h-4 text-white/40 shrink-0" />
+                  <select
+                    value={bedrooms}
+                    onChange={(e) => setBedrooms(e.target.value)}
+                    className="flex-1 bg-transparent text-sm text-white/70 focus:outline-none appearance-none cursor-pointer [&>option]:text-foreground [&>option]:bg-background"
+                  >
+                    {bedroomOptions.map((opt) => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Price dropdown */}
+                <div className="flex items-center gap-2 px-4 py-2.5 bg-white/[0.06] rounded-lg sm:w-40">
+                  <Banknote className="w-4 h-4 text-white/40 shrink-0" />
+                  <select
+                    value={priceRange}
+                    onChange={(e) => setPriceRange(e.target.value)}
+                    className="flex-1 bg-transparent text-sm text-white/70 focus:outline-none appearance-none cursor-pointer [&>option]:text-foreground [&>option]:bg-background"
+                  >
+                    {priceOptions.map((opt) => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Search button */}
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 bg-white text-black text-xs font-medium uppercase tracking-[0.12em] rounded-lg hover:bg-white/90 transition-colors duration-300 shrink-0"
                 >
-                  Explore Properties
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-                <Link
-                  to="/advisor"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-3.5 border border-white/[0.15] text-white text-xs font-medium uppercase tracking-[0.15em] rounded-xl hover:bg-white/[0.08] hover:border-white/30 transition-all duration-300"
-                >
-                  Speak to an Advisor
-                </Link>
-              </motion.div>
+                  Search
+                </button>
+              </motion.form>
             </div>
 
             {/* Right — Floating Property Card (hidden on mobile) */}

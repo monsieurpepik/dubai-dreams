@@ -38,6 +38,17 @@ const support = [
   { label: 'Compare', href: '/compare' },
 ];
 
+const popularSearches = [
+  { label: 'Studios under AED 1M', href: '/properties?priceRange=0-1000000&bedrooms=0' },
+  { label: '3BR in Dubai Marina', href: '/properties?area=dubai-marina&bedrooms=3' },
+  { label: 'Golden Visa Properties', href: '/properties?goldenVisa=true' },
+  { label: 'Waterfront Apartments', href: '/properties?collection=waterfront' },
+  { label: 'Handover 2025', href: '/properties?handover=2025' },
+  { label: 'Luxury Penthouses', href: '/properties?collection=penthouse' },
+  { label: 'Off-plan under AED 2M', href: '/properties?priceRange=0-2000000' },
+  { label: 'Villas in Dubai Hills', href: '/properties?area=dubai-hills&type=villa' },
+];
+
 function FooterColumn({ title, links }: { title: string; links: { label: string; href: string }[] }) {
   return (
     <div>
@@ -128,6 +139,24 @@ export function Footer() {
           <FooterColumn title="Developers" links={developers} />
           <FooterColumn title="Company" links={company} />
           <FooterColumn title="Support" links={support} />
+        </div>
+      </div>
+
+      {/* Popular Searches */}
+      <div className="container-wide py-10 border-t border-border/30">
+        <h4 className="text-[10px] tracking-[0.2em] text-muted-foreground/60 uppercase mb-5 font-medium">
+          Popular Searches
+        </h4>
+        <div className="flex flex-wrap gap-2">
+          {popularSearches.map((search) => (
+            <Link
+              key={search.label}
+              to={search.href}
+              className="px-3.5 py-1.5 text-[12px] text-muted-foreground border border-border/30 rounded-full hover:text-foreground hover:border-border/60 transition-colors duration-300"
+            >
+              {search.label}
+            </Link>
+          ))}
         </div>
       </div>
 
