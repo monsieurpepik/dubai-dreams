@@ -97,7 +97,7 @@ export const PropertyMap = ({ properties, highlightedPropertyId }: PropertyMapPr
         mapRef.current = null;
       }
     };
-  }, [mappableProperties, center, formatPrice]);
+  }, [mappableProperties, center, formatPrice, highlightedPropertyId]);
 
   if (mappableProperties.length === 0) {
     return (

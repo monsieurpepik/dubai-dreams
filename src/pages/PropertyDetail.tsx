@@ -338,7 +338,7 @@ const PropertyDetail = () => {
           </div>
         </section>
 
-        <ImmersiveGallery
+        <GalleryMosaic
           images={property.property_images || []}
           propertyName={property.name}
         />

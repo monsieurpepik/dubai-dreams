@@ -36,6 +36,7 @@ const Properties = () => {
     (collection as CategoryFilter) || 'all'
   );
   const cityName = tenant?.office_location?.city || 'Dubai';
+  const [hoveredPropertyId, setHoveredPropertyId] = useState<string | null>(null);
 
   const handleCategoryChange = (cat: CategoryFilter) => {
     setCategory(cat);
