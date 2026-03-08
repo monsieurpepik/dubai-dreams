@@ -23,7 +23,7 @@ export const TrustedDevelopersStrip = () => {
   if (!developers?.length) return null;
 
   return (
-    <section ref={ref} className="py-16 md:py-24 bg-foreground">
+    <section ref={ref} className="py-16 md:py-24 bg-secondary/20 border-y border-border/30">
       <div className="container-wide">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
