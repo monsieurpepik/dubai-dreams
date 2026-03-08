@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, User, LogOut } from 'lucide-react';
 import { useTenant } from '@/hooks/useTenant';
 import { CurrencySwitcher } from '@/components/ui/CurrencySwitcher';
+import { useAuth } from '@/hooks/useAuth';
 
 const navItems = [
   { label: 'Properties', href: '/properties', image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80' },
