@@ -28,6 +28,7 @@ export function MenuOverlay({ isOpen, onClose, onSearchOpen }: MenuOverlayProps)
   const navigate = useNavigate();
   const location = useLocation();
   const { tenant } = useTenant();
+  const { user, signOut } = useAuth();
   const brandName = tenant?.brand_name || 'OwningDubai';
 
   const handleNavClick = (href: string) => {
