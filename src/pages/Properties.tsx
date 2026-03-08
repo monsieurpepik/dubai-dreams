@@ -242,15 +242,25 @@ const Properties = () => {
             )}
 
             {viewMode === 'split' && (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="max-h-[80vh] overflow-y-auto space-y-6 pr-2">
+              <div className="flex gap-0 -mx-4 md:-mx-6 lg:-mx-8">
+                {/* Left: Scrollable property list */}
+                <div className="w-full lg:w-1/2 max-h-[calc(100vh-200px)] overflow-y-auto px-4 md:px-6 lg:px-8 scrollbar-hide">
                   <SmartSortBar activeSort={sortBy} onSortChange={setSortBy} propertyCount={propertyCount} />
-                  {filteredProperties.map((p: any, i: number) => (
-                    <CleanPropertyCard key={p.id} property={p} index={i} variant="compact" />
-                  ))}
+                  <div className="space-y-4 pb-8">
+                    {filteredProperties.map((p: any, i: number) => (
+                      <div
+                        key={p.id}
+                        onMouseEnter={() => setHoveredPropertyId(p.id)}
+                        onMouseLeave={() => setHoveredPropertyId(null)}
+                      >
+                        <CleanPropertyCard property={p} index={i} variant="compact" />
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="sticky top-24 h-[80vh]">
-                  <PropertyMap properties={filteredProperties} />
+                {/* Right: Sticky map */}
+                <div className="hidden lg:block w-1/2 sticky top-24 h-[calc(100vh-200px)]">
+                  <PropertyMap properties={filteredProperties} highlightedPropertyId={hoveredPropertyId} />
                 </div>
               </div>
             )}
