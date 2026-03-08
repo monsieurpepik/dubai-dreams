@@ -1,30 +1,52 @@
 import { useDisplayCurrency, type DisplayCurrency } from '@/hooks/useDisplayCurrency';
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
+import { useState } from 'react';
 
-const currencies: { code: DisplayCurrency; label: string; symbol: string }[] = [
-  { code: 'AED', label: 'AED', symbol: 'AED' },
-  { code: 'USD', label: 'USD', symbol: '$' },
-  { code: 'EUR', label: 'EUR', symbol: '€' },
-  { code: 'GBP', label: 'GBP', symbol: '£' },
+const currencies: { code: DisplayCurrency; label: string }[] = [
+  { code: 'AED', label: 'AED' },
+  { code: 'USD', label: 'USD' },
+  { code: 'EUR', label: 'EUR' },
+  { code: 'GBP', label: 'GBP' },
 ];
 
 export const CurrencySwitcher = () => {
   const { displayCurrency, setDisplayCurrency } = useDisplayCurrency();
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="relative group">
-      <select
-        value={displayCurrency}
-        onChange={(e) => setDisplayCurrency(e.target.value as DisplayCurrency)}
-        className="appearance-none h-8 pl-3 pr-7 text-[11px] tracking-[0.15em] bg-background/40 backdrop-blur-sm border border-border/30 text-muted-foreground rounded-full hover:border-border/60 hover:bg-background/70 hover:text-foreground focus:outline-none transition-all duration-300 cursor-pointer"
-        aria-label="Currency"
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <button
+          className="text-[11px] tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors duration-300 px-1 py-1"
+          aria-label="Switch currency"
+        >
+          {displayCurrency}
+        </button>
+      </PopoverTrigger>
+      <PopoverContent
+        align="end"
+        sideOffset={8}
+        className="w-auto min-w-[80px] p-1.5 bg-background/95 backdrop-blur-xl border border-border/40 rounded-lg shadow-lg"
       >
-        {currencies.map(c => (
-          <option key={c.code} value={c.code}>{c.label}</option>
-        ))}
-      </select>
-      <svg className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-3 h-3 text-muted-foreground group-hover:text-foreground transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-      </svg>
-    </div>
+        <div className="flex flex-col">
+          {currencies.map((c) => (
+            <button
+              key={c.code}
+              onClick={() => {
+                setDisplayCurrency(c.code);
+                setOpen(false);
+              }}
+              className={`text-[11px] tracking-[0.12em] px-3 py-1.5 text-left rounded-md transition-colors duration-200 ${
+                displayCurrency === c.code
+                  ? 'text-foreground bg-accent/50'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/30'
+              }`}
+            >
+              {c.label}
+            </button>
+          ))}
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 };

@@ -100,7 +100,7 @@ const App = () => (
             <Sonner />
             <BrowserRouter>
               <AnalyticsWrapper>
-                <CustomCursor />
+                
                 <AnimatedRoutes />
                 <MobileTabBar />
                 <WhatsAppButton />
