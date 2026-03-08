@@ -60,6 +60,11 @@ export function TenantProvider({ children }: TenantProviderProps) {
         // Apply tenant theme if configured
         applyTenantTheme(tenantData);
         
+        // Initialize Google Analytics if configured
+        if (tenantData.seo_config?.ga_measurement_id) {
+          initGA(tenantData.seo_config.ga_measurement_id);
+        }
+        
       } catch (err) {
         console.error('Failed to load tenant:', err);
         setError(err instanceof Error ? err : new Error('Unknown error'));
