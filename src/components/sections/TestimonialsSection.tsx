@@ -4,16 +4,9 @@ import { motion } from 'framer-motion';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useRef } from 'react';
 
-const countryFlags: Record<string, string> = {
-  'UK': '🇬🇧', 'United Kingdom': '🇬🇧', 'USA': '🇺🇸', 'United States': '🇺🇸',
-  'India': '🇮🇳', 'Pakistan': '🇵🇰', 'UAE': '🇦🇪', 'Saudi Arabia': '🇸🇦',
-  'Germany': '🇩🇪', 'France': '🇫🇷', 'Canada': '🇨🇦', 'Australia': '🇦🇺',
-  'China': '🇨🇳', 'Russia': '🇷🇺', 'Nigeria': '🇳🇬', 'Egypt': '🇪🇬',
-  'South Africa': '🇿🇦', 'Brazil': '🇧🇷', 'Lebanon': '🇱🇧', 'Jordan': '🇯🇴',
-  'Kuwait': '🇰🇼', 'Bahrain': '🇧🇭', 'Oman': '🇴🇲', 'Qatar': '🇶🇦',
-  'Italy': '🇮🇹', 'Spain': '🇪🇸', 'Netherlands': '🇳🇱', 'Sweden': '🇸🇪',
-  'Singapore': '🇸🇬', 'Japan': '🇯🇵', 'South Korea': '🇰🇷',
-};
+function getInitials(name: string) {
+  return name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+}
 
 const TestimonialSkeleton = () => (
   <div className="min-w-[320px] md:min-w-[400px] space-y-5 p-8">
@@ -77,29 +70,22 @@ export const TestimonialsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className="relative min-w-[300px] md:min-w-0 snap-start bg-card border border-border/30 rounded-xl p-8 md:p-10 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow duration-300"
+              className="relative min-w-[300px] md:min-w-0 snap-start p-8 md:p-10 flex flex-col justify-between"
             >
-              {/* Large decorative quote */}
-              <span className="text-8xl font-serif text-muted-foreground/30 leading-none select-none absolute top-4 left-6">
-                "
-              </span>
-
-              <p className="text-base md:text-lg text-foreground leading-relaxed relative z-10 font-light mt-8">
-                {t.quote}
+              <p className="text-base md:text-lg text-foreground leading-relaxed font-light italic">
+                "{t.quote}"
               </p>
               
-              <footer className="mt-8 pt-6 border-t border-border/30">
-                <p className="text-sm font-medium text-foreground">{t.name}</p>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-xs text-muted-foreground">
-                    {countryFlags[t.country] && `${countryFlags[t.country]} `}{t.country}
-                  </span>
-                  {t.property_name && (
-                    <>
-                      <span className="text-border">·</span>
-                      <span className="text-xs text-muted-foreground">{t.property_name}</span>
-                    </>
-                  )}
+              <footer className="mt-8 pt-6 border-t border-border/30 flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-muted flex items-center justify-center text-[11px] font-medium text-muted-foreground tracking-wide shrink-0">
+                  {getInitials(t.name)}
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">{t.name}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {t.country}
+                    {t.property_name && ` · ${t.property_name}`}
+                  </p>
                 </div>
               </footer>
             </motion.blockquote>

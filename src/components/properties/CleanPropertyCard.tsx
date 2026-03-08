@@ -100,7 +100,8 @@ export const CleanPropertyCard = ({ property, variant = 'default', viewCount }: 
     badges.push({ label: 'New', variant: 'default' });
   }
 
-  const badgeStyles = {
+  const badgeStyles: Record<string, string> = {
+    exclusive: 'bg-white/90 text-black font-serif tracking-wide',
     gold: 'bg-amber-500/90 text-white',
     accent: 'bg-emerald-600/90 text-white',
     default: 'bg-black/50 backdrop-blur-sm text-white',

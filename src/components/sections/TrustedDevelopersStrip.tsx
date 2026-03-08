@@ -63,7 +63,7 @@ export const TrustedDevelopersStrip = () => {
                       }}
                     />
                   ) : (
-                    <span className="inline-block px-6 py-3 text-sm font-serif tracking-widest uppercase text-background/60 border border-background/30 hover:text-background hover:border-background/60 transition-all duration-500">
+                    <span className="inline-block px-6 py-3 text-sm font-serif tracking-widest uppercase text-muted-foreground/60 border border-border/30 hover:text-foreground hover:border-border/60 transition-all duration-500">
                       {developer.name}
                     </span>
                   )}

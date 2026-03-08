@@ -32,7 +32,7 @@ export const HowItWorksMini = () => {
               initial={{ opacity: 0, y: 12 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.12 }}
-              className="text-center bg-card border border-border/30 rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300"
+              className="text-center p-8"
             >
               <step.icon className="w-6 h-6 mx-auto mb-4 text-muted-foreground/60" strokeWidth={1.5} />
               <p className="text-[10px] tracking-[0.15em] text-muted-foreground/60 mb-2">{step.number}</p>
