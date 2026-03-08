@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, User, LogOut } from 'lucide-react';
 import { useTenant } from '@/hooks/useTenant';
 import { CurrencySwitcher } from '@/components/ui/CurrencySwitcher';
+import { useAuth } from '@/hooks/useAuth';
 
 const navItems = [
   { label: 'Properties', href: '/properties', image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80' },
@@ -27,6 +28,7 @@ export function MenuOverlay({ isOpen, onClose, onSearchOpen }: MenuOverlayProps)
   const navigate = useNavigate();
   const location = useLocation();
   const { tenant } = useTenant();
+  const { user, signOut } = useAuth();
   const brandName = tenant?.brand_name || 'OwningDubai';
 
   const handleNavClick = (href: string) => {
@@ -142,6 +144,34 @@ export function MenuOverlay({ isOpen, onClose, onSearchOpen }: MenuOverlayProps)
             </div>
 
             <div className="flex items-center gap-6">
+              {user ? (
+                <>
+                  <Link
+                    to="/saved"
+                    onClick={onClose}
+                    className="text-[11px] tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
+                  >
+                    <User className="w-3.5 h-3.5" />
+                    My Shortlist
+                  </Link>
+                  <button
+                    onClick={() => { signOut(); onClose(); }}
+                    className="text-[11px] tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/auth"
+                  onClick={onClose}
+                  className="text-[11px] tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5"
+                >
+                  <User className="w-3.5 h-3.5" />
+                  Sign In
+                </Link>
+              )}
               <span className="hidden md:inline text-[10px] tracking-[0.15em] text-muted-foreground/30">
                 Dubai, UAE
               </span>
