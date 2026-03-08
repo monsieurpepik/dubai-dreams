@@ -31,7 +31,7 @@ export const TrustedDevelopersStrip = () => {
           transition={{ duration: 0.6 }}
           className="text-center"
         >
-          <h3 className="font-serif text-lg md:text-xl tracking-[0.15em] uppercase text-background/60 mb-12 md:mb-16">
+          <h3 className="font-serif text-lg md:text-xl tracking-[0.15em] uppercase text-muted-foreground/60 mb-12 md:mb-16">
             Trusted Developers
           </h3>
 
