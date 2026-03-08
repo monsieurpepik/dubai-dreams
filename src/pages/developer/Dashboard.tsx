@@ -1,20 +1,24 @@
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 import { 
   Building2, 
   Users, 
   TrendingUp, 
   Eye,
   ArrowUpRight,
-  ArrowDownRight
+  ArrowDownRight,
+  RefreshCw
 } from 'lucide-react';
 import { DeveloperLayout } from '@/components/developer/DeveloperLayout';
 import { useDeveloper } from '@/contexts/DeveloperContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
 import { formatDistanceToNow } from 'date-fns';
 import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
 
 export default function DeveloperDashboard() {
   const { developer } = useDeveloper();
