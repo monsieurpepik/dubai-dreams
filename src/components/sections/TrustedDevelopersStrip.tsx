@@ -48,10 +48,10 @@ export const TrustedDevelopersStrip = () => {
                     <img
                       src={developer.logo_url}
                       alt={developer.name}
-                      className="h-10 md:h-14 w-auto opacity-50 hover:opacity-100 transition-opacity duration-500 brightness-0 invert"
+                      className="h-10 md:h-14 w-auto opacity-60 hover:opacity-100 transition-opacity duration-500 brightness-0 invert"
                     />
                   ) : (
-                    <span className="inline-block px-6 py-3 text-sm font-serif tracking-widest uppercase text-background/50 border border-background/20 hover:text-background hover:border-background/50 transition-all duration-500">
+                    <span className="inline-block px-6 py-3 text-sm font-serif tracking-widest uppercase text-background/60 border border-background/30 hover:text-background hover:border-background/60 transition-all duration-500">
                       {developer.name}
                     </span>
                   )}

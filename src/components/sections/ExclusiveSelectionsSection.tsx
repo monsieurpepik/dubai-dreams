@@ -55,7 +55,7 @@ export const ExclusiveSelectionsSection = () => {
       {/* Header */}
       <div className="container-wide flex items-end justify-between mb-10 md:mb-14">
         <div>
-          <p className="text-[10px] tracking-[0.35em] text-muted-foreground/40 mb-3">
+          <p className="text-[10px] tracking-[0.35em] text-muted-foreground/30 mb-3">
             CURATED FOR YOU
           </p>
           <h2 className="font-serif text-2xl md:text-3xl text-foreground font-light">
@@ -66,14 +66,14 @@ export const ExclusiveSelectionsSection = () => {
           <button
             onClick={() => scroll('left')}
             disabled={!canScrollLeft}
-            className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors disabled:opacity-20 disabled:pointer-events-none"
+            className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors disabled:opacity-30 disabled:pointer-events-none"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
           <button
             onClick={() => scroll('right')}
             disabled={!canScrollRight}
-            className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors disabled:opacity-20 disabled:pointer-events-none"
+            className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors disabled:opacity-30 disabled:pointer-events-none"
           >
             <ChevronRight className="w-4 h-4" />
           </button>
@@ -111,23 +111,21 @@ export const ExclusiveSelectionsSection = () => {
                   ) : (
                     <div className="w-full aspect-[4/5] bg-muted" />
                   )}
-                  {/* Gradient overlay at bottom */}
-                  <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/50 to-transparent" />
-                  {/* Price overlay */}
-                  <p className="absolute bottom-4 left-4 font-serif text-base text-white/90">
+                  <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent" />
+                  <p className="absolute bottom-4 left-4 font-serif text-base text-white">
                     From {formatPrice(property.price_from, { compact: true })}
                   </p>
                 </div>
 
                 {/* Details */}
                 <div className="mt-4 space-y-1">
-                  <p className="text-[10px] tracking-[0.2em] text-muted-foreground/40">
+                  <p className="text-[10px] tracking-[0.2em] text-muted-foreground/30">
                     {property.developer?.name || 'Developer'}
                   </p>
-                  <h3 className="font-serif text-lg text-foreground leading-tight group-hover:text-foreground/70 transition-colors duration-300">
+                  <h3 className="font-serif text-lg text-foreground leading-tight group-hover:text-foreground/60 transition-colors duration-300">
                     {property.name}
                   </h3>
-                  <p className="text-xs text-muted-foreground/50">
+                  <p className="text-xs text-muted-foreground/60">
                     {property.area}
                   </p>
                 </div>
@@ -141,7 +139,7 @@ export const ExclusiveSelectionsSection = () => {
       <div className="container-wide mt-10 md:hidden text-center">
         <Link
           to="/properties"
-          className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors"
+          className="text-xs text-muted-foreground/60 hover:text-foreground transition-colors"
         >
           View all projects →
         </Link>

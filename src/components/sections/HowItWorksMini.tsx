@@ -13,7 +13,7 @@ export const HowItWorksMini = () => {
   const [ref, inView] = useInView({ threshold: 0.3, triggerOnce: true });
 
   return (
-    <section ref={ref} className="py-16 md:py-24 border-y border-border/10">
+    <section ref={ref} className="py-16 md:py-24 border-y border-border/30">
       <div className="container-wide">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -32,10 +32,10 @@ export const HowItWorksMini = () => {
               initial={{ opacity: 0, y: 12 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: i * 0.12 }}
-              className="text-center bg-card border border-border/20 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300"
+              className="text-center bg-card border border-border/30 rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300"
             >
-              <step.icon className="w-6 h-6 mx-auto mb-4 text-muted-foreground/50" strokeWidth={1.5} />
-              <p className="text-[10px] tracking-[0.15em] text-muted-foreground/50 mb-2">{step.number}</p>
+              <step.icon className="w-6 h-6 mx-auto mb-4 text-muted-foreground/60" strokeWidth={1.5} />
+              <p className="text-[10px] tracking-[0.15em] text-muted-foreground/60 mb-2">{step.number}</p>
               <h3 className="font-serif text-lg text-foreground mb-2">{step.title}</h3>
               <p className="text-xs text-muted-foreground leading-relaxed max-w-xs mx-auto">{step.description}</p>
             </motion.div>
