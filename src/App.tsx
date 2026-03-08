@@ -20,6 +20,7 @@ import Terms from "./pages/Terms";
 import SavedProperties from "./pages/SavedProperties";
 import Discover from "./pages/Discover";
 import Auth from "./pages/Auth";
+import LeadAdmin from "./pages/LeadAdmin";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
