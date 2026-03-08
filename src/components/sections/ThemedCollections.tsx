@@ -87,21 +87,21 @@ const CollectionRow = ({ config, index }: { config: CollectionConfig; index: num
           <h2 className="font-serif text-xl md:text-2xl text-foreground">
             {config.title}
           </h2>
-          <p className="text-xs text-muted-foreground/50 mt-1">{config.subtitle}</p>
+          <p className="text-xs text-muted-foreground/60 mt-1">{config.subtitle}</p>
         </div>
         <div className="flex items-center gap-2">
           <div className="hidden md:flex items-center gap-2">
             <button
               onClick={() => scroll('left')}
               disabled={!canScrollLeft}
-              className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors disabled:opacity-20 disabled:pointer-events-none"
+              className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors disabled:opacity-30 disabled:pointer-events-none"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
               onClick={() => scroll('right')}
               disabled={!canScrollRight}
-              className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors disabled:opacity-20 disabled:pointer-events-none"
+              className="w-8 h-8 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors disabled:opacity-30 disabled:pointer-events-none"
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -137,7 +137,7 @@ const CollectionRow = ({ config, index }: { config: CollectionConfig; index: num
       <div className="container-wide mt-6 md:hidden">
         <Link
           to={config.link}
-          className="text-xs text-muted-foreground/50 hover:text-foreground transition-colors"
+          className="text-xs text-muted-foreground/60 hover:text-foreground transition-colors"
         >
           View all {config.title.toLowerCase()} →
         </Link>
@@ -148,7 +148,7 @@ const CollectionRow = ({ config, index }: { config: CollectionConfig; index: num
 
 export const ThemedCollections = () => {
   return (
-    <div className="border-t border-border/10">
+    <div className="border-t border-border/30">
       {collections.map((config, i) => (
         <CollectionRow key={config.title} config={config} index={i} />
       ))}

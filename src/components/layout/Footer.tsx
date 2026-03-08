@@ -41,7 +41,7 @@ const support = [
 function FooterColumn({ title, links }: { title: string; links: { label: string; href: string }[] }) {
   return (
     <div>
-      <h4 className="text-[10px] tracking-[0.2em] text-muted-foreground/50 uppercase mb-5 font-medium">
+      <h4 className="text-[10px] tracking-[0.2em] text-muted-foreground/60 uppercase mb-5 font-medium">
         {title}
       </h4>
       <ul className="space-y-2.5">
@@ -77,9 +77,9 @@ export function Footer() {
   };
 
   return (
-    <footer className="bg-background border-t border-border/10">
+    <footer className="bg-background border-t border-border/30">
       {/* Newsletter Row */}
-      <div className="container-wide py-14 md:py-16 border-b border-border/10">
+      <div className="container-wide py-14 md:py-16 border-b border-border/30">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div>
             <h3 className="font-serif text-xl md:text-2xl text-foreground font-light">
@@ -95,7 +95,7 @@ export function Footer() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              className="flex-1 md:w-64 px-4 py-3 bg-secondary border border-border/30 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+              className="flex-1 md:w-64 px-4 py-3 bg-secondary border border-border/30 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none"
               required
             />
             <button type="submit" className="btn-primary !py-3 whitespace-nowrap">
@@ -106,7 +106,7 @@ export function Footer() {
       </div>
 
       {/* Contact Row */}
-      <div className="container-wide py-8 border-b border-border/10">
+      <div className="container-wide py-8 border-b border-border/30">
         <div className="flex flex-wrap items-center gap-6 md:gap-10">
           {contactPhone && (
             <a href={`tel:${contactPhone}`} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
@@ -132,14 +132,14 @@ export function Footer() {
       </div>
 
       {/* RERA Disclaimer */}
-      <div className="container-wide py-4 border-t border-border/10">
-        <p className="text-[11px] text-muted-foreground/40 leading-relaxed">
+      <div className="container-wide py-4 border-t border-border/30">
+        <p className="text-[11px] text-muted-foreground/30 leading-relaxed">
           Prices and availability are subject to change without notice. All off-plan purchases are regulated by the Dubai Land Department (DLD) and payments are made through DLD-approved escrow accounts. Regulated by the Real Estate Regulatory Agency (RERA).
         </p>
       </div>
 
       {/* Bottom Bar */}
-      <div className="container-wide py-6 border-t border-border/10">
+      <div className="container-wide py-6 border-t border-border/30">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
           <div className="flex items-center gap-4">
             <span className="font-serif text-sm text-foreground font-light tracking-[0.05em]">

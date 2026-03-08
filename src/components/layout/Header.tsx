@@ -54,7 +54,7 @@ export function Header() {
         transition={{ duration: 0.8, delay: 0.2 }}
         className={`fixed left-0 right-0 top-0 z-50 transition-all duration-700 ${
           isScrolled
-            ? 'bg-background/95 backdrop-blur-xl border-b border-border/10'
+            ? 'bg-background/95 backdrop-blur-xl border-b border-border/30'
             : 'bg-transparent'
         }`}
       >
@@ -78,12 +78,12 @@ export function Header() {
                 exit={{ opacity: 0, scale: 0.9, y: -10 }}
                 transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                 onClick={() => setIsSearchOpen(true)}
-                className="hidden md:flex items-center gap-3 px-5 py-2 border border-border/40 rounded-full bg-background/60 backdrop-blur-sm hover:shadow-md hover:border-border/60 transition-all duration-300 group"
+                className="hidden md:flex items-center gap-3 px-5 py-2 border border-border/30 rounded-full bg-background/60 backdrop-blur-sm hover:shadow-md hover:border-border/60 transition-all duration-300 group"
               >
                 <Search className="w-3.5 h-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
                 <div className="flex items-center gap-0 text-xs text-muted-foreground">
-                  <span className="pr-3 border-r border-border/40">Area</span>
-                  <span className="px-3 border-r border-border/40">Bedrooms</span>
+                  <span className="pr-3 border-r border-border/30">Area</span>
+                  <span className="px-3 border-r border-border/30">Bedrooms</span>
                   <span className="pl-3">Budget</span>
                 </div>
               </motion.button>
@@ -105,7 +105,7 @@ export function Header() {
             )}
             <button
               onClick={() => setIsMenuOpen(true)}
-              className="group flex items-center gap-2.5 px-4 py-2 rounded-full border border-border/30 hover:border-border/60 bg-background/40 backdrop-blur-sm hover:bg-background/70 transition-all duration-300"
+              className="group flex items-center gap-2.5 px-4 py-2 rounded-full border border-border/30 hover:border-border/60 bg-background/30 backdrop-blur-sm hover:bg-background/60 transition-all duration-300"
               aria-label="Open navigation menu"
             >
               <div className="flex flex-col gap-[3px]">

@@ -29,7 +29,7 @@ export function LatestInsightsSection() {
   if (articles.length === 0) return null;
 
   return (
-    <section className="py-16 md:py-24 border-t border-border/10">
+    <section className="py-16 md:py-24 border-t border-border/30">
       <div className="container-wide">
         <div className="flex items-end justify-between mb-10">
           <h2 className="font-serif text-xl md:text-2xl text-foreground">
@@ -42,7 +42,7 @@ export function LatestInsightsSection() {
             View all →
           </Link>
         </div>
-        <div className="grid md:grid-cols-3 gap-px bg-border/10">
+        <div className="grid md:grid-cols-3 gap-px bg-border/30">
           {articles.map((article: any) => (
             <Link
               key={article.id}
@@ -52,7 +52,7 @@ export function LatestInsightsSection() {
               <span className="text-[10px] tracking-[0.15em] text-muted-foreground uppercase">
                 {categoryLabels[article.category]}
               </span>
-              <h3 className="font-serif text-base md:text-lg text-foreground mt-2 mb-4 group-hover:opacity-70 transition-opacity duration-300 leading-snug">
+              <h3 className="font-serif text-base md:text-lg text-foreground mt-2 mb-4 group-hover:text-foreground/60 transition-opacity duration-300 leading-snug">
                 {article.title}
               </h3>
               <span className="text-[11px] text-muted-foreground">

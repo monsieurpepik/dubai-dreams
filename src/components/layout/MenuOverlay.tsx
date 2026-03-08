@@ -47,7 +47,7 @@ export function MenuOverlay({ isOpen, onClose, onSearchOpen }: MenuOverlayProps)
           className="fixed inset-0 z-[60] bg-background flex flex-col"
         >
           {/* Header bar */}
-          <div className="flex items-center justify-between px-6 lg:px-12 h-16 md:h-20 border-b border-border/10">
+          <div className="flex items-center justify-between px-6 lg:px-12 h-16 md:h-20 border-b border-border/30">
             <span className="font-serif text-lg tracking-[0.08em] text-foreground">
               {brandName}
             </span>
@@ -85,7 +85,7 @@ export function MenuOverlay({ isOpen, onClose, onSearchOpen }: MenuOverlayProps)
                       }`} />
 
                       {/* Number */}
-                      <span className="text-[10px] tracking-[0.2em] text-muted-foreground/50 font-light w-6 shrink-0">
+                      <span className="text-[10px] tracking-[0.2em] text-muted-foreground/60 font-light w-6 shrink-0">
                         {num}
                       </span>
 
@@ -93,7 +93,7 @@ export function MenuOverlay({ isOpen, onClose, onSearchOpen }: MenuOverlayProps)
                       <span className={`font-serif text-2xl md:text-3xl lg:text-4xl tracking-[0.02em] transition-all duration-300 ${
                         isActive
                           ? 'text-foreground'
-                          : 'text-muted-foreground/40 group-hover:text-foreground group-hover:translate-x-1'
+                          : 'text-muted-foreground/30 group-hover:text-foreground group-hover:translate-x-1'
                       }`}>
                         {item.label}
                       </span>
@@ -119,8 +119,8 @@ export function MenuOverlay({ isOpen, onClose, onSearchOpen }: MenuOverlayProps)
               </AnimatePresence>
 
               {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-r from-background/40 via-transparent to-transparent pointer-events-none" />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/20 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-r from-background/30 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/30 via-transparent to-transparent pointer-events-none" />
             </div>
           </div>
 
@@ -129,7 +129,7 @@ export function MenuOverlay({ isOpen, onClose, onSearchOpen }: MenuOverlayProps)
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
-            className="border-t border-border/10 px-6 lg:px-12 py-4 md:py-5 flex items-center justify-between"
+            className="border-t border-border/30 px-6 lg:px-12 py-4 md:py-5 flex items-center justify-between"
           >
             <div className="flex items-center gap-6">
               <button
@@ -142,7 +142,7 @@ export function MenuOverlay({ isOpen, onClose, onSearchOpen }: MenuOverlayProps)
             </div>
 
             <div className="flex items-center gap-6">
-              <span className="hidden md:inline text-[10px] tracking-[0.15em] text-muted-foreground/40">
+              <span className="hidden md:inline text-[10px] tracking-[0.15em] text-muted-foreground/30">
                 Dubai, UAE
               </span>
               <Link
