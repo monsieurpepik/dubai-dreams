@@ -13,7 +13,7 @@ export const WhyDubaiStrip = () => {
   const [ref, inView] = useInView({ threshold: 0.3, triggerOnce: true });
 
   return (
-    <section ref={ref} className="py-14 md:py-20 border-y border-border/30">
+    <section ref={ref} className="py-16 md:py-24 border-y border-border/30">
       <div className="container-wide">
         <motion.div
           initial={{ opacity: 0, y: 16 }}

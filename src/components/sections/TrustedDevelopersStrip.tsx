@@ -31,7 +31,7 @@ export const TrustedDevelopersStrip = () => {
           transition={{ duration: 0.6 }}
           className="text-center"
         >
-          <h3 className="font-serif text-lg md:text-xl tracking-[0.25em] uppercase text-background/60 mb-12 md:mb-16">
+          <h3 className="font-serif text-lg md:text-xl tracking-[0.15em] uppercase text-background/60 mb-12 md:mb-16">
             Trusted Developers
           </h3>
 
@@ -48,7 +48,19 @@ export const TrustedDevelopersStrip = () => {
                     <img
                       src={developer.logo_url}
                       alt={developer.name}
-                      className="h-10 md:h-14 w-auto opacity-60 hover:opacity-100 transition-opacity duration-500 brightness-0 invert"
+                      className="h-10 md:h-14 w-auto opacity-60 hover:opacity-100 transition-opacity duration-500"
+                      onError={(e) => {
+                        // Hide broken image, show text fallback
+                        const target = e.currentTarget;
+                        const parent = target.parentElement;
+                        target.style.display = 'none';
+                        if (parent) {
+                          const fallback = document.createElement('span');
+                          fallback.className = 'inline-block px-6 py-3 text-sm font-serif tracking-widest uppercase text-background/60 border border-background/30 hover:text-background hover:border-background/60 transition-all duration-500';
+                          fallback.textContent = developer.name;
+                          parent.appendChild(fallback);
+                        }
+                      }}
                     />
                   ) : (
                     <span className="inline-block px-6 py-3 text-sm font-serif tracking-widest uppercase text-background/60 border border-background/30 hover:text-background hover:border-background/60 transition-all duration-500">

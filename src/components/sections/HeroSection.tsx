@@ -230,6 +230,7 @@ export function HeroSection() {
               goPrev={goPrev}
               formatPrice={formatPrice}
             />
+            </div>
           </div>
         </div>
       </div>
