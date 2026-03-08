@@ -24,6 +24,7 @@ import { InvestorProfile } from '@/components/properties/InvestorProfile';
 import { RiskSignals } from '@/components/properties/RiskSignals';
 import { CleanPropertyCard } from '@/components/properties/CleanPropertyCard';
 import { BackToTop } from '@/components/ui/BackToTop';
+import { PropertyTruthCard } from '@/components/properties/PropertyTruthCard';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTenant } from '@/hooks/useTenant';
