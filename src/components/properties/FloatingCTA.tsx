@@ -27,22 +27,22 @@ export const FloatingCTA = ({ propertyName }: FloatingCTAProps) => {
 
   return (
     <>
-      {/* Mobile — two-button row */}
+      {/* Mobile — two-button row, WhatsApp primary */}
       <div className="fixed bottom-20 right-4 z-50 md:hidden flex flex-col gap-2">
         <Link
-          to="/advisor"
-          className="w-11 h-11 rounded-full bg-background border border-border/50 text-foreground flex items-center justify-center shadow-lg"
+          to="/contact"
+          className="w-10 h-10 rounded-full bg-background border border-border/50 text-foreground flex items-center justify-center shadow-lg"
         >
-          <Phone className="w-4 h-4" />
+          <Phone className="w-3.5 h-3.5" />
         </Link>
         <a
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
           onClick={handleWhatsApp}
-          className="w-11 h-11 rounded-full bg-foreground/80 backdrop-blur-sm text-background flex items-center justify-center shadow-lg"
+          className="w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/25"
         >
-          <MessageCircle className="w-4 h-4" />
+          <MessageCircle className="w-5 h-5" />
         </a>
       </div>
 
@@ -90,7 +90,7 @@ export const FloatingCTA = ({ propertyName }: FloatingCTAProps) => {
                   <span>WhatsApp</span>
                 </a>
                 <Link
-                  to="/advisor"
+                  to="/contact"
                   className="flex items-center justify-center gap-2 w-full border border-border/50 text-foreground px-4 py-3 text-xs font-medium uppercase tracking-[0.15em] hover:bg-secondary/50 transition-colors rounded-xl"
                 >
                   <Phone className="w-4 h-4" />
@@ -107,16 +107,16 @@ export const FloatingCTA = ({ propertyName }: FloatingCTAProps) => {
               className="flex flex-col gap-2"
             >
               <Link
-                to="/advisor"
-                className="w-11 h-11 rounded-full bg-background border border-border/50 text-foreground flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow"
+                to="/contact"
+                className="w-10 h-10 rounded-full bg-background border border-border/50 text-foreground flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow"
               >
-                <Phone className="w-4 h-4" />
+                <Phone className="w-3.5 h-3.5" />
               </Link>
               <button
                 onClick={() => setIsExpanded(true)}
-                className="w-11 h-11 rounded-full bg-foreground/80 backdrop-blur-sm text-background flex items-center justify-center shadow-lg hover:bg-foreground transition-colors duration-300"
+                className="w-12 h-12 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/25 hover:bg-emerald-600 transition-colors duration-300"
               >
-                <MessageCircle className="w-4 h-4" />
+                <MessageCircle className="w-5 h-5" />
               </button>
             </motion.div>
           )}

@@ -53,6 +53,7 @@ export interface TenantSeoConfig {
   default_title: string;
   default_description: string;
   og_image_url?: string | null;
+  ga_measurement_id?: string | null;
 }
 
 export interface TenantFeatures {

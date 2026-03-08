@@ -4,6 +4,7 @@ import { DEFAULT_TENANT_SLUG } from '@/types/tenant';
 import { detectTenantSlug, fetchTenant } from '@/services/tenantService';
 import { formatPrice, formatPriceRange, getCurrencySymbol } from '@/utils/currency';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
+import { initGA } from '@/lib/analytics';
 
 interface TenantContextValue {
   tenant: Tenant | null;
@@ -58,6 +59,11 @@ export function TenantProvider({ children }: TenantProviderProps) {
         
         // Apply tenant theme if configured
         applyTenantTheme(tenantData);
+        
+        // Initialize Google Analytics if configured
+        if (tenantData.seo_config?.ga_measurement_id) {
+          initGA(tenantData.seo_config.ga_measurement_id);
+        }
         
       } catch (err) {
         console.error('Failed to load tenant:', err);

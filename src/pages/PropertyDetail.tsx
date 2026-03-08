@@ -24,6 +24,7 @@ import { InvestorProfile } from '@/components/properties/InvestorProfile';
 import { RiskSignals } from '@/components/properties/RiskSignals';
 import { CleanPropertyCard } from '@/components/properties/CleanPropertyCard';
 import { BackToTop } from '@/components/ui/BackToTop';
+import { PropertyTruthCard } from '@/components/properties/PropertyTruthCard';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTenant } from '@/hooks/useTenant';
@@ -216,8 +217,8 @@ const PropertyDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title={`${property.name} | ${property.area}`}
-        description={`${property.name} in ${property.area}, ${property.location}. Starting from ${formatPrice(property.price_from, { compact: true })}. ${property.tagline || property.description?.slice(0, 100) || `Premium off-plan property in ${cityName}.`}`}
+        title={`${property.name}${property.developer ? ` by ${property.developer.name}` : ''} | From ${formatPrice(property.price_from, { compact: true })}`}
+        description={`${formatBedrooms(property.bedrooms || [])} in ${property.area}, ${property.location}. ${property.tagline || property.description?.slice(0, 120) || `Premium off-plan property in ${cityName} starting from ${formatPrice(property.price_from, { compact: true })}.`}`}
         image={primaryImage}
         url={`https://owning${cityName.toLowerCase()}.com/properties/${property.slug}`}
       />
@@ -400,10 +401,19 @@ const PropertyDetail = () => {
             </div>
 
             <div className="space-y-8">
-              {/* Multi-CTA Actions */}
+              {/* WhatsApp-first CTA */}
               <div className="bg-card border border-border/50 rounded-xl p-6 space-y-3">
                 <h3 className="text-sm font-medium text-foreground mb-4">Get in Touch</h3>
                 <div className="flex flex-col gap-2">
+                  <a
+                    href={getPropertyWhatsAppUrl(property.name)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2.5 px-4 py-3.5 bg-emerald-500 text-white rounded-lg text-sm font-medium hover:bg-emerald-600 transition-colors"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    WhatsApp Us
+                  </a>
                   {tenant?.phone && (
                     <a
                       href={`tel:${tenant.phone}`}
@@ -413,15 +423,6 @@ const PropertyDetail = () => {
                       Schedule a Call
                     </a>
                   )}
-                  <a
-                    href={getPropertyWhatsAppUrl(property.name)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 px-4 py-3 border border-border/50 rounded-lg text-sm text-emerald-500 hover:bg-emerald-500/5 transition-colors"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    WhatsApp
-                  </a>
                   {property.brochure_url && (
                     <a
                       href={property.brochure_url}
@@ -435,6 +436,17 @@ const PropertyDetail = () => {
                   )}
                 </div>
               </div>
+
+              <PropertyTruthCard
+                propertyId={property.id}
+                propertyName={property.name}
+                area={property.area}
+                priceFrom={property.price_from}
+                roiEstimate={property.roi_estimate}
+                sizeSqftFrom={property.size_sqft_from}
+                completionDate={property.completion_date}
+                propertyType={property.property_type}
+              />
 
               <WhyThisProject
                 roiEstimate={property.roi_estimate}

@@ -43,15 +43,6 @@ export const MobileCTABar = ({ propertyName, priceFrom, onInquireClick, brochure
               <Phone className="w-4 h-4" />
             </a>
           )}
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center h-12 w-12 border border-border/50 text-emerald-500 shrink-0 rounded-md"
-            aria-label="WhatsApp"
-          >
-            <MessageCircle className="w-4 h-4" />
-          </a>
           {brochureUrl && (
             <a
               href={brochureUrl}
@@ -63,11 +54,20 @@ export const MobileCTABar = ({ propertyName, priceFrom, onInquireClick, brochure
               <FileDown className="w-4 h-4" />
             </a>
           )}
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 h-12 bg-emerald-500 text-white flex items-center justify-center gap-2 text-xs uppercase tracking-wide font-medium rounded-md"
+          >
+            <MessageCircle className="w-4 h-4" />
+            WhatsApp
+          </a>
           <Button 
             onClick={onInquireClick}
-            className="flex-1 h-12 bg-foreground text-background hover:bg-foreground/90 text-xs uppercase tracking-wide"
+            className="h-12 px-5 bg-foreground text-background hover:bg-foreground/90 text-xs uppercase tracking-wide"
           >
-            Schedule Call
+            Inquire
           </Button>
         </div>
       </div>
