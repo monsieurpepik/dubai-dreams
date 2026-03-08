@@ -5,12 +5,15 @@ import { TrustBar } from "@/components/sections/TrustBar";
 import { EditorialStatement } from "@/components/sections/EditorialStatement";
 import { HowItWorksMini } from "@/components/sections/HowItWorksMini";
 import { ExclusiveSelectionsSection } from "@/components/sections/ExclusiveSelectionsSection";
+import { RecentlyAddedSection } from "@/components/sections/RecentlyAddedSection";
 import { WhyDubaiStrip } from "@/components/sections/WhyDubaiStrip";
 import { ThemedCollections } from "@/components/sections/ThemedCollections";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { PrivateAdvisorSection } from "@/components/sections/PrivateAdvisorSection";
 import { LatestInsightsSection } from "@/components/sections/LatestInsightsSection";
 import { TrustedDevelopersStrip } from "@/components/sections/TrustedDevelopersStrip";
+import { HomeSEOContent } from "@/components/sections/HomeSEOContent";
+import { HomeMobileCTA } from "@/components/sections/HomeMobileCTA";
 import { BackToTop } from "@/components/ui/BackToTop";
 import { SEO } from "@/components/SEO";
 
@@ -26,15 +29,20 @@ const Index = () => {
         <EditorialStatement />
         <HowItWorksMini />
         <ExclusiveSelectionsSection />
+        <RecentlyAddedSection />
         <WhyDubaiStrip />
         <ThemedCollections />
         <TrustedDevelopersStrip />
         <TestimonialsSection />
-        <PrivateAdvisorSection />
+        <div id="advisor-section">
+          <PrivateAdvisorSection />
+        </div>
         <LatestInsightsSection />
+        <HomeSEOContent />
       </main>
       <Footer />
       <BackToTop />
+      <HomeMobileCTA />
     </div>
   );
 };

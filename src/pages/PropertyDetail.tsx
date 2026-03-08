@@ -7,7 +7,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { SEO } from '@/components/SEO';
-import { ImmersiveGallery } from '@/components/properties/ImmersiveGallery';
+import { GalleryMosaic } from '@/components/properties/GalleryMosaic';
 import { PropertyInquiryForm } from '@/components/properties/PropertyInquiryForm';
 import { AffordabilityCTA } from '@/components/properties/AffordabilityCTA';
 import { SimpleMarketContext } from '@/components/properties/SimpleMarketContext';
@@ -338,7 +338,7 @@ const PropertyDetail = () => {
           </div>
         </section>
 
-        <ImmersiveGallery
+        <GalleryMosaic
           images={property.property_images || []}
           propertyName={property.name}
         />

@@ -350,6 +350,25 @@ const AreaGuide = () => {
             )}
           </div>
         </section>
+
+        {/* SEO Content Block */}
+        <section className="py-12 md:py-16 border-t border-border/10">
+          <div className="container-wide max-w-3xl">
+            <div className="space-y-4 text-muted-foreground text-sm leading-relaxed">
+              <p>
+                {areaName} is one of {cityName}'s most sought-after destinations for off-plan property investment.
+                {description} Whether you're a first-time buyer exploring affordable entry points or a seasoned investor
+                seeking premium returns, {areaName} offers a range of projects from {cityName}'s most reputable developers.
+              </p>
+              <p>
+                All properties listed on this page are RERA-registered and DLD-compliant. Our advisory team can guide you
+                through payment plans, Golden Visa eligibility, and projected returns tailored to {areaName}'s specific
+                market dynamics. <Link to="/contact" className="text-foreground underline underline-offset-4 hover:no-underline">Schedule a consultation</Link> to
+                discuss your investment strategy.
+              </p>
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
     </div>

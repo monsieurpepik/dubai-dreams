@@ -7,6 +7,7 @@ import 'leaflet/dist/leaflet.css';
 
 interface PropertyMapProps {
   properties: any[];
+  highlightedPropertyId?: string | null;
 }
 
 // Fix default marker icon
@@ -20,7 +21,18 @@ const defaultIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
-export const PropertyMap = ({ properties }: PropertyMapProps) => {
+const highlightedIcon = new L.Icon({
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconSize: [35, 57],
+  iconAnchor: [17, 57],
+  popupAnchor: [1, -48],
+  shadowSize: [57, 57],
+  className: 'highlighted-marker',
+});
+
+export const PropertyMap = ({ properties, highlightedPropertyId }: PropertyMapProps) => {
   const { formatPrice } = useTenant();
   const mapRef = useRef<L.Map | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -53,8 +65,10 @@ export const PropertyMap = ({ properties }: PropertyMapProps) => {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>',
     }).addTo(map);
 
+    const markers: L.Marker[] = [];
     mappableProperties.forEach(p => {
       const img = p.property_images?.find((i: any) => i.is_primary)?.url || p.property_images?.[0]?.url;
+      const isHighlighted = highlightedPropertyId === p.id;
       const popupContent = `
         <a href="/properties/${p.slug}" style="display:block;text-decoration:none;color:inherit;">
           ${img ? `<img src="${img}" alt="${p.name}" style="width:192px;height:112px;object-fit:cover;margin-bottom:8px;" />` : ''}
@@ -66,9 +80,15 @@ export const PropertyMap = ({ properties }: PropertyMapProps) => {
         </a>
       `;
 
-      L.marker([Number(p.latitude), Number(p.longitude)], { icon: defaultIcon })
+      const marker = L.marker([Number(p.latitude), Number(p.longitude)], { 
+        icon: isHighlighted ? highlightedIcon : defaultIcon,
+        zIndexOffset: isHighlighted ? 1000 : 0
+      })
         .addTo(map)
         .bindPopup(popupContent);
+      
+      if (isHighlighted) marker.openPopup();
+      markers.push(marker);
     });
 
     return () => {
@@ -77,7 +97,7 @@ export const PropertyMap = ({ properties }: PropertyMapProps) => {
         mapRef.current = null;
       }
     };
-  }, [mappableProperties, center, formatPrice]);
+  }, [mappableProperties, center, formatPrice, highlightedPropertyId]);
 
   if (mappableProperties.length === 0) {
     return (
