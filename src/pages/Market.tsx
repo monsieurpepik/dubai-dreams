@@ -39,6 +39,17 @@ const Market = () => {
     },
   });
 
+  const { data: propertyCounts } = useQuery({
+    queryKey: ['area-property-counts'],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('properties').select('area');
+      if (error) throw error;
+      const counts: Record<string, number> = {};
+      data.forEach((p) => { counts[p.area] = (counts[p.area] || 0) + 1; });
+      return counts;
+    },
+  });
+
   const stats = useMemo(() => {
     if (!marketData || marketData.length === 0) return null;
     const avgPrice = Math.round(marketData.reduce((s, a) => s + Number(a.avg_price_sqft), 0) / marketData.length);
