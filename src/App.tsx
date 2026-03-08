@@ -9,7 +9,7 @@ import { TenantProvider } from "@/contexts/TenantContext";
 import { DeveloperProvider } from "@/contexts/DeveloperContext";
 import { usePageTracking } from "@/hooks/usePageTracking";
 import { MobileTabBar } from "@/components/layout/MobileTabBar";
-import { WhatsAppButton } from "@/components/properties/WhatsAppButton";
+import { FloatingCTA } from "@/components/properties/FloatingCTA";
 import Index from "./pages/Index";
 import Properties from "./pages/Properties";
 import PropertyDetail from "./pages/PropertyDetail";
