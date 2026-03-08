@@ -401,10 +401,19 @@ const PropertyDetail = () => {
             </div>
 
             <div className="space-y-8">
-              {/* Multi-CTA Actions */}
+              {/* WhatsApp-first CTA */}
               <div className="bg-card border border-border/50 rounded-xl p-6 space-y-3">
                 <h3 className="text-sm font-medium text-foreground mb-4">Get in Touch</h3>
                 <div className="flex flex-col gap-2">
+                  <a
+                    href={getPropertyWhatsAppUrl(property.name)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2.5 px-4 py-3.5 bg-emerald-500 text-white rounded-lg text-sm font-medium hover:bg-emerald-600 transition-colors"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    WhatsApp Us
+                  </a>
                   {tenant?.phone && (
                     <a
                       href={`tel:${tenant.phone}`}
@@ -414,15 +423,6 @@ const PropertyDetail = () => {
                       Schedule a Call
                     </a>
                   )}
-                  <a
-                    href={getPropertyWhatsAppUrl(property.name)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 px-4 py-3 border border-border/50 rounded-lg text-sm text-emerald-500 hover:bg-emerald-500/5 transition-colors"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    WhatsApp
-                  </a>
                   {property.brochure_url && (
                     <a
                       href={property.brochure_url}
@@ -436,6 +436,17 @@ const PropertyDetail = () => {
                   )}
                 </div>
               </div>
+
+              <PropertyTruthCard
+                propertyId={property.id}
+                propertyName={property.name}
+                area={property.area}
+                priceFrom={property.price_from}
+                roiEstimate={property.roi_estimate}
+                sizeSqftFrom={property.size_sqft_from}
+                completionDate={property.completion_date}
+                propertyType={property.property_type}
+              />
 
               <WhyThisProject
                 roiEstimate={property.roi_estimate}

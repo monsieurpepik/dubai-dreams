@@ -90,7 +90,7 @@ export const FloatingCTA = ({ propertyName }: FloatingCTAProps) => {
                   <span>WhatsApp</span>
                 </a>
                 <Link
-                  to="/advisor"
+                  to="/contact"
                   className="flex items-center justify-center gap-2 w-full border border-border/50 text-foreground px-4 py-3 text-xs font-medium uppercase tracking-[0.15em] hover:bg-secondary/50 transition-colors rounded-xl"
                 >
                   <Phone className="w-4 h-4" />
