@@ -22,9 +22,15 @@ export function TrustBar() {
     staleTime: 60_000,
   });
 
+  const MIN_THRESHOLD = 5;
+
   const stats = [
-    { icon: Building2, value: `${counts?.developers || 0}+`, label: 'Verified developers' },
-    { icon: TrendingUp, value: `${counts?.properties || 0}+`, label: 'Off-plan projects listed' },
+    ...(counts && counts.developers >= MIN_THRESHOLD
+      ? [{ icon: Building2, value: `${counts.developers}+`, label: 'Verified developers' }]
+      : []),
+    ...(counts && counts.properties >= MIN_THRESHOLD
+      ? [{ icon: TrendingUp, value: `${counts.properties}+`, label: 'Off-plan projects listed' }]
+      : []),
     { icon: Users, value: '0%', label: 'Income tax on returns' },
   ];
 
