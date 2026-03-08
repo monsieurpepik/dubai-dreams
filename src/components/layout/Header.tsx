@@ -105,7 +105,7 @@ export function Header() {
             )}
             <button
               onClick={() => setIsMenuOpen(true)}
-              className="group flex items-center gap-2.5 px-4 py-2 rounded-full border border-border/30 hover:border-border/60 bg-background/40 backdrop-blur-sm hover:bg-background/70 transition-all duration-300"
+              className="group flex items-center gap-2.5 px-4 py-2 rounded-full border border-border/30 hover:border-border/60 bg-background/30 backdrop-blur-sm hover:bg-background/60 transition-all duration-300"
               aria-label="Open navigation menu"
             >
               <div className="flex flex-col gap-[3px]">
