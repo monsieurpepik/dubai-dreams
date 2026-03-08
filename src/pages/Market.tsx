@@ -11,6 +11,7 @@ import { SEO } from '@/components/SEO';
 import { areaToSlug } from '@/data/areas';
 import { useTenant } from '@/hooks/useTenant';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
+import { AreaCompareTool } from '@/components/market/AreaCompareTool';
 
 type SortKey = 'area' | 'price' | 'trend' | 'offplan';
 type SortDir = 'asc' | 'desc';
@@ -35,6 +36,17 @@ const Market = () => {
       const { count, error } = await supabase.from('properties').select('*', { count: 'exact', head: true });
       if (error) throw error;
       return count || 0;
+    },
+  });
+
+  const { data: propertyCounts } = useQuery({
+    queryKey: ['area-property-counts'],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('properties').select('area');
+      if (error) throw error;
+      const counts: Record<string, number> = {};
+      data.forEach((p) => { counts[p.area] = (counts[p.area] || 0) + 1; });
+      return counts;
     },
   });
 
@@ -146,6 +158,11 @@ const Market = () => {
               </div>
             </div>
           </section>
+        )}
+
+        {/* Compare Tool */}
+        {marketData && marketData.length > 0 && (
+          <AreaCompareTool allAreas={marketData} propertyCounts={propertyCounts} />
         )}
 
         {/* Price Chart */}
