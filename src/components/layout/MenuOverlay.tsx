@@ -12,6 +12,7 @@ const primaryItems = [
   { label: 'Market Trends', href: '/market', image: 'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=800&q=80' },
   { label: 'Developers', href: '/developers', image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80' },
   { label: 'Intelligence', href: '/insights', image: 'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=800&q=80' },
+  { label: 'Calculator', href: '/calculator', image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80' },
   { label: 'Private Advisor', href: '/advisor', image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80' },
 ];
 
