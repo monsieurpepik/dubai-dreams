@@ -78,7 +78,7 @@ export function Header() {
                 exit={{ opacity: 0, scale: 0.9, y: -10 }}
                 transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                 onClick={() => setIsSearchOpen(true)}
-                className="hidden md:flex items-center gap-3 px-5 py-2 border border-border/40 rounded-full bg-background/60 backdrop-blur-sm hover:shadow-md hover:border-border/60 transition-all duration-300 group"
+                className="hidden md:flex items-center gap-3 px-5 py-2 border border-border/30 rounded-full bg-background/60 backdrop-blur-sm hover:shadow-md hover:border-border/60 transition-all duration-300 group"
               >
                 <Search className="w-3.5 h-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
                 <div className="flex items-center gap-0 text-xs text-muted-foreground">
