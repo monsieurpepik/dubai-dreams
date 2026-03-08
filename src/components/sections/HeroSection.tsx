@@ -227,6 +227,22 @@ export function HeroSection() {
                 Verified off-plan projects from {cityName}'s top developers. From AED 500K, with flexible payment plans.
               </motion.p>
 
+              {/* Deal Finder CTA */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.95 }}
+                className="mt-5"
+              >
+                <Link
+                  to="/discover"
+                  className="inline-flex items-center gap-2 text-[11px] tracking-[0.15em] text-white/80 hover:text-white border border-white/20 hover:border-white/40 px-5 py-2.5 rounded-xl transition-all duration-300"
+                >
+                  <ArrowRight className="w-3.5 h-3.5" />
+                  Find Your Deal — AI-Powered Matching
+                </Link>
+              </motion.div>
+
               {/* Glassmorphic Search Bar */}
               <motion.form
                 onSubmit={handleSearch}

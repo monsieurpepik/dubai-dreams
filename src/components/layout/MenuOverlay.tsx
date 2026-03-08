@@ -7,6 +7,7 @@ import { CurrencySwitcher } from '@/components/ui/CurrencySwitcher';
 import { useAuth } from '@/hooks/useAuth';
 
 const primaryItems = [
+  { label: 'Deal Finder', href: '/discover', image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80' },
   { label: 'Properties', href: '/properties', image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80' },
   { label: 'Areas', href: '/areas', image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80' },
   { label: 'Market Trends', href: '/market', image: 'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=800&q=80' },

@@ -14,3 +14,6 @@ verify_jwt = false
 
 [functions.qualify-lead]
 verify_jwt = false
+
+[functions.match-deals]
+verify_jwt = false
