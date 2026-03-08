@@ -68,7 +68,8 @@ const AnimatedRoutes = () => {
         <Route path="/how-it-works" element={<PageTransition><HowItWorks /></PageTransition>} />
         <Route path="/privacy" element={<PageTransition><Privacy /></PageTransition>} />
         <Route path="/terms" element={<PageTransition><Terms /></PageTransition>} />
-        <Route path="/saved" element={<PageTransition><SavedProperties /></PageTransition>} />
+        <Route path="/auth" element={<PageTransition><Auth /></PageTransition>} />
+        <Route path="/saved" element={<ProtectedRoute><PageTransition><SavedProperties /></PageTransition></ProtectedRoute>} />
         <Route path="/compare" element={<PageTransition><Compare /></PageTransition>} />
         <Route path="/areas/:slug" element={<PageTransition><AreaGuide /></PageTransition>} />
         <Route path="/discover" element={<PageTransition><Discover /></PageTransition>} />
