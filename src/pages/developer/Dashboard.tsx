@@ -1,20 +1,24 @@
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 import { 
   Building2, 
   Users, 
   TrendingUp, 
   Eye,
   ArrowUpRight,
-  ArrowDownRight
+  ArrowDownRight,
+  RefreshCw
 } from 'lucide-react';
 import { DeveloperLayout } from '@/components/developer/DeveloperLayout';
 import { useDeveloper } from '@/contexts/DeveloperContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
 import { formatDistanceToNow } from 'date-fns';
 import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
 
 export default function DeveloperDashboard() {
   const { developer } = useDeveloper();
@@ -76,6 +80,23 @@ export default function DeveloperDashboard() {
     enabled: !!developer?.id && !!properties?.length,
   });
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefreshData = async () => {
+    setRefreshing(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('fetch-bayut-data', {
+        body: {},
+      });
+      if (error) throw error;
+      toast.success(`Import complete: ${data?.inserted || 0} new properties added, ${data?.skipped || 0} duplicates skipped`);
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to refresh data');
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   const stats = [
     {
       title: 'Active Listings',
@@ -112,6 +133,19 @@ export default function DeveloperDashboard() {
       title="Dashboard"
       subtitle={`Welcome back${developer?.name ? `, ${developer.name}` : ''}`}
     >
+      {/* Refresh Data Button */}
+      <div className="flex justify-end mb-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleRefreshData}
+          disabled={refreshing}
+          className="gap-2"
+        >
+          <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+          {refreshing ? 'Importing...' : 'Refresh Property Data'}
+        </Button>
+      </div>
       {/* Stats Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat, index) => {
