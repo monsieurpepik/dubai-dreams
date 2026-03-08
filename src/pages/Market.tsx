@@ -11,6 +11,7 @@ import { SEO } from '@/components/SEO';
 import { areaToSlug } from '@/data/areas';
 import { useTenant } from '@/hooks/useTenant';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
+import { AreaCompareTool } from '@/components/market/AreaCompareTool';
 
 type SortKey = 'area' | 'price' | 'trend' | 'offplan';
 type SortDir = 'asc' | 'desc';
