@@ -4,6 +4,7 @@ import { DEFAULT_TENANT_SLUG } from '@/types/tenant';
 import { detectTenantSlug, fetchTenant } from '@/services/tenantService';
 import { formatPrice, formatPriceRange, getCurrencySymbol } from '@/utils/currency';
 import { useDisplayCurrency } from '@/hooks/useDisplayCurrency';
+import { initGA } from '@/lib/analytics';
 
 interface TenantContextValue {
   tenant: Tenant | null;
