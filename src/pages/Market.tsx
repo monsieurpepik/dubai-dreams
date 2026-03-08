@@ -160,6 +160,11 @@ const Market = () => {
           </section>
         )}
 
+        {/* Compare Tool */}
+        {marketData && marketData.length > 0 && (
+          <AreaCompareTool allAreas={marketData} propertyCounts={propertyCounts} />
+        )}
+
         {/* Price Chart */}
         {priceChartData.length > 0 && (
           <section className="py-12 md:py-16 border-b border-border/30">
