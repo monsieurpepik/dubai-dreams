@@ -1,19 +1,16 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { HeroSection } from "@/components/sections/HeroSection";
-import { ExclusiveSelectionsSection } from "@/components/sections/ExclusiveSelectionsSection";
-import { SearchEntry } from "@/components/properties/SearchEntry";
-import { QuickCategories } from "@/components/sections/QuickCategories";
-import { WhyDubaiStrip } from "@/components/sections/WhyDubaiStrip";
+import { TrustBar } from "@/components/sections/TrustBar";
 import { EditorialStatement } from "@/components/sections/EditorialStatement";
-import { OffPlanProjectsSection } from "@/components/sections/OffPlanProjectsSection";
-import { TrustedDevelopersStrip } from "@/components/sections/TrustedDevelopersStrip";
-import { ThemedCollections } from "@/components/sections/ThemedCollections";
-import { RecentlyAddedSection } from "@/components/sections/RecentlyAddedSection";
-import { LatestInsightsSection } from "@/components/sections/LatestInsightsSection";
 import { HowItWorksMini } from "@/components/sections/HowItWorksMini";
-import { PrivateAdvisorSection } from "@/components/sections/PrivateAdvisorSection";
+import { ExclusiveSelectionsSection } from "@/components/sections/ExclusiveSelectionsSection";
+import { WhyDubaiStrip } from "@/components/sections/WhyDubaiStrip";
+import { ThemedCollections } from "@/components/sections/ThemedCollections";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
+import { PrivateAdvisorSection } from "@/components/sections/PrivateAdvisorSection";
+import { LatestInsightsSection } from "@/components/sections/LatestInsightsSection";
+import { TrustedDevelopersStrip } from "@/components/sections/TrustedDevelopersStrip";
 import { BackToTop } from "@/components/ui/BackToTop";
 import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import { SEO } from "@/components/SEO";
@@ -27,19 +24,16 @@ const Index = () => {
       <Header />
       <main>
         <HeroSection />
-        <ExclusiveSelectionsSection />
-        <SearchEntry />
-        <QuickCategories />
-        <WhyDubaiStrip />
+        <TrustBar />
         <EditorialStatement />
-        <ThemedCollections />
-        <PrivateAdvisorSection />
-        <OffPlanProjectsSection />
-        <TrustedDevelopersStrip />
-        <RecentlyAddedSection />
-        <TestimonialsSection />
-        <LatestInsightsSection />
         <HowItWorksMini />
+        <ExclusiveSelectionsSection />
+        <WhyDubaiStrip />
+        <ThemedCollections />
+        <TrustedDevelopersStrip />
+        <TestimonialsSection />
+        <PrivateAdvisorSection />
+        <LatestInsightsSection />
       </main>
       <Footer />
       <BackToTop />

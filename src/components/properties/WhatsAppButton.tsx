@@ -17,19 +17,14 @@ export const WhatsAppButton = ({ propertyName, variant = 'floating' }: WhatsAppB
     ? getPropertyWhatsAppUrl(propertyName)
     : getWhatsAppUrl();
 
-  // Don't render if no WhatsApp number configured
-  if (!tenant?.whatsapp_number) {
-    return null;
-  }
+  if (!tenant?.whatsapp_number) return null;
 
   const handleClick = () => {
     analytics.clickWhatsApp(propertyName);
   };
 
-  // City name for personalized messages
   const cityName = tenant?.office_location?.city || 'property';
 
-  // Inline variant for cards - neutral, minimal
   if (variant === 'inline') {
     return (
       <motion.a
@@ -39,7 +34,7 @@ export const WhatsAppButton = ({ propertyName, variant = 'floating' }: WhatsAppB
         onClick={handleClick}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        className="flex items-center gap-2 bg-foreground text-background px-4 py-2 text-xs font-medium uppercase tracking-wider"
+        className="flex items-center gap-2 bg-foreground text-background px-4 py-2 text-xs font-medium uppercase tracking-wider rounded-xl"
       >
         <MessageCircle className="w-4 h-4" />
         <span>Message</span>
@@ -47,7 +42,6 @@ export const WhatsAppButton = ({ propertyName, variant = 'floating' }: WhatsAppB
     );
   }
 
-  // Sidebar variant for property detail - calm, professional
   if (variant === 'sidebar') {
     return (
       <motion.a
@@ -57,7 +51,7 @@ export const WhatsAppButton = ({ propertyName, variant = 'floating' }: WhatsAppB
         onClick={handleClick}
         whileHover={{ scale: 1.01 }}
         whileTap={{ scale: 0.99 }}
-        className="flex items-center justify-center gap-2 w-full bg-foreground text-background px-4 py-3 text-xs font-medium uppercase tracking-wider transition-opacity hover:opacity-90"
+        className="flex items-center justify-center gap-2 w-full bg-foreground text-background px-4 py-3 text-xs font-medium uppercase tracking-wider transition-opacity hover:opacity-90 rounded-xl"
       >
         <MessageCircle className="w-4 h-4" />
         <span>Start Conversation</span>
@@ -65,10 +59,10 @@ export const WhatsAppButton = ({ propertyName, variant = 'floating' }: WhatsAppB
     );
   }
 
-  // Floating variant - neutral, confident, no urgency
+  // Floating variant — subtle WhatsApp icon
   return (
     <>
-      {/* Mobile: Simple button */}
+      {/* Mobile */}
       <motion.a
         href={whatsappUrl}
         target="_blank"
@@ -76,17 +70,17 @@ export const WhatsAppButton = ({ propertyName, variant = 'floating' }: WhatsAppB
         onClick={handleClick}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1, duration: 0.4 }}
-        className="fixed bottom-6 right-6 z-50 md:hidden flex items-center justify-center w-12 h-12 bg-foreground text-background"
+        transition={{ delay: 2, duration: 0.4 }}
+        className="fixed bottom-6 right-6 z-50 md:hidden flex items-center justify-center w-11 h-11 rounded-full bg-foreground/80 backdrop-blur-sm text-background shadow-lg"
       >
-        <MessageCircle className="w-5 h-5" />
+        <MessageCircle className="w-4.5 h-4.5" />
       </motion.a>
 
-      {/* Desktop: Expandable widget */}
+      {/* Desktop */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1, duration: 0.4 }}
+        transition={{ delay: 2, duration: 0.4 }}
         className="fixed bottom-6 right-6 z-50 hidden md:block"
       >
         <AnimatePresence mode="wait">
@@ -96,17 +90,17 @@ export const WhatsAppButton = ({ propertyName, variant = 'floating' }: WhatsAppB
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="bg-background border border-border p-6 w-72"
+              className="bg-background border border-border/30 p-6 w-72 rounded-xl shadow-xl"
             >
               <div className="flex items-center justify-between mb-4">
-                <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                  Contact
+                <span className="text-[10px] font-medium uppercase tracking-[0.15em] text-muted-foreground">
+                  Get in Touch
                 </span>
                 <button
                   onClick={() => setIsExpanded(false)}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  className="text-muted-foreground/60 hover:text-foreground transition-colors"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-3.5 h-3.5" />
                 </button>
               </div>
               
@@ -119,10 +113,10 @@ export const WhatsAppButton = ({ propertyName, variant = 'floating' }: WhatsAppB
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={handleClick}
-                className="flex items-center justify-center gap-2 w-full bg-foreground text-background px-4 py-3 text-xs font-medium uppercase tracking-wider hover:opacity-90 transition-opacity"
+                className="flex items-center justify-center gap-2 w-full bg-foreground text-background px-4 py-3 text-xs font-medium uppercase tracking-[0.15em] hover:opacity-90 transition-opacity rounded-xl"
               >
                 <MessageCircle className="w-4 h-4" />
-                <span>Start Conversation</span>
+                <span>WhatsApp</span>
               </a>
             </motion.div>
           ) : (
@@ -132,12 +126,9 @@ export const WhatsAppButton = ({ propertyName, variant = 'floating' }: WhatsAppB
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsExpanded(true)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="flex items-center gap-3 bg-foreground text-background px-5 py-3 text-xs font-medium uppercase tracking-wider hover:opacity-90 transition-opacity"
+              className="w-11 h-11 rounded-full bg-foreground/80 backdrop-blur-sm text-background flex items-center justify-center shadow-lg hover:bg-foreground transition-colors duration-300"
             >
-              <MessageCircle className="w-4 h-4" />
-              <span>Contact</span>
+              <MessageCircle className="w-4.5 h-4.5" />
             </motion.button>
           )}
         </AnimatePresence>
