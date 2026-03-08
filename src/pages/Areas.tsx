@@ -248,6 +248,27 @@ const Areas = () => {
             </div>
           </div>
         </section>
+
+        {/* Floating Compare CTA */}
+        <AnimatePresence>
+          {compareAreas.length >= 2 && (
+            <motion.div
+              initial={{ y: 80, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 80, opacity: 0 }}
+              className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50"
+            >
+              <button
+                onClick={goToCompare}
+                className="flex items-center gap-3 px-6 py-3 bg-foreground text-background text-sm font-medium tracking-wider uppercase shadow-lg hover:opacity-90 transition-opacity"
+              >
+                <Layers className="w-4 h-4" />
+                Compare {compareAreas.length} Areas
+                <ArrowUpRight className="w-4 h-4" />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
       <Footer />
     </div>
