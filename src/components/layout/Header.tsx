@@ -82,8 +82,8 @@ export function Header() {
               >
                 <Search className="w-3.5 h-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
                 <div className="flex items-center gap-0 text-xs text-muted-foreground">
-                  <span className="pr-3 border-r border-border/40">Area</span>
-                  <span className="px-3 border-r border-border/40">Bedrooms</span>
+                  <span className="pr-3 border-r border-border/30">Area</span>
+                  <span className="px-3 border-r border-border/30">Bedrooms</span>
                   <span className="pl-3">Budget</span>
                 </div>
               </motion.button>
