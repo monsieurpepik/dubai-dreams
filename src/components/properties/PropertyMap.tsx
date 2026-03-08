@@ -21,7 +21,18 @@ const defaultIcon = new L.Icon({
   shadowSize: [41, 41],
 });
 
-export const PropertyMap = ({ properties }: PropertyMapProps) => {
+const highlightedIcon = new L.Icon({
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconSize: [35, 57],
+  iconAnchor: [17, 57],
+  popupAnchor: [1, -48],
+  shadowSize: [57, 57],
+  className: 'highlighted-marker',
+});
+
+export const PropertyMap = ({ properties, highlightedPropertyId }: PropertyMapProps) => {
   const { formatPrice } = useTenant();
   const mapRef = useRef<L.Map | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
