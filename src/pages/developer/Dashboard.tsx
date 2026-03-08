@@ -80,6 +80,23 @@ export default function DeveloperDashboard() {
     enabled: !!developer?.id && !!properties?.length,
   });
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefreshData = async () => {
+    setRefreshing(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('fetch-bayut-data', {
+        body: {},
+      });
+      if (error) throw error;
+      toast.success(`Import complete: ${data?.inserted || 0} new properties added, ${data?.skipped || 0} duplicates skipped`);
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to refresh data');
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   const stats = [
     {
       title: 'Active Listings',
