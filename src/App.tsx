@@ -8,7 +8,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { TenantProvider } from "@/contexts/TenantContext";
 import { DeveloperProvider } from "@/contexts/DeveloperContext";
 import { usePageTracking } from "@/hooks/usePageTracking";
-
 import { MobileTabBar } from "@/components/layout/MobileTabBar";
 import { WhatsAppButton } from "@/components/properties/WhatsAppButton";
 import Index from "./pages/Index";
