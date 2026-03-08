@@ -14,7 +14,22 @@ type SortOption = 'alphabetical' | 'price-high' | 'price-low' | 'growth';
 
 const Areas = () => {
   const [sort, setSort] = useState<SortOption>('growth');
+  const [compareAreas, setCompareAreas] = useState<string[]>([]);
   const { formatPrice } = useTenant();
+  const navigate = useNavigate();
+
+  const toggleCompare = (areaName: string) => {
+    setCompareAreas(prev =>
+      prev.includes(areaName)
+        ? prev.filter(a => a !== areaName)
+        : prev.length < 3 ? [...prev, areaName] : prev
+    );
+  };
+
+  const goToCompare = () => {
+    const params = compareAreas.map(encodeURIComponent).join(',');
+    navigate(`/market?compare=${params}#compare`);
+  };
 
   const { data: marketData, isLoading } = useQuery({
     queryKey: ['all-area-market-data'],
