@@ -65,8 +65,10 @@ export const PropertyMap = ({ properties, highlightedPropertyId }: PropertyMapPr
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>',
     }).addTo(map);
 
+    const markers: L.Marker[] = [];
     mappableProperties.forEach(p => {
       const img = p.property_images?.find((i: any) => i.is_primary)?.url || p.property_images?.[0]?.url;
+      const isHighlighted = highlightedPropertyId === p.id;
       const popupContent = `
         <a href="/properties/${p.slug}" style="display:block;text-decoration:none;color:inherit;">
           ${img ? `<img src="${img}" alt="${p.name}" style="width:192px;height:112px;object-fit:cover;margin-bottom:8px;" />` : ''}
@@ -78,9 +80,15 @@ export const PropertyMap = ({ properties, highlightedPropertyId }: PropertyMapPr
         </a>
       `;
 
-      L.marker([Number(p.latitude), Number(p.longitude)], { icon: defaultIcon })
+      const marker = L.marker([Number(p.latitude), Number(p.longitude)], { 
+        icon: isHighlighted ? highlightedIcon : defaultIcon,
+        zIndexOffset: isHighlighted ? 1000 : 0
+      })
         .addTo(map)
         .bindPopup(popupContent);
+      
+      if (isHighlighted) marker.openPopup();
+      markers.push(marker);
     });
 
     return () => {
