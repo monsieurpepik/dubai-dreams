@@ -7,6 +7,7 @@ import 'leaflet/dist/leaflet.css';
 
 interface PropertyMapProps {
   properties: any[];
+  highlightedPropertyId?: string | null;
 }
 
 // Fix default marker icon
