@@ -15,7 +15,7 @@ import { CategoryBar, CategoryFilter } from '@/components/properties/CategoryBar
 import { SaveSearchButton } from '@/components/properties/SaveSearchButton';
 import { CleanPropertyCard } from '@/components/properties/CleanPropertyCard';
 import { useTenant } from '@/hooks/useTenant';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import heroImage from '@/assets/hero-dubai-skyline.jpeg';
 
 const collectionMeta: Record<string, { title: string; description: string }> = {
