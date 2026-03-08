@@ -1,135 +1,66 @@
 
 
-# Airbnb + LuxuryProperty.com + JamesEdition Meets Hermes -- The Final Layer
+# Updated Score: 7.5 / 10
 
-## The Gap Analysis
+The improvements moved the needle meaningfully. Here is what changed:
 
-The site now has Hermes-level restraint (good). But comparing it to Airbnb, LuxuryProperty.com, and JamesEdition reveals specific functional and experiential gaps.
+**What got better since 6.5:**
+- Hero search bar added — major functional gap closed
+- Floating CTA stack (WhatsApp + Book a Call) — conversion surface area doubled
+- Lenis removed — native scrolling restored, accessibility fixed
+- Trust bar no longer shows embarrassing "0+" stats
+- Testimonials cleaned up (no more emoji flags)
+- Developer logos on light background — no more jarring dark strip
+- "Exclusive" badges and image count on cards — visual hierarchy improved
 
-### What Airbnb Does That This Site Does Not
-- **Image carousel on property cards** -- hover or swipe to preview multiple photos without clicking through. This is the single highest-impact UX pattern in property browsing. Currently cards show one static image.
-- **Wishlist/Save with visual feedback** -- a heart icon on the card image with an animation on click. Currently save functionality exists but is not on the card.
-- **Instant category filtering** -- the horizontal scrolling category bar with icons on the listing page works, but the homepage has no visual category browsing. The QuickCategories are text-only links at the bottom -- invisible.
-- **Map + list split view** -- the Properties page has grid/map toggle. Airbnb shows them side by side. A split view where hovering a card highlights on the map is the gold standard.
-
-### What LuxuryProperty.com Does That This Site Does Not
-- **Property card multi-image preview** -- LuxuryProperty shows image count and allows browsing on the card level
-- **"Exclusive" and "Featured" labels** -- visual hierarchy to distinguish premium listings from standard
-- **Developer page** -- clicking a developer name leads to a dedicated page showing their portfolio, track record, and active projects. Currently developer names are just text.
-- **Area guide links from cards** -- the area name on a card is clickable, leading to an area guide
-
-### What JamesEdition Does That This Site Does Not
-- **Lifestyle-first imagery** -- JamesEdition property cards feel like editorial photography. The image aspect ratio is taller (closer to 4:5 or 1:1) rather than the standard 3:2 landscape, making each card feel more like a magazine spread.
-- **Price as a statement** -- JamesEdition shows price in a larger, more confident type treatment. Currently the price is `text-sm text-foreground/80` -- too shy for a luxury platform.
-- **"Request Info" on every card** -- a subtle CTA on hover, not requiring users to navigate to the detail page to take action
-- **Curated editorial sections** -- "Most viewed this week", "Recently added", "Price reduced" -- dynamic content sections that make the platform feel alive
+**What still holds the score back from 9:**
 
 ---
 
-## Changes to Implement
+## The Gap to 9/10 — Six Remaining Issues
 
-### 1. Property Card -- Multi-Image Hover Carousel (Airbnb Pattern)
-The single biggest upgrade. Replace the static single image with the existing `ImageHoverCarousel` component that is already built but not used on CleanPropertyCard. On desktop, moving the mouse across the image reveals different photos. On mobile, dot indicators allow swiping.
+### 1. No Authentication / User Accounts
+LuxuryProperty and JamesEdition both have user accounts. Saved properties currently use localStorage — they vanish across devices. A logged-in user should see their saved searches, inquiry history, and get personalized recommendations. Without auth, the platform feels like a brochure, not a product.
 
-Also add a subtle save/heart icon in the top-right corner of the image (Airbnb style).
+**Fix:** Add email-based auth (sign up / sign in), a `profiles` table, and migrate saved properties from localStorage to a `saved_properties` database table. Gate the "Saved" page behind auth.
 
-**File:** `src/components/properties/CleanPropertyCard.tsx`
-- Replace the static `<img>` with the `ImageHoverCarousel` component, passing all `property_images`
-- Add a heart/save button overlaid on the image top-right
-- Make the area name a clickable link to `/areas/{area-slug}`
+### 2. Property Detail Page — No Gallery Grid Below Hero
+The detail page has a cinematic hero with crossfading images (good), but the `ImmersiveGallery` bento grid below it shows thumbnails redundantly. JamesEdition and LuxuryProperty show a clean 2x2 or 1+4 mosaic grid that opens into a full-screen lightbox. Currently the gallery section feels like an afterthought below the hero.
 
-### 2. Property Card -- Price as a Statement (JamesEdition)
-The price is currently `text-sm text-foreground/80`. On a luxury platform, price is confidence. Make it larger, serif, and full opacity.
+**Fix:** Rework `ImmersiveGallery` into a proper mosaic layout (1 large + 4 small tiles) with a "View all X photos" button that opens a fullscreen lightbox/carousel. Remove the current bento thumbnail strip.
 
-**File:** `src/components/properties/CleanPropertyCard.tsx`
-- Change price to `font-serif text-lg text-foreground` instead of `text-sm text-foreground/80`
-- This single change makes the card feel JamesEdition-level
+### 3. Listings Page — No Split Map View
+The plan called for an Airbnb-style split view (list left, map right). Currently the Properties page has grid/map toggle but not a simultaneous side-by-side. This is the single biggest UX gap on the listings page vs. both reference sites.
 
-### 3. Property Card -- Hover CTA (JamesEdition)
-Add a "View Project" text that appears on hover below the card content. Subtle, not a button -- just text that fades in. This signals interactivity without adding visual noise.
+**Fix:** Add a `split` view mode to `Properties.tsx` — left column scrollable property cards, right column sticky map. Hovering a card highlights its map pin.
 
-**File:** `src/components/properties/CleanPropertyCard.tsx`
-- Add a `group-hover:opacity-100 opacity-0` text line at the bottom of the card content
+### 4. No "Recently Added" or Dynamic Content Sections
+The homepage sections are static in feel. Both reference sites have "Recently Added", "Most Viewed", and "Price Reduced" sections that signal a living marketplace. The homepage currently shows one carousel ("Exclusive Selections") and collections — but no time-based dynamic sections.
 
-### 4. Homepage -- Promote QuickCategories to a Visual Section
-Currently QuickCategories are near-invisible text links at the bottom. Move them up to sit directly below the SearchEntry, styled as Airbnb-like pills with subtle borders (not icons -- that would break the Hermes feel). Make them horizontally scrollable on mobile.
+**Fix:** Add a "Recently Added" horizontal scroll section below Exclusive Selections, querying the 6 newest properties. Add view counts to cards using the existing `property_views` table.
 
-**File:** `src/pages/Index.tsx` -- reorder sections: Hero -> Search -> Categories -> Editorial -> Properties -> Footer
-**File:** `src/components/sections/QuickCategories.tsx` -- restyle as horizontal pill bar with border styling and scrollable overflow
+### 5. Mobile Experience — No Sticky CTA on Homepage
+On mobile, the homepage has no persistent conversion CTA. The advisor form is buried at 80% scroll depth. LuxuryProperty has a sticky bottom bar on every page. The existing `MobileCTABar` component is only used on the property detail page.
 
-### 5. Homepage -- Add "Recently Added" Dynamic Section
-Below the main "Selected works" grid, add a smaller horizontal scroll section titled "Recently added" showing the 4 newest properties in a horizontal scroll. This makes the homepage feel alive (Airbnb "trending" pattern) without breaking the Hermes restraint because it is a single row, not a grid.
+**Fix:** Add `MobileCTABar` to the homepage (and listings page) with "Speak to an Advisor" + WhatsApp actions.
 
-**File:** `src/pages/Index.tsx` -- add new section
-**File:** `src/components/sections/RecentlyAddedSection.tsx` -- **New** -- horizontal scroll of 4 latest properties using a compact card variant
+### 6. SEO Content Blocks Missing
+LuxuryProperty has rich-text SEO paragraphs on area pages and the homepage footer. Currently our area guide pages exist but have no substantive text content — just filtered property grids. Google needs crawlable text to rank these pages.
 
-### 6. Property Grid -- Asymmetric Editorial Layout (JamesEdition)
-The current 3-column equal grid is functional but generic. For the homepage "Selected works" section, make the first 2 cards larger (spanning 2 columns on desktop) and the remaining 4 standard size. This creates visual hierarchy and the editorial magazine feel that JamesEdition and LuxuryProperty use.
-
-**File:** `src/components/sections/OffPlanProjectsSection.tsx` -- replace CleanPropertyGrid with a custom asymmetric layout
-- First row: 2 large cards (each taking 50% width, taller aspect ratio)
-- Second row: 4 standard cards in a 4-column grid
-- This creates a "featured + browse" hierarchy
-
-### 7. Listing Page -- Split Map View (Airbnb)
-Replace the grid/map toggle with a side-by-side split view option. Left side: property list (scrollable). Right side: map (sticky). Hovering a card highlights its pin on the map.
-
-**File:** `src/pages/Properties.tsx`
-- Add a third view mode: `split`
-- When split is active, render a `grid grid-cols-2` with the left side scrollable and the right side sticky with the map
-- The existing PropertyMap component can be reused
-
-### 8. Developer Name as Link (LuxuryProperty)
-On property cards and detail pages, the developer name should link to `/properties?developer={slug}` to filter by that developer. Currently it is plain text.
-
-**File:** `src/components/properties/CleanPropertyCard.tsx` -- wrap developer name in a Link (with `e.stopPropagation()` to prevent card navigation)
-**File:** `src/pages/PropertyDetail.tsx` -- wrap developer name in a Link
-
-### 9. Area Name as Link on Cards
-Same pattern as developer -- make the area name on property cards clickable, linking to the area guide page.
-
-**File:** `src/components/properties/CleanPropertyCard.tsx` -- wrap area in a Link to `/areas/{area-slug}`
-
-### 10. Property Detail -- Full-Width Hero Image (LuxuryProperty/JamesEdition)
-The current bento grid gallery on the detail page is good. But LuxuryProperty and JamesEdition both start with a single full-bleed cinematic image before showing the gallery grid. Add a hero-height primary image at the top, with the bento grid accessible via "View all photos."
-
-**File:** `src/pages/PropertyDetail.tsx`
-- Before the ImmersiveGallery bento grid, show the primary image full-width at `h-[60vh]` with a gradient overlay and the property name overlaid at the bottom-left
-- The "View all photos" button transitions to the existing lightbox/grid view
-
-### 11. Footer -- Add "Explore" Section (LuxuryProperty SEO Pattern)
-LuxuryProperty's footer has "Popular Searches" that improve SEO. Add a row of dynamic links: "Studios under AED 1M", "3BR in Dubai Marina", "Golden Visa Properties" -- these link to pre-filtered search results.
-
-**File:** `src/components/layout/Footer.tsx`
-- Add a "Popular Searches" row between the area links and the brand line
-- Each link maps to a `/properties?collection=X` or `/properties?area=X&bedrooms=Y` URL
-
-### 12. Custom Cursor -- Add "View" Text on Property Card Hover
-JamesEdition-level touch: when hovering a property card image, the custom cursor expands to show a small "View" text inside the circle. This is a subtle but high-craft detail.
-
-**File:** `src/components/ui/CustomCursor.tsx`
-- Track whether the user is hovering a `[data-cursor="view"]` element
-- When true, expand cursor to 48px and show "View" text inside
-- Add `data-cursor="view"` attribute to property card image containers
+**Fix:** Add a 2-3 paragraph SEO content block to the bottom of the homepage (above footer) and to area guide pages. Content can be static initially, stored in the database later.
 
 ---
 
-## Technical Summary
+## Priority Order for Implementation
 
-| Change | File(s) | Inspiration | Effort |
-|--------|---------|-------------|--------|
-| Multi-image hover carousel on cards | CleanPropertyCard.tsx | Airbnb | Medium |
-| Price as serif statement | CleanPropertyCard.tsx | JamesEdition | Trivial |
-| Hover CTA text on cards | CleanPropertyCard.tsx | JamesEdition | Trivial |
-| QuickCategories as pill bar | Index.tsx, QuickCategories.tsx | Airbnb | Low |
-| "Recently Added" horizontal scroll | Index.tsx, new RecentlyAddedSection.tsx | Airbnb | Medium |
-| Asymmetric editorial grid | OffPlanProjectsSection.tsx | JamesEdition | Medium |
-| Split map view on listings | Properties.tsx | Airbnb | Medium |
-| Developer name as link | CleanPropertyCard.tsx, PropertyDetail.tsx | LuxuryProperty | Trivial |
-| Area name as link on cards | CleanPropertyCard.tsx | LuxuryProperty | Trivial |
-| Full-width hero on detail page | PropertyDetail.tsx | LuxuryProperty/JamesEdition | Low |
-| Popular Searches in footer | Footer.tsx | LuxuryProperty | Low |
-| Cursor "View" text on card hover | CustomCursor.tsx, CleanPropertyCard.tsx | JamesEdition | Low |
+| Priority | Change | Impact on Score |
+|----------|--------|----------------|
+| 1 | Split map view on listings page | +0.3 |
+| 2 | Gallery mosaic + lightbox on detail page | +0.3 |
+| 3 | "Recently Added" section + view counts on homepage | +0.2 |
+| 4 | Mobile sticky CTA on homepage + listings | +0.2 |
+| 5 | User authentication + saved properties in DB | +0.3 |
+| 6 | SEO content blocks | +0.2 |
 
-**Total:** 8 files modified, 1 new file. No new dependencies. All changes use existing framer-motion, react-router-dom, and component library.
+Implementing all six closes the gap to ~9.0.
 
