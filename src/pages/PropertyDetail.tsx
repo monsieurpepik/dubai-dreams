@@ -217,8 +217,8 @@ const PropertyDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title={`${property.name} | ${property.area}`}
-        description={`${property.name} in ${property.area}, ${property.location}. Starting from ${formatPrice(property.price_from, { compact: true })}. ${property.tagline || property.description?.slice(0, 100) || `Premium off-plan property in ${cityName}.`}`}
+        title={`${property.name}${property.developer ? ` by ${property.developer.name}` : ''} | From ${formatPrice(property.price_from, { compact: true })}`}
+        description={`${formatBedrooms(property.bedrooms || [])} in ${property.area}, ${property.location}. ${property.tagline || property.description?.slice(0, 120) || `Premium off-plan property in ${cityName} starting from ${formatPrice(property.price_from, { compact: true })}.`}`}
         image={primaryImage}
         url={`https://owning${cityName.toLowerCase()}.com/properties/${property.slug}`}
       />
