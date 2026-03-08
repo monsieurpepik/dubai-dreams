@@ -48,7 +48,7 @@ export const TrustedDevelopersStrip = () => {
                     <img
                       src={developer.logo_url}
                       alt={developer.name}
-                      className="h-10 md:h-14 w-auto opacity-60 hover:opacity-100 transition-opacity duration-500"
+                      className="h-10 md:h-14 w-auto opacity-40 hover:opacity-80 transition-opacity duration-500 dark:invert"
                       onError={(e) => {
                         // Hide broken image, show text fallback
                         const target = e.currentTarget;
