@@ -7,6 +7,7 @@ import { HowItWorksMini } from "@/components/sections/HowItWorksMini";
 import { ExclusiveSelectionsSection } from "@/components/sections/ExclusiveSelectionsSection";
 import { RecentlyAddedSection } from "@/components/sections/RecentlyAddedSection";
 import { WhyDubaiStrip } from "@/components/sections/WhyDubaiStrip";
+import { MarketPulseSection } from "@/components/sections/MarketPulseSection";
 import { ThemedCollections } from "@/components/sections/ThemedCollections";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { PrivateAdvisorSection } from "@/components/sections/PrivateAdvisorSection";
@@ -31,6 +32,7 @@ const Index = () => {
         <ExclusiveSelectionsSection />
         <RecentlyAddedSection />
         <WhyDubaiStrip />
+        <MarketPulseSection />
         <ThemedCollections />
         <TrustedDevelopersStrip />
         <TestimonialsSection />
