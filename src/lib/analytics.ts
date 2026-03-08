@@ -7,10 +7,29 @@ declare global {
   }
 }
 
+let gaInitialized = false;
+
+/**
+ * Initialize GA4 dynamically with a measurement ID.
+ * Call once when the tenant config loads.
+ */
+export const initGA = (measurementId: string) => {
+  if (gaInitialized || !measurementId || measurementId === 'G-PLACEHOLDER') return;
+
+  // Load the gtag.js script
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+  document.head.appendChild(script);
+
+  window.gtag('config', measurementId);
+  gaInitialized = true;
+};
+
 // Track page views
 export const trackPageView = (path: string, title?: string) => {
-  if (typeof window.gtag === 'function') {
-    window.gtag('config', import.meta.env.VITE_GA_MEASUREMENT_ID, {
+  if (typeof window.gtag === 'function' && gaInitialized) {
+    window.gtag('event', 'page_view', {
       page_path: path,
       page_title: title,
     });
