@@ -29,6 +29,8 @@ import InsightDetail from "./pages/InsightDetail";
 import Advisor from "./pages/Advisor";
 import DeveloperProfilePage from "./pages/DeveloperProfile";
 import DevelopersIndex from "./pages/Developers";
+import Areas from "./pages/Areas";
+import Market from "./pages/Market";
 import Auth from "./pages/Auth";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import DeveloperLogin from "./pages/developer/Login";
