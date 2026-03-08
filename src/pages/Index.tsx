@@ -12,11 +12,9 @@ import { PrivateAdvisorSection } from "@/components/sections/PrivateAdvisorSecti
 import { LatestInsightsSection } from "@/components/sections/LatestInsightsSection";
 import { TrustedDevelopersStrip } from "@/components/sections/TrustedDevelopersStrip";
 import { BackToTop } from "@/components/ui/BackToTop";
-import { useSmoothScroll } from "@/hooks/useSmoothScroll";
 import { SEO } from "@/components/SEO";
 
 const Index = () => {
-  useSmoothScroll();
 
   return (
     <div className="min-h-screen bg-background">
