@@ -28,6 +28,7 @@ const Index = () => {
       <main>
         <HeroSection />
         <TrustBar />
+        <DealFinderBanner />
         <EditorialStatement />
         <HowItWorksMini />
         <ExclusiveSelectionsSection />
