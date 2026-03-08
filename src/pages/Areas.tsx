@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { motion } from 'framer-motion';
-import { TrendingUp, TrendingDown, ArrowUpRight, SortAsc, MapPin } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { TrendingUp, TrendingDown, ArrowUpRight, SortAsc, MapPin, CheckSquare, Square, Layers } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';

@@ -69,7 +69,7 @@ export const AreaCompareTool = ({ allAreas, propertyCounts }: AreaCompareToolPro
   const availableAreas = allAreas.filter(a => !selectedAreas.includes(a.area)).sort((a, b) => a.area.localeCompare(b.area));
 
   return (
-    <section className="py-12 md:py-16 border-b border-border/30">
+    <section ref={containerRef} id="compare" className="py-12 md:py-16 border-b border-border/30">
       <div className="container-wide">
         <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-2 flex items-center gap-3">
           <Layers className="w-5 h-5 text-accent" />
