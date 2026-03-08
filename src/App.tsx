@@ -102,7 +102,7 @@ const App = () => (
                 
                 <AnimatedRoutes />
                 <MobileTabBar />
-                <WhatsAppButton />
+                <FloatingCTA />
               </AnalyticsWrapper>
             </BrowserRouter>
           </TooltipProvider>
