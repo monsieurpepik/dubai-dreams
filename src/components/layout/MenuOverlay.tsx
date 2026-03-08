@@ -9,18 +9,8 @@ import { useAuth } from '@/hooks/useAuth';
 const primaryItems = [
   { label: 'Deal Finder', href: '/discover', image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80' },
   { label: 'Properties', href: '/properties', image: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80' },
-  { label: 'Areas', href: '/areas', image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=80' },
-  { label: 'Market Trends', href: '/market', image: 'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=800&q=80' },
-  { label: 'Developers', href: '/developers', image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80' },
-  { label: 'Intelligence', href: '/insights', image: 'https://images.unsplash.com/photo-1551836022-4c4c79ecde51?w=800&q=80' },
   { label: 'Calculator', href: '/calculator', image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80' },
-  { label: 'Private Advisor', href: '/advisor', image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80' },
-];
-
-const secondaryItems = [
-  { label: 'About', href: '/about' },
-  { label: 'How It Works', href: '/how-it-works' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Contact', href: '/contact', image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80' },
 ];
 
 interface MenuOverlayProps {
@@ -103,37 +93,6 @@ export function MenuOverlay({ isOpen, onClose, onSearchOpen }: MenuOverlayProps)
                       }`}>
                         {item.label}
                       </span>
-                    </motion.button>
-                  );
-                })}
-              </div>
-
-              {/* Separator */}
-              <motion.div
-                initial={{ opacity: 0, scaleX: 0 }}
-                animate={{ opacity: 1, scaleX: 1 }}
-                transition={{ delay: 0.4, duration: 0.4 }}
-                className="h-px bg-border/40 my-6 origin-left max-w-[200px]"
-              />
-
-              {/* Secondary nav */}
-              <div className="flex flex-wrap gap-x-6 gap-y-2">
-                {secondaryItems.map((item, index) => {
-                  const isActive = location.pathname === item.href;
-                  return (
-                    <motion.button
-                      key={item.label}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.45 + index * 0.04, duration: 0.4 }}
-                      onClick={() => handleNavClick(item.href)}
-                      className={`text-sm tracking-[0.08em] transition-colors duration-300 ${
-                        isActive
-                          ? 'text-foreground'
-                          : 'text-muted-foreground/60 hover:text-foreground'
-                      }`}
-                    >
-                      {item.label}
                     </motion.button>
                   );
                 })}

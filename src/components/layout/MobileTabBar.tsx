@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, Search, Heart, MessageCircle, Menu } from 'lucide-react';
+import { Home, Search, Heart, Compass, Menu } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useSavedProperties } from '@/hooks/useSavedProperties';
 import { SearchOverlay } from '@/components/properties/SearchOverlay';
@@ -8,8 +8,8 @@ import { SearchOverlay } from '@/components/properties/SearchOverlay';
 const tabs = [
   { id: 'explore', label: 'Explore', icon: Home, href: '/' },
   { id: 'search', label: 'Search', icon: Search, href: null },
+  { id: 'deals', label: 'Deals', icon: Compass, href: '/discover' },
   { id: 'saved', label: 'Saved', icon: Heart, href: '/saved' },
-  { id: 'advisor', label: 'Advisor', icon: MessageCircle, href: '/advisor' },
   { id: 'menu', label: 'Menu', icon: Menu, href: null },
 ] as const;
 
@@ -40,7 +40,6 @@ export function MobileTabBar() {
     if (tab.id === 'search') {
       setSearchOpen(true);
     } else if (tab.id === 'menu') {
-      // Trigger the header menu — dispatch a custom event
       window.dispatchEvent(new CustomEvent('open-mobile-menu'));
     } else if (tab.href) {
       navigate(tab.href);

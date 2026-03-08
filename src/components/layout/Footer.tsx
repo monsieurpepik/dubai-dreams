@@ -5,37 +5,10 @@ import { useTenant } from "@/hooks/useTenant";
 import { toast } from "sonner";
 
 const explore = [
-  { label: 'Dubai Marina', href: '/area-guide/dubai-marina' },
-  { label: 'Palm Jumeirah', href: '/area-guide/palm-jumeirah' },
-  { label: 'Downtown Dubai', href: '/area-guide/downtown-dubai' },
-  { label: 'Business Bay', href: '/area-guide/business-bay' },
-  { label: 'Dubai Hills', href: '/area-guide/dubai-hills' },
-  { label: 'JVC', href: '/area-guide/jvc' },
-  { label: 'Creek Harbour', href: '/area-guide/creek-harbour' },
-  { label: 'Dubai South', href: '/area-guide/dubai-south' },
-];
-
-const developers = [
-  { label: 'Emaar', href: '/properties?developer=emaar' },
-  { label: 'DAMAC', href: '/properties?developer=damac' },
-  { label: 'Nakheel', href: '/properties?developer=nakheel' },
-  { label: 'Sobha', href: '/properties?developer=sobha' },
-  { label: 'Meraas', href: '/properties?developer=meraas' },
-  { label: 'Omniyat', href: '/properties?developer=omniyat' },
-];
-
-const company = [
-  { label: 'About', href: '/about' },
-  { label: 'How It Works', href: '/how-it-works' },
-  { label: 'Intelligence', href: '/insights' },
-  { label: 'Contact', href: '/contact' },
-];
-
-const support = [
+  { label: 'Deal Finder', href: '/discover' },
+  { label: 'All Properties', href: '/properties' },
   { label: 'Mortgage Calculator', href: '/calculator' },
-  { label: 'Private Advisor', href: '/advisor' },
   { label: 'Saved Properties', href: '/saved' },
-  { label: 'Compare', href: '/compare' },
 ];
 
 const popularSearches = [
@@ -44,9 +17,7 @@ const popularSearches = [
   { label: 'Golden Visa Properties', href: '/properties?goldenVisa=true' },
   { label: 'Waterfront Apartments', href: '/properties?collection=waterfront' },
   { label: 'Handover 2025', href: '/properties?handover=2025' },
-  { label: 'Luxury Penthouses', href: '/properties?collection=penthouse' },
   { label: 'Off-plan under AED 2M', href: '/properties?priceRange=0-2000000' },
-  { label: 'Villas in Dubai Hills', href: '/properties?area=dubai-hills&type=villa' },
 ];
 
 function FooterColumn({ title, links }: { title: string; links: { label: string; href: string }[] }) {
@@ -134,12 +105,7 @@ export function Footer() {
 
       {/* Columns */}
       <div className="container-wide py-14 md:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-8">
-          <FooterColumn title="Explore" links={explore} />
-          <FooterColumn title="Developers" links={developers} />
-          <FooterColumn title="Company" links={company} />
-          <FooterColumn title="Support" links={support} />
-        </div>
+        <FooterColumn title="Explore" links={explore} />
       </div>
 
       {/* Popular Searches */}
