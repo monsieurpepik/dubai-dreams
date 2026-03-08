@@ -30,10 +30,18 @@ const popularAreas = [
 ];
 
 const priceFilters = [
-  { label: 'Under 2M', href: '/properties?maxPrice=2000000' },
-  { label: '2–5M', href: '/properties?minPrice=2000000&maxPrice=5000000' },
-  { label: '5–10M', href: '/properties?minPrice=5000000&maxPrice=10000000' },
-  { label: '10M+', href: '/properties?minPrice=10000000' },
+  { label: 'Under 2M', key: 'under-2m', params: { maxPrice: '2000000' } },
+  { label: '2–5M', key: '2-5m', params: { minPrice: '2000000', maxPrice: '5000000' } },
+  { label: '5–10M', key: '5-10m', params: { minPrice: '5000000', maxPrice: '10000000' } },
+  { label: '10M+', key: '10m-plus', params: { minPrice: '10000000' } },
+];
+
+const bedroomOptions = [
+  { label: 'Studio', value: '0' },
+  { label: '1 BR', value: '1' },
+  { label: '2 BR', value: '2' },
+  { label: '3 BR', value: '3' },
+  { label: '4+', value: '4' },
 ];
 
 function getRecentSearches(): string[] {
@@ -54,8 +62,16 @@ export const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
+
+  // Filter accumulation state
+  const [selectedArea, setSelectedArea] = useState<string | null>(null);
+  const [selectedPrice, setSelectedPrice] = useState<string | null>(null);
+  const [selectedBedrooms, setSelectedBedrooms] = useState<string | null>(null);
+
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+
+  const hasFilters = selectedArea || selectedPrice || selectedBedrooms;
 
   useEffect(() => {
     if (isOpen) {
@@ -63,6 +79,9 @@ export const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
       setResults([]);
       setActiveIndex(-1);
       setRecentSearches(getRecentSearches());
+      setSelectedArea(null);
+      setSelectedPrice(null);
+      setSelectedBedrooms(null);
       setTimeout(() => inputRef.current?.focus(), 100);
     }
   }, [isOpen]);
@@ -120,7 +139,6 @@ export const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
 
       setResults(mapped);
       setActiveIndex(-1);
-      // Save search term
       if (q.length >= 3) addRecentSearch(q);
     } catch (err) {
       console.error('Search error:', err);
@@ -159,6 +177,24 @@ export const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
     developer: results.filter(r => r.type === 'developer'),
   };
 
+  const handleShowResults = () => {
+    const params = new URLSearchParams();
+    if (selectedArea) params.set('area', selectedArea);
+    if (selectedBedrooms) params.set('bedrooms', selectedBedrooms);
+    if (selectedPrice) {
+      const pf = priceFilters.find(p => p.key === selectedPrice);
+      if (pf) {
+        Object.entries(pf.params).forEach(([k, v]) => params.set(k, v));
+      }
+    }
+    onClose();
+    navigate(`/properties?${params.toString()}`);
+  };
+
+  const getSelectedAreaName = () => popularAreas.find(a => a.slug === selectedArea)?.name;
+  const getSelectedPriceLabel = () => priceFilters.find(p => p.key === selectedPrice)?.label;
+  const getSelectedBedroomLabel = () => bedroomOptions.find(b => b.value === selectedBedrooms)?.label;
+
   let globalIndex = -1;
 
   return (
@@ -171,9 +207,9 @@ export const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
           transition={{ duration: 0.2 }}
           className="fixed inset-0 z-[60] bg-background/95 backdrop-blur-xl overflow-y-auto"
         >
-          <div className="max-w-2xl mx-auto px-6 pt-24 md:pt-32 pb-16">
+          <div className="max-w-2xl mx-auto px-6 pt-24 md:pt-32 pb-32">
             {/* Search Input */}
-            <div className="relative mb-8">
+            <div className="relative mb-6">
               <Search className="absolute left-0 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <input
                 ref={inputRef}
@@ -192,6 +228,43 @@ export const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
                 <X className="w-5 h-5" />
               </button>
             </div>
+
+            {/* Selected Filter Chips */}
+            <AnimatePresence>
+              {hasFilters && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="flex flex-wrap gap-2 mb-6"
+                >
+                  {selectedArea && (
+                    <button
+                      onClick={() => setSelectedArea(null)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs bg-foreground text-background rounded-full transition-colors hover:bg-foreground/80"
+                    >
+                      {getSelectedAreaName()} <X className="w-3 h-3" />
+                    </button>
+                  )}
+                  {selectedBedrooms && (
+                    <button
+                      onClick={() => setSelectedBedrooms(null)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs bg-foreground text-background rounded-full transition-colors hover:bg-foreground/80"
+                    >
+                      {getSelectedBedroomLabel()} <X className="w-3 h-3" />
+                    </button>
+                  )}
+                  {selectedPrice && (
+                    <button
+                      onClick={() => setSelectedPrice(null)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs bg-foreground text-background rounded-full transition-colors hover:bg-foreground/80"
+                    >
+                      {getSelectedPriceLabel()} <X className="w-3 h-3" />
+                    </button>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Results when typing */}
             {query.length >= 2 && (
@@ -244,7 +317,7 @@ export const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
               </motion.div>
             )}
 
-            {/* Empty state — before typing */}
+            {/* Filter builder — before typing */}
             {query.length < 2 && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -271,42 +344,75 @@ export const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
                   </div>
                 )}
 
-                {/* Popular Areas */}
+                {/* Popular Areas — toggle selection */}
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 mb-4">Popular Areas</p>
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    {popularAreas.map(area => (
-                      <button
-                        key={area.slug}
-                        onClick={() => {
-                          onClose();
-                          navigate(`/properties?area=${area.slug}`);
-                        }}
-                        className="flex items-center gap-3 px-4 py-3.5 border border-border/30 rounded-xl hover:border-foreground/20 hover:bg-foreground/[0.02] transition-all duration-300 group text-left"
-                      >
-                        <span className="text-lg">{area.emoji}</span>
-                        <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">{area.name}</span>
-                      </button>
-                    ))}
+                    {popularAreas.map(area => {
+                      const isSelected = selectedArea === area.slug;
+                      return (
+                        <button
+                          key={area.slug}
+                          onClick={() => setSelectedArea(isSelected ? null : area.slug)}
+                          className={`flex items-center gap-3 px-4 py-3.5 border rounded-xl transition-all duration-300 group text-left ${
+                            isSelected
+                              ? 'border-foreground bg-foreground/5'
+                              : 'border-border/30 hover:border-foreground/20 hover:bg-foreground/[0.02]'
+                          }`}
+                        >
+                          <span className="text-lg">{area.emoji}</span>
+                          <span className={`text-sm transition-colors ${
+                            isSelected ? 'text-foreground font-medium' : 'text-muted-foreground group-hover:text-foreground'
+                          }`}>{area.name}</span>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
-                {/* Quick Price Filters */}
+                {/* Bedrooms */}
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 mb-4">Bedrooms</p>
+                  <div className="flex flex-wrap gap-2">
+                    {bedroomOptions.map(opt => {
+                      const isSelected = selectedBedrooms === opt.value;
+                      return (
+                        <button
+                          key={opt.value}
+                          onClick={() => setSelectedBedrooms(isSelected ? null : opt.value)}
+                          className={`px-5 py-2.5 text-xs tracking-wide border rounded-full transition-all duration-300 ${
+                            isSelected
+                              ? 'border-foreground bg-foreground text-background'
+                              : 'border-border/40 text-muted-foreground hover:border-foreground/30 hover:text-foreground'
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Budget — toggle selection */}
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 mb-4">By Budget</p>
                   <div className="flex flex-wrap gap-2">
-                    {priceFilters.map(pf => (
-                      <button
-                        key={pf.label}
-                        onClick={() => {
-                          onClose();
-                          navigate(pf.href);
-                        }}
-                        className="px-5 py-2.5 text-xs tracking-wide border border-border/40 rounded-full text-muted-foreground hover:border-foreground/30 hover:text-foreground transition-all duration-300"
-                      >
-                        {pf.label}
-                      </button>
-                    ))}
+                    {priceFilters.map(pf => {
+                      const isSelected = selectedPrice === pf.key;
+                      return (
+                        <button
+                          key={pf.key}
+                          onClick={() => setSelectedPrice(isSelected ? null : pf.key)}
+                          className={`px-5 py-2.5 text-xs tracking-wide border rounded-full transition-all duration-300 ${
+                            isSelected
+                              ? 'border-foreground bg-foreground text-background'
+                              : 'border-border/40 text-muted-foreground hover:border-foreground/30 hover:text-foreground'
+                          }`}
+                        >
+                          {pf.label}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -331,6 +437,27 @@ export const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
               </motion.div>
             )}
           </div>
+
+          {/* Sticky Show Results button */}
+          <AnimatePresence>
+            {hasFilters && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                className="fixed bottom-0 left-0 right-0 z-[61] p-4 bg-background/80 backdrop-blur-lg border-t border-border/20"
+              >
+                <div className="max-w-2xl mx-auto">
+                  <button
+                    onClick={handleShowResults}
+                    className="w-full py-3.5 bg-foreground text-background text-sm font-medium tracking-wide rounded-xl hover:bg-foreground/90 transition-colors"
+                  >
+                    Show Results
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
       )}
     </AnimatePresence>
