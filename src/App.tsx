@@ -21,6 +21,17 @@ import SavedProperties from "./pages/SavedProperties";
 import Discover from "./pages/Discover";
 import Auth from "./pages/Auth";
 import LeadAdmin from "./pages/LeadAdmin";
+import Insights from "./pages/Insights";
+import InsightDetail from "./pages/InsightDetail";
+import Developers from "./pages/Developers";
+import DeveloperProfile from "./pages/DeveloperProfile";
+import Areas from "./pages/Areas";
+import AreaGuide from "./pages/AreaGuide";
+import Advisor from "./pages/Advisor";
+import Market from "./pages/Market";
+import About from "./pages/About";
+import HowItWorks from "./pages/HowItWorks";
+import Compare from "./pages/Compare";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
@@ -54,6 +65,17 @@ const AnimatedRoutes = () => {
         <Route path="/auth" element={<PageTransition><Auth /></PageTransition>} />
         <Route path="/saved" element={<ProtectedRoute><PageTransition><SavedProperties /></PageTransition></ProtectedRoute>} />
         <Route path="/leads" element={<ProtectedRoute><PageTransition><LeadAdmin /></PageTransition></ProtectedRoute>} />
+        <Route path="/insights" element={<PageTransition><Insights /></PageTransition>} />
+        <Route path="/insights/:slug" element={<PageTransition><InsightDetail /></PageTransition>} />
+        <Route path="/developers" element={<PageTransition><Developers /></PageTransition>} />
+        <Route path="/developers/:slug" element={<PageTransition><DeveloperProfile /></PageTransition>} />
+        <Route path="/areas" element={<PageTransition><Areas /></PageTransition>} />
+        <Route path="/areas/:slug" element={<PageTransition><AreaGuide /></PageTransition>} />
+        <Route path="/advisor" element={<PageTransition><Advisor /></PageTransition>} />
+        <Route path="/market" element={<PageTransition><Market /></PageTransition>} />
+        <Route path="/about" element={<PageTransition><About /></PageTransition>} />
+        <Route path="/how-it-works" element={<PageTransition><HowItWorks /></PageTransition>} />
+        <Route path="/compare" element={<PageTransition><Compare /></PageTransition>} />
         <Route path="/privacy" element={<PageTransition><Privacy /></PageTransition>} />
         <Route path="/terms" element={<PageTransition><Terms /></PageTransition>} />
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
