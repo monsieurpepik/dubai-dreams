@@ -29,7 +29,7 @@ export function EditorialStatement() {
   };
 
   return (
-    <section className="py-16 md:py-24 bg-black">
+    <section className="py-16 md:py-24 bg-black border-t border-white/10">
       <div className="container-wide">
         <motion.p
           initial={{ opacity: 0 }}

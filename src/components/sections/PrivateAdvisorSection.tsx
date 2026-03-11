@@ -88,7 +88,7 @@ export const PrivateAdvisorSection = () => {
   };
 
   return (
-    <section ref={ref} className="relative bg-black">
+    <section ref={ref} className="relative bg-black border-t border-white/10">
       <div className="grid grid-cols-1 lg:grid-cols-2">
         {/* Left — Form */}
         <motion.div

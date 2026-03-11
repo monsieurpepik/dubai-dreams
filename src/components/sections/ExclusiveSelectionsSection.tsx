@@ -51,7 +51,7 @@ export const ExclusiveSelectionsSection = () => {
   if (properties.length === 0) return null;
 
   return (
-    <section className="py-16 md:py-24 bg-black overflow-hidden">
+    <section className="py-16 md:py-24 bg-black overflow-hidden border-t border-white/10">
       {/* Header */}
       <div className="container-wide flex items-end justify-between mb-10 md:mb-14">
         <div>
@@ -97,7 +97,7 @@ export const ExclusiveSelectionsSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-50px' }}
               transition={{ duration: 0.5, delay: i * 0.08 }}
-              className="shrink-0 w-[300px] md:w-[360px] lg:w-[400px] snap-start"
+              className="shrink-0 w-[292px] snap-start"
             >
               <Link to={`/properties/${property.slug}`} className="group block">
                 {/* Image */}
@@ -128,7 +128,7 @@ export const ExclusiveSelectionsSection = () => {
                   <p className="text-xs text-white/60">
                     {property.area}
                   </p>
-                  <p className="text-xs text-[#1127D2] font-medium mt-3 pt-2">SHOP NOW &gt;</p>
+                  <p className="text-[11px] tracking-[0.15em] text-[#1127D2] font-medium mt-3 pt-2 uppercase group-hover:tracking-[0.2em] transition-all duration-300">SHOP NOW &gt;</p>
                 </div>
               </Link>
             </motion.div>

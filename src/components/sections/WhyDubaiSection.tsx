@@ -58,7 +58,7 @@ export const WhyDubaiSection = () => {
   });
 
   return (
-    <section ref={containerRef} className="relative bg-black">
+    <section ref={containerRef} className="relative bg-black border-t border-white/10">
       {/* Sticky header */}
       <div className="sticky top-0 z-10 pt-32 pb-8 pointer-events-none bg-black/80 backdrop-blur-sm">
         <div className="container-wide">
