@@ -3,34 +3,28 @@ import { useNavigate } from 'react-router-dom';
 
 const categories = [
   {
-    label: 'Properties',
-    image: 'https://cdn.prod.website-files.com/6704ef547a0aa2ea217de020/6705033ae6501c14512cd5fa_Properties.avif',
-    href: '/properties',
-    available: true,
+    label: 'Villas',
+    subtitle: 'Palm Jumeirah · Emirates Hills · Dubai Hills',
+    image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80',
+    href: '/properties?type=villa',
   },
   {
-    label: 'Jets',
-    image: 'https://cdn.prod.website-files.com/6704ef547a0aa2ea217de020/6705060ad608d95ff6588caa_Jets.avif',
-    href: '#',
-    available: false,
+    label: 'Apartments',
+    subtitle: 'Downtown · Marina · DIFC · JBR',
+    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80',
+    href: '/properties?type=apartment',
   },
   {
-    label: 'Cars',
-    image: 'https://cdn.prod.website-files.com/6704ef547a0aa2ea217de020/6705060a86db80bb1f27a659_cars.avif',
-    href: '#',
-    available: false,
+    label: 'Penthouses',
+    subtitle: 'Sky-level living across Dubai',
+    image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80',
+    href: '/properties?type=penthouse',
   },
   {
-    label: 'Yachts',
-    image: 'https://cdn.prod.website-files.com/6704ef547a0aa2ea217de020/6705060a9cbb59852cc6fa3f_Yachts.avif',
-    href: '#',
-    available: false,
-  },
-  {
-    label: 'Watches',
-    image: 'https://cdn.prod.website-files.com/6704ef547a0aa2ea217de020/6705060a6ff76b3cdd9effe2_Watches.avif',
-    href: '#',
-    available: false,
+    label: 'Off-Plan',
+    subtitle: 'Directly from top developers',
+    image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80',
+    href: '/properties?status=off-plan',
   },
 ];
 
@@ -38,59 +32,58 @@ export function CategoryCards() {
   const navigate = useNavigate();
 
   return (
-    <section className="bg-black py-20 md:py-28 border-t border-white/10">
+    <section className="bg-black py-20 md:py-28 border-t border-white/[0.06]">
       <div className="container-wide">
         {/* Section label */}
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-[10px] tracking-[0.3em] text-white/40 uppercase mb-10 text-center"
+          transition={{ duration: 0.8 }}
+          className="mb-12 md:mb-16"
         >
-          Browse Categories
-        </motion.p>
+          <p className="text-[10px] tracking-[0.3em] text-white/30 uppercase">
+            Browse by category
+          </p>
+        </motion.div>
 
-        {/* Card grid — staggered like Webflow GSAP */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
+        {/* 4-card grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
           {categories.map((cat, index) => (
             <motion.div
               key={cat.label}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
+              viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.7, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-              onClick={() => cat.available && navigate(cat.href)}
-              className={`group relative overflow-hidden cursor-pointer ${
-                cat.available ? '' : 'cursor-default'
-              }`}
+              onClick={() => navigate(cat.href)}
+              className="group relative overflow-hidden cursor-pointer"
               style={{ aspectRatio: '3/4' }}
             >
               {/* Image */}
               <img
                 src={cat.image}
                 alt={cat.label}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.06]"
               />
 
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
-              {/* Label */}
-              <div className="absolute inset-0 flex flex-col items-center justify-end pb-6 md:pb-8">
-                <h3 className="text-[14px] md:text-[16px] font-medium tracking-[0.25em] text-white uppercase">
+              {/* Label at bottom */}
+              <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
+                <h3 className="text-[15px] md:text-[17px] font-medium tracking-[0.2em] text-white uppercase">
                   {cat.label}
                 </h3>
-                {!cat.available && (
-                  <span className="mt-2 text-[9px] tracking-[0.2em] text-white/40 uppercase">
-                    Coming Soon
-                  </span>
-                )}
-                {cat.available && (
-                  <span className="mt-2 text-[9px] tracking-[0.2em] text-white/50 uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    Explore &gt;
-                  </span>
-                )}
+                <p className="mt-1.5 text-[11px] text-white/35 font-light leading-relaxed">
+                  {cat.subtitle}
+                </p>
+
+                {/* Hover arrow */}
+                <div className="mt-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                  <span className="text-[10px] tracking-[0.2em] text-white/60 uppercase">Explore</span>
+                  <span className="text-white/40">&rarr;</span>
+                </div>
               </div>
             </motion.div>
           ))}
