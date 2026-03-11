@@ -1,11 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, MapPin } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useTenant } from '@/hooks/useTenant';
 
-// Real-looking placeholder projects shown when DB is empty
 const placeholderProjects = [
   {
     id: 'ph1',
@@ -80,39 +79,38 @@ export function OffPlanSection() {
       : `${Math.min(...bedrooms)}–${Math.max(...bedrooms)} BR`;
   };
 
-  // Use real data or placeholders
   const displayProperties = properties.length > 0 ? properties : placeholderProjects;
   const isPlaceholder = properties.length === 0;
 
   return (
-    <section className="bg-black py-20 md:py-28 border-t border-white/[0.08]">
+    <section className="bg-black py-20 md:py-28">
       <div className="container-wide">
         {/* Header */}
-        <div className="flex items-end justify-between mb-12 md:mb-16">
+        <div className="flex items-end justify-between mb-10 md:mb-14">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-[10px] tracking-[0.3em] text-white/30 uppercase mb-3">
-              Featured Projects
-            </p>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-white">
+            <h2 className="text-2xl md:text-3xl font-semibold text-white tracking-[-0.01em]">
               Off-Plan Developments
             </h2>
+            <p className="mt-2 text-[15px] text-white/60">
+              New projects from Dubai's top developers
+            </p>
           </motion.div>
 
           <Link
             to="/properties?status=off-plan"
-            className="hidden md:inline-flex items-center gap-2 text-[11px] tracking-[0.15em] text-white/30 hover:text-white/60 transition-colors uppercase"
+            className="hidden md:inline-flex items-center gap-1.5 text-[14px] font-medium text-white/60 hover:text-white transition-colors"
           >
-            View All <ArrowRight className="w-3 h-3" />
+            View all <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+        {/* Grid — Airbnb card style */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">
           {displayProperties.map((property: any, index: number) => {
             const image = property.property_images?.[0]?.url || getPrimaryImage(property.property_images);
             const bedroomLabel = getBedroomLabel(property.bedrooms);
@@ -126,83 +124,92 @@ export function OffPlanSection() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.6, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
               >
-                <Link to={isPlaceholder ? '/properties' : `/properties/${property.slug}`} className="group block">
+                <Link
+                  to={isPlaceholder ? '/properties' : `/properties/${property.slug}`}
+                  className="group block rounded-2xl bg-white/[0.04] hover:bg-white/[0.07] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-300 hover:shadow-[0_8px_40px_rgba(255,255,255,0.04)] overflow-hidden"
+                >
                   {/* Image */}
-                  <div className="relative overflow-hidden" style={{ aspectRatio: '4/3' }}>
+                  <div className="relative overflow-hidden rounded-t-2xl" style={{ aspectRatio: '16/11' }}>
                     {image ? (
                       <img
                         src={image}
                         alt={property.name}
-                        className="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]"
+                        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                       />
                     ) : (
                       <div className="w-full h-full bg-white/[0.03]" />
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-                    {/* Badges */}
+                    {/* Badges — pill shaped */}
                     <div className="absolute top-3 left-3 flex gap-1.5">
                       {isPlaceholder && (
-                        <span className="px-2.5 py-1 text-[9px] tracking-[0.1em] font-medium bg-white/[0.15] text-white uppercase backdrop-blur-sm">
+                        <span className="px-3 py-1 text-[11px] font-medium bg-black/50 text-white rounded-full backdrop-blur-md">
                           Coming Soon
                         </span>
                       )}
                       {property.golden_visa_eligible && !isPlaceholder && (
-                        <span className="px-2.5 py-1 text-[9px] tracking-[0.1em] font-medium bg-white/90 text-black uppercase">
+                        <span className="px-3 py-1 text-[11px] font-medium bg-white text-black rounded-full">
                           Golden Visa
                         </span>
                       )}
                       {property.roi_estimate && property.roi_estimate >= 7 && !isPlaceholder && (
-                        <span className="px-2.5 py-1 text-[9px] tracking-[0.1em] font-medium bg-white/90 text-black uppercase">
+                        <span className="px-3 py-1 text-[11px] font-medium bg-white text-black rounded-full">
                           {property.roi_estimate}% ROI
                         </span>
                       )}
                     </div>
-
-                    {/* Price overlay */}
-                    <div className="absolute bottom-3 left-3">
-                      <p className="text-[15px] font-medium text-white">
-                        From {formatPrice(property.price_from, { compact: true })}
-                      </p>
-                    </div>
                   </div>
 
-                  {/* Details */}
-                  <div className="mt-4 space-y-1.5">
-                    <p className="text-[10px] tracking-[0.15em] text-white/30 uppercase">
+                  {/* Details — padded card body */}
+                  <div className="p-5">
+                    {/* Developer */}
+                    <p className="text-[12px] text-white/30 font-medium">
                       {property.developer?.name || 'Developer'}
                     </p>
-                    <h3 className="text-[16px] text-white font-normal leading-tight group-hover:text-white/60 transition-colors duration-300">
+
+                    {/* Name */}
+                    <h3 className="mt-1.5 text-[17px] text-white font-semibold leading-snug">
                       {property.name}
                     </h3>
-                    <p className="text-[12px] text-white/30">
-                      {property.area}
-                    </p>
 
-                    {/* Specs */}
-                    <div className="flex items-center gap-3 pt-1">
+                    {/* Area with pin */}
+                    <div className="mt-2 flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-white/30 shrink-0" />
+                      <p className="text-[13px] text-white/60">
+                        {property.area}
+                      </p>
+                    </div>
+
+                    {/* Specs row — pills */}
+                    <div className="flex flex-wrap items-center gap-2 mt-3">
                       {bedroomLabel && (
-                        <span className="text-[11px] text-white/30">{bedroomLabel}</span>
-                      )}
-                      {bedroomLabel && handoverYear && (
-                        <span className="text-white/[0.08]">·</span>
+                        <span className="px-2.5 py-1 text-[11px] text-white/60 bg-white/[0.06] rounded-full">
+                          {bedroomLabel}
+                        </span>
                       )}
                       {handoverYear && (
-                        <span className="text-[11px] text-white/30">Handover {handoverYear}</span>
+                        <span className="px-2.5 py-1 text-[11px] text-white/60 bg-white/[0.06] rounded-full">
+                          Handover {handoverYear}
+                        </span>
                       )}
                       {property.payment_plan && (
-                        <>
-                          <span className="text-white/[0.08]">·</span>
-                          <span className="text-[11px] text-white/30">{property.payment_plan}</span>
-                        </>
+                        <span className="px-2.5 py-1 text-[11px] text-white/60 bg-white/[0.06] rounded-full">
+                          {property.payment_plan}
+                        </span>
                       )}
                     </div>
 
-                    <p className="text-[10px] tracking-[0.15em] text-white/30 uppercase pt-2 group-hover:text-white/60 transition-colors duration-300">
-                      View Project &gt;
-                    </p>
+                    {/* Price + CTA row */}
+                    <div className="flex items-center justify-between mt-4 pt-4 border-t border-white/[0.06]">
+                      <p className="text-[16px] font-semibold text-white">
+                        From {formatPrice(property.price_from, { compact: true })}
+                      </p>
+                      <span className="text-[13px] font-medium text-white/60 group-hover:text-white transition-colors duration-200">
+                        View &rarr;
+                      </span>
+                    </div>
                   </div>
                 </Link>
               </motion.div>
@@ -210,13 +217,13 @@ export function OffPlanSection() {
           })}
         </div>
 
-        {/* Mobile CTA */}
-        <div className="mt-12 text-center md:hidden">
+        {/* Mobile CTA — pill button */}
+        <div className="mt-10 text-center md:hidden">
           <Link
             to="/properties?status=off-plan"
-            className="inline-flex items-center gap-2 text-[11px] tracking-[0.15em] text-white/30 hover:text-white/60 transition-colors uppercase"
+            className="inline-flex items-center gap-2 px-6 py-3 text-[13px] font-medium text-white bg-white/[0.08] border border-white/[0.1] rounded-full hover:bg-white/[0.14] transition-all"
           >
-            View All Projects <ArrowRight className="w-3 h-3" />
+            View all projects <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>

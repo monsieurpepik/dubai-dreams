@@ -14,6 +14,7 @@ const quickFilters = [
 export function WebflowHero() {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
+  const [isFocused, setIsFocused] = useState(false);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,33 +63,42 @@ export function WebflowHero() {
           <span className="text-white/60">in Dubai</span>
         </motion.h2>
 
-        {/* Search bar */}
+        {/* Airbnb-style search bar — rounded, elevated, glassy */}
         <motion.form
           onSubmit={handleSearch}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-10 w-full max-w-lg"
+          className="mt-10 w-full max-w-xl"
         >
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+          <div
+            className={`relative rounded-full transition-all duration-300 ${
+              isFocused
+                ? 'bg-white/[0.14] shadow-[0_8px_32px_rgba(255,255,255,0.08)]'
+                : 'bg-white/[0.08] shadow-[0_4px_24px_rgba(0,0,0,0.3)]'
+            }`}
+          >
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-white/40" />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
               placeholder="Search by area, developer, or project"
-              className="w-full pl-11 pr-28 py-4 bg-white/[0.08] border border-white/[0.12] text-[14px] text-white placeholder:text-white/30 focus:outline-none focus:border-white/30 focus:bg-white/[0.12] transition-all backdrop-blur-sm"
+              className="w-full pl-13 pr-32 py-4 bg-transparent rounded-full text-[15px] text-white placeholder:text-white/35 focus:outline-none transition-all"
+              style={{ paddingLeft: '3.2rem' }}
             />
             <button
               type="submit"
-              className="absolute right-1.5 top-1/2 -translate-y-1/2 px-5 py-2.5 bg-white text-black text-[11px] font-semibold tracking-[0.15em] uppercase hover:bg-white/90 transition-all"
+              className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2.5 bg-white text-black text-[13px] font-semibold rounded-full hover:bg-white/90 hover:shadow-[0_2px_12px_rgba(255,255,255,0.15)] active:scale-[0.97] transition-all duration-200"
             >
               Search
             </button>
           </div>
         </motion.form>
 
-        {/* Quick filter pills */}
+        {/* Quick filter pills — rounded, Airbnb style */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -99,7 +109,7 @@ export function WebflowHero() {
             <button
               key={filter.label}
               onClick={() => navigate(filter.href)}
-              className="px-4 py-2 text-[11px] tracking-[0.1em] text-white/60 border border-white/[0.1] hover:border-white/30 hover:text-white transition-all uppercase"
+              className="px-5 py-2 text-[13px] text-white/60 bg-white/[0.06] border border-white/[0.1] rounded-full hover:bg-white/[0.12] hover:border-white/[0.2] hover:text-white active:scale-[0.97] transition-all duration-200"
             >
               {filter.label}
             </button>
@@ -115,9 +125,9 @@ export function WebflowHero() {
             const el = document.getElementById('advisor-section');
             el?.scrollIntoView({ behavior: 'smooth' });
           }}
-          className="mt-8 text-[11px] tracking-[0.15em] text-white/30 hover:text-white/60 transition-colors uppercase"
+          className="mt-8 text-[13px] text-white/30 hover:text-white/60 transition-colors underline underline-offset-4 decoration-white/[0.15] hover:decoration-white/30"
         >
-          Or get matched by an advisor &darr;
+          Or get matched by an advisor
         </motion.button>
       </div>
 

@@ -150,7 +150,7 @@ export function MenuOverlay({ isOpen, onClose }: MenuOverlayProps) {
                   const el = document.getElementById('advisor-section');
                   el?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="w-full py-3.5 bg-white text-black text-[11px] font-semibold tracking-[0.2em] uppercase hover:bg-white/90 transition-all"
+                className="w-full py-3.5 bg-white text-black text-[13px] font-semibold rounded-full hover:bg-white/90 hover:shadow-[0_2px_12px_rgba(255,255,255,0.12)] active:scale-[0.97] transition-all duration-200"
               >
                 Get Matched
               </button>

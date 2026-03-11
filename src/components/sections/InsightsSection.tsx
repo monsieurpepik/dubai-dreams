@@ -38,7 +38,7 @@ const placeholderArticles = [
     category: 'area_intelligence',
     published_at: new Date().toISOString(),
     reading_time_min: 5,
-    cover_image_url: 'https://images.unsplash.com/photo-1518684079-3c03-d61d57808b2c?w=800&q=80',
+    cover_image_url: 'https://images.unsplash.com/photo-1518684079-3c830dcef090?w=800&q=80',
   },
 ];
 
@@ -61,76 +61,78 @@ export function InsightsSection() {
   const articles = dbArticles.length > 0 ? dbArticles : placeholderArticles;
 
   return (
-    <section className="bg-black py-20 md:py-28 border-t border-white/[0.08]">
+    <section className="bg-black py-20 md:py-28">
       <div className="container-wide">
         {/* Header */}
-        <div className="flex items-end justify-between mb-12 md:mb-16">
+        <div className="flex items-end justify-between mb-10 md:mb-14">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <p className="text-[10px] tracking-[0.3em] text-white/30 uppercase mb-3">
-              Intelligence
-            </p>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-white">
+            <h2 className="text-2xl md:text-3xl font-semibold text-white tracking-[-0.01em]">
               Market Insights
             </h2>
+            <p className="mt-2 text-[15px] text-white/60">
+              Data-driven intelligence for smart investors
+            </p>
           </motion.div>
 
           <Link
             to="/insights"
-            className="hidden md:inline-flex items-center gap-2 text-[11px] tracking-[0.15em] text-white/30 hover:text-white/60 transition-colors uppercase"
+            className="hidden md:inline-flex items-center gap-1.5 text-[14px] font-medium text-white/60 hover:text-white transition-colors"
           >
-            All Articles <ArrowRight className="w-3 h-3" />
+            All articles <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
-        {/* Article grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+        {/* Article grid — Airbnb card treatment */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-7">
           {articles.map((article: any, index: number) => (
             <motion.div
               key={article.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
             >
-              <Link to={`/insights/${article.slug}`} className="group block">
+              <Link
+                to={`/insights/${article.slug}`}
+                className="group block rounded-2xl bg-white/[0.04] hover:bg-white/[0.07] border border-white/[0.06] hover:border-white/[0.12] transition-all duration-300 hover:shadow-[0_8px_40px_rgba(255,255,255,0.04)] overflow-hidden"
+              >
                 {/* Cover image */}
                 {article.cover_image_url && (
-                  <div className="overflow-hidden" style={{ aspectRatio: '16/10' }}>
+                  <div className="overflow-hidden rounded-t-2xl" style={{ aspectRatio: '16/10' }}>
                     <img
                       src={article.cover_image_url}
                       alt={article.title}
-                      className="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-[1.04]"
+                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                     />
                   </div>
                 )}
 
-                {/* Content */}
-                <div className="mt-4 space-y-2">
-                  <div className="flex items-center gap-3">
-                    <span className="text-[9px] tracking-[0.2em] text-white/30 uppercase">
-                      {categoryLabels[article.category] || article.category}
-                    </span>
-                    <span className="text-white/[0.08]">·</span>
-                    <span className="text-[10px] text-white/30">
-                      {article.published_at && format(new Date(article.published_at), 'MMM d, yyyy')}
-                    </span>
-                  </div>
+                {/* Content — padded body */}
+                <div className="p-5">
+                  {/* Category pill */}
+                  <span className="inline-block px-3 py-1 text-[11px] font-medium text-white/60 bg-white/[0.06] rounded-full mb-3">
+                    {categoryLabels[article.category] || article.category}
+                  </span>
 
-                  <h3 className="text-[15px] text-white/60 font-normal leading-snug group-hover:text-white transition-colors duration-300">
+                  {/* Title */}
+                  <h3 className="text-[16px] text-white font-semibold leading-snug group-hover:text-white/80 transition-colors duration-200">
                     {article.title}
                   </h3>
 
-                  <div className="flex items-center justify-between pt-1">
-                    <span className="text-[10px] text-white/30">
-                      {article.reading_time_min} min read
-                    </span>
-                    <span className="text-[10px] tracking-[0.15em] text-white/30 uppercase group-hover:text-white/60 transition-colors duration-300">
-                      Read &gt;
+                  {/* Meta row */}
+                  <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/[0.06]">
+                    <div className="flex items-center gap-2 text-[12px] text-white/30">
+                      <span>{article.published_at && format(new Date(article.published_at), 'MMM d, yyyy')}</span>
+                      <span>·</span>
+                      <span>{article.reading_time_min} min read</span>
+                    </div>
+                    <span className="text-[13px] font-medium text-white/60 group-hover:text-white transition-colors duration-200">
+                      Read &rarr;
                     </span>
                   </div>
                 </div>
@@ -139,13 +141,13 @@ export function InsightsSection() {
           ))}
         </div>
 
-        {/* Mobile CTA */}
-        <div className="mt-12 text-center md:hidden">
+        {/* Mobile CTA — pill */}
+        <div className="mt-10 text-center md:hidden">
           <Link
             to="/insights"
-            className="inline-flex items-center gap-2 text-[11px] tracking-[0.15em] text-white/30 hover:text-white/60 transition-colors uppercase"
+            className="inline-flex items-center gap-2 px-6 py-3 text-[13px] font-medium text-white bg-white/[0.08] border border-white/[0.1] rounded-full hover:bg-white/[0.14] transition-all"
           >
-            All Articles <ArrowRight className="w-3 h-3" />
+            All articles <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>
