@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Menu } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useTenant } from '@/hooks/useTenant';
 import { SearchOverlay } from '@/components/properties/SearchOverlay';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { CurrencySwitcher } from '@/components/ui/CurrencySwitcher';
 import { MenuOverlay } from '@/components/layout/MenuOverlay';
-
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -35,7 +34,6 @@ export function Header() {
     return () => window.removeEventListener('open-mobile-menu', handler);
   }, []);
 
-  // Show search pill when scrolled on homepage, or always on other pages
   const showSearchPill = (!isHomepage || isScrolled);
 
   return (
@@ -49,7 +47,7 @@ export function Header() {
         transition={{ duration: 0.8, delay: 0.2 }}
         className={`fixed left-0 right-0 top-0 z-50 transition-all duration-700 ${
           isScrolled
-            ? 'bg-black/90 backdrop-blur-xl border-b border-white/10'
+            ? 'bg-black/90 backdrop-blur-xl border-b border-white/[0.08]'
             : 'bg-transparent'
         }`}
       >
@@ -61,10 +59,10 @@ export function Header() {
             aria-label="Open navigation menu"
           >
             <div className="flex flex-col gap-[4px]">
-              <span className="block w-[22px] h-[1.5px] bg-white/70 group-hover:bg-white transition-colors duration-300" />
-              <span className="block w-[22px] h-[1.5px] bg-white/70 group-hover:bg-white transition-colors duration-300" />
+              <span className="block w-[22px] h-[1.5px] bg-white/60 group-hover:bg-white transition-colors duration-300" />
+              <span className="block w-[22px] h-[1.5px] bg-white/60 group-hover:bg-white transition-colors duration-300" />
             </div>
-            <span className="hidden md:inline text-[12px] font-medium tracking-[0.05em] text-white/70 group-hover:text-white transition-colors uppercase">
+            <span className="hidden md:inline text-[12px] font-medium tracking-[0.05em] text-white/60 group-hover:text-white transition-colors uppercase">
               Menu
             </span>
           </button>
@@ -89,7 +87,7 @@ export function Header() {
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                   onClick={() => setIsSearchOpen(true)}
-                  className="p-2 text-white/50 hover:text-white transition-colors"
+                  className="p-2 text-white/30 hover:text-white transition-colors"
                   aria-label="Search"
                 >
                   <Search className="w-4 h-4" />
@@ -97,21 +95,18 @@ export function Header() {
               )}
             </AnimatePresence>
 
-            {/* CTA button — hidden on mobile */}
-            <Link
-              to="/deal-finder"
-              className="hidden md:flex items-center gap-2 bg-[#1127D2] text-white text-[12px] font-medium tracking-[0.05em] px-3 py-2 rounded-[4px] hover:bg-[#0d1fb0] transition-colors uppercase"
+            {/* CTA — consistent white on black, no blue */}
+            <button
+              onClick={() => {
+                const el = document.getElementById('advisor-section');
+                el?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="hidden md:flex items-center gap-2 bg-white text-black text-[11px] font-semibold tracking-[0.1em] px-4 py-2.5 hover:bg-white/90 transition-colors uppercase"
             >
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-              </svg>
-              Personal Shopper
-            </Link>
+              Get Matched
+            </button>
           </div>
         </div>
-
-        {/* Bottom line */}
-        <div className="mx-6 lg:mx-12 h-px bg-white/10" />
       </motion.header>
 
       <MenuOverlay

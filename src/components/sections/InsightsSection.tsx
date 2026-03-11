@@ -12,7 +12,6 @@ const categoryLabels: Record<string, string> = {
   investor_playbook: 'Investor Playbook',
 };
 
-// Placeholder articles shown when Supabase has no data
 const placeholderArticles = [
   {
     id: 'p1',
@@ -39,7 +38,7 @@ const placeholderArticles = [
     category: 'area_intelligence',
     published_at: new Date().toISOString(),
     reading_time_min: 5,
-    cover_image_url: 'https://images.unsplash.com/photo-1518684079-3c830dcef090?w=800&q=80',
+    cover_image_url: 'https://images.unsplash.com/photo-1518684079-3c03-d61d57808b2c?w=800&q=80',
   },
 ];
 
@@ -59,11 +58,10 @@ export function InsightsSection() {
     },
   });
 
-  // Use real articles if available, otherwise show placeholders
   const articles = dbArticles.length > 0 ? dbArticles : placeholderArticles;
 
   return (
-    <section className="bg-black py-20 md:py-28 border-t border-white/[0.06]">
+    <section className="bg-black py-20 md:py-28 border-t border-white/[0.08]">
       <div className="container-wide">
         {/* Header */}
         <div className="flex items-end justify-between mb-12 md:mb-16">
@@ -76,8 +74,7 @@ export function InsightsSection() {
             <p className="text-[10px] tracking-[0.3em] text-white/30 uppercase mb-3">
               Intelligence
             </p>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-white"
-                style={{ fontFamily: "'Inter', sans-serif" }}>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-white">
               Market Insights
             </h2>
           </motion.div>
@@ -100,10 +97,7 @@ export function InsightsSection() {
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
             >
-              <Link
-                to={`/insights/${article.slug}`}
-                className="group block"
-              >
+              <Link to={`/insights/${article.slug}`} className="group block">
                 {/* Cover image */}
                 {article.cover_image_url && (
                   <div className="overflow-hidden" style={{ aspectRatio: '16/10' }}>
@@ -117,28 +111,25 @@ export function InsightsSection() {
 
                 {/* Content */}
                 <div className="mt-4 space-y-2">
-                  {/* Category + date */}
                   <div className="flex items-center gap-3">
-                    <span className="text-[9px] tracking-[0.2em] text-white/25 uppercase">
+                    <span className="text-[9px] tracking-[0.2em] text-white/30 uppercase">
                       {categoryLabels[article.category] || article.category}
                     </span>
-                    <span className="text-white/10">·</span>
-                    <span className="text-[10px] text-white/20">
+                    <span className="text-white/[0.08]">·</span>
+                    <span className="text-[10px] text-white/30">
                       {article.published_at && format(new Date(article.published_at), 'MMM d, yyyy')}
                     </span>
                   </div>
 
-                  {/* Title */}
-                  <h3 className="text-[15px] text-white/80 font-normal leading-snug group-hover:text-white transition-colors duration-300">
+                  <h3 className="text-[15px] text-white/60 font-normal leading-snug group-hover:text-white transition-colors duration-300">
                     {article.title}
                   </h3>
 
-                  {/* Read time + CTA */}
                   <div className="flex items-center justify-between pt-1">
-                    <span className="text-[10px] text-white/20">
+                    <span className="text-[10px] text-white/30">
                       {article.reading_time_min} min read
                     </span>
-                    <span className="text-[10px] tracking-[0.15em] text-white/15 uppercase group-hover:text-white/40 transition-colors duration-300">
+                    <span className="text-[10px] tracking-[0.15em] text-white/30 uppercase group-hover:text-white/60 transition-colors duration-300">
                       Read &gt;
                     </span>
                   </div>
