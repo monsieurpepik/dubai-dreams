@@ -196,7 +196,12 @@ def extract_images(item: dict) -> list[str]:
         images.append(item["cover_image"])
     elif item.get("coverPhoto", {}).get("url"):
         images.append(item["coverPhoto"]["url"])
-    return [url for url in images[:6] if url and isinstance(url, str)]
+    # Upgrade to high-res: replace /small.webp with /original.webp
+    upgraded = []
+    for url in images[:6]:
+        if url and isinstance(url, str):
+            upgraded.append(url.replace("/small.webp", "/original.webp"))
+    return upgraded
 
 
 def roi_estimate(price: int) -> float:
