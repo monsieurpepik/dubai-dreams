@@ -22,7 +22,7 @@ export const SEO = ({
   const defaults = {
     title: tenant?.seo_config?.default_title || `${tenant?.brand_name || 'Owning'} | Premium Off-Plan Properties`,
     description: tenant?.seo_config?.default_description || description || 'Your gateway to premium real estate. Discover exclusive off-plan properties with flexible payment plans.',
-    image: tenant?.seo_config?.og_image_url || image || 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1200&h=630&fit=crop',
+    image: tenant?.seo_config?.og_image_url || image || 'https://owningdubai.com/og-image.png',
     url: tenant?.domain ? `https://${tenant.domain}` : 'https://owningdubai.com',
     titleTemplate: tenant?.seo_config?.title_template || '%s | ' + (tenant?.brand_name || 'Owning'),
   };
