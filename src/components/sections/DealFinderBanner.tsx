@@ -13,9 +13,9 @@ export function DealFinderBanner() {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 });
 
   return (
-    <section ref={ref} className="py-16 md:py-24 border-b border-border/30">
+    <section ref={ref} className="py-16 md:py-24 bg-black border-b border-white/10">
       <div className="container-wide">
-        <div className="relative overflow-hidden rounded-xl bg-foreground text-primary-foreground p-8 md:p-12 lg:p-16">
+        <div className="relative overflow-hidden rounded-md bg-black/40 border border-white/20 backdrop-blur text-white p-8 md:p-12 lg:p-16">
           {/* Subtle grain texture overlay */}
           <div className="absolute inset-0 opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjgiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjYSkiIG9wYWNpdHk9IjEiLz48L3N2Zz4=')] pointer-events-none" />
 
@@ -26,7 +26,7 @@ export function DealFinderBanner() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6 }}
-                className="text-[10px] tracking-[0.3em] text-primary-foreground/40 uppercase mb-4"
+                className="text-[10px] tracking-[0.05em] text-white/50 uppercase mb-4"
               >
                 New — AI Deal Matching
               </motion.p>
@@ -34,17 +34,17 @@ export function DealFinderBanner() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.7, delay: 0.1 }}
-                className="font-serif text-3xl md:text-4xl lg:text-[2.75rem] font-light leading-[1.15] tracking-wide"
+                className="text-3xl md:text-4xl lg:text-[2.75rem] font-light leading-[1.15] tracking-wide"
               >
                 Stop browsing.
                 <br />
-                <span className="text-primary-foreground/50">Start finding deals.</span>
+                <span className="text-white/70">Start finding deals.</span>
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0, y: 8 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="mt-4 text-sm text-primary-foreground/50 leading-relaxed max-w-md"
+                className="mt-4 text-sm text-white/70 leading-relaxed max-w-md"
               >
                 Describe your ideal investment in 5 questions. Our AI scores every property
                 by deal value, yield potential, and market positioning — so you see the
@@ -57,7 +57,7 @@ export function DealFinderBanner() {
               >
                 <Link
                   to="/discover"
-                  className="inline-flex items-center gap-2 mt-8 px-7 py-3 bg-primary-foreground text-foreground text-xs font-medium uppercase tracking-[0.15em] rounded-xl hover:opacity-90 transition-opacity"
+                  className="inline-flex items-center gap-2 mt-8 px-7 py-3 bg-[#1127D2] text-white text-xs font-medium uppercase tracking-[0.05em] rounded-md hover:opacity-90 transition-opacity"
                 >
                   Find Your Deal
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -80,12 +80,12 @@ export function DealFinderBanner() {
                     initial={{ opacity: 0, x: 15 }}
                     animate={inView ? { opacity: 1, x: 0 } : {}}
                     transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
-                    className="flex items-center gap-4 p-4 rounded-xl bg-primary-foreground/[0.06] border border-primary-foreground/[0.08]"
+                    className="flex items-center gap-4 p-4 rounded-md bg-white/5 border border-white/20"
                   >
-                    <Icon className="w-4.5 h-4.5 text-primary-foreground/40 shrink-0" />
+                    <Icon className="w-4.5 h-4.5 text-white/50 shrink-0" />
                     <div>
-                      <p className="text-sm font-medium text-primary-foreground/90">{f.label}</p>
-                      <p className="text-[11px] text-primary-foreground/40 mt-0.5">{f.desc}</p>
+                      <p className="text-sm font-medium text-white/90">{f.label}</p>
+                      <p className="text-[11px] text-white/50 mt-0.5">{f.desc}</p>
                     </div>
                   </motion.div>
                 );

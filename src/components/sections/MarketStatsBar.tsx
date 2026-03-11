@@ -12,9 +12,9 @@ export const MarketStatsBar = () => {
   const [ref, inView] = useInView({ threshold: 0.5, triggerOnce: true });
 
   return (
-    <section 
-      ref={ref} 
-      className="py-8 md:py-10 bg-foreground text-background"
+    <section
+      ref={ref}
+      className="py-8 md:py-10 bg-black text-white border-b border-white/10"
     >
       <div className="container-wide">
         <motion.div
@@ -31,10 +31,10 @@ export const MarketStatsBar = () => {
               transition={{ duration: 0.7, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
               className="flex items-center gap-3"
             >
-              <span className="font-serif text-3xl md:text-4xl animate-[pulse_4s_ease-in-out_infinite]">
+              <span className="text-3xl md:text-4xl text-white animate-[pulse_4s_ease-in-out_infinite]">
                 {stat.value}
               </span>
-              <span className="text-[10px] uppercase tracking-[0.2em] text-background/60">
+              <span className="text-[10px] uppercase tracking-[0.05em] text-white/50">
                 {stat.label}
               </span>
             </motion.div>
@@ -45,7 +45,7 @@ export const MarketStatsBar = () => {
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className="text-center mt-4 text-[10px] text-background/30 tracking-wider"
+          className="text-center mt-4 text-[10px] text-white/30 tracking-wider"
         >
           Market data as of Feb 2026
         </motion.p>

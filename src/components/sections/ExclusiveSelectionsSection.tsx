@@ -51,14 +51,14 @@ export const ExclusiveSelectionsSection = () => {
   if (properties.length === 0) return null;
 
   return (
-    <section className="py-16 md:py-24 bg-background overflow-hidden">
+    <section className="py-16 md:py-24 bg-black overflow-hidden">
       {/* Header */}
       <div className="container-wide flex items-end justify-between mb-10 md:mb-14">
         <div>
-          <p className="text-[10px] tracking-[0.35em] text-muted-foreground/30 mb-3">
+          <p className="text-[10px] tracking-[0.05em] text-white/50 mb-3 uppercase">
             CURATED FOR YOU
           </p>
-          <h2 className="font-serif text-2xl md:text-3xl text-foreground font-light">
+          <h2 className="text-2xl md:text-3xl text-white font-light">
             Exclusive Selections
           </h2>
         </div>
@@ -66,14 +66,14 @@ export const ExclusiveSelectionsSection = () => {
           <button
             onClick={() => scroll('left')}
             disabled={!canScrollLeft}
-            className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors disabled:opacity-30 disabled:pointer-events-none"
+            className="w-9 h-9 rounded-md border border-white/20 flex items-center justify-center text-white/70 hover:text-white hover:border-white/40 transition-colors disabled:opacity-30 disabled:pointer-events-none"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
           <button
             onClick={() => scroll('right')}
             disabled={!canScrollRight}
-            className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors disabled:opacity-30 disabled:pointer-events-none"
+            className="w-9 h-9 rounded-md border border-white/20 flex items-center justify-center text-white/70 hover:text-white hover:border-white/40 transition-colors disabled:opacity-30 disabled:pointer-events-none"
           >
             <ChevronRight className="w-4 h-4" />
           </button>
@@ -101,7 +101,7 @@ export const ExclusiveSelectionsSection = () => {
             >
               <Link to={`/properties/${property.slug}`} className="group block">
                 {/* Image */}
-                <div className="relative overflow-hidden rounded-xl">
+                <div className="relative overflow-hidden rounded-md">
                   {image ? (
                     <img
                       src={image}
@@ -109,25 +109,26 @@ export const ExclusiveSelectionsSection = () => {
                       className="w-full aspect-[4/5] object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                     />
                   ) : (
-                    <div className="w-full aspect-[4/5] bg-muted" />
+                    <div className="w-full aspect-[4/5] bg-white/5" />
                   )}
                   <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent" />
-                  <p className="absolute bottom-4 left-4 font-serif text-base text-white">
+                  <p className="absolute bottom-4 left-4 text-base text-white">
                     From {formatPrice(property.price_from, { compact: true })}
                   </p>
                 </div>
 
                 {/* Details */}
-                <div className="mt-4 space-y-1">
-                  <p className="text-[10px] tracking-[0.2em] text-muted-foreground/30">
+                <div className="mt-4 space-y-1 border-t border-white/10 pt-4">
+                  <p className="text-[10px] tracking-[0.05em] text-white/50 uppercase">
                     {property.developer?.name || 'Developer'}
                   </p>
-                  <h3 className="font-serif text-lg text-foreground leading-tight group-hover:text-foreground/60 transition-colors duration-300">
+                  <h3 className="text-lg text-white leading-tight group-hover:text-white/70 transition-colors duration-300">
                     {property.name}
                   </h3>
-                  <p className="text-xs text-muted-foreground/60">
+                  <p className="text-xs text-white/60">
                     {property.area}
                   </p>
+                  <p className="text-xs text-[#1127D2] font-medium mt-3 pt-2">SHOP NOW &gt;</p>
                 </div>
               </Link>
             </motion.div>
@@ -139,7 +140,7 @@ export const ExclusiveSelectionsSection = () => {
       <div className="container-wide mt-10 md:hidden text-center">
         <Link
           to="/properties"
-          className="text-xs text-muted-foreground/60 hover:text-foreground transition-colors"
+          className="text-xs text-white/70 hover:text-white transition-colors"
         >
           View all projects →
         </Link>

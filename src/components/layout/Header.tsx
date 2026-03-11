@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search } from 'lucide-react';
+import { Search, Menu } from 'lucide-react';
 import { useTenant } from '@/hooks/useTenant';
 import { SearchOverlay } from '@/components/properties/SearchOverlay';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -29,23 +29,18 @@ export function Header() {
     return () => { document.body.style.overflow = ''; };
   }, [isMenuOpen]);
 
-  // Listen for mobile tab bar menu trigger
   useEffect(() => {
     const handler = () => setIsMenuOpen(true);
     window.addEventListener('open-mobile-menu', handler);
     return () => window.removeEventListener('open-mobile-menu', handler);
   }, []);
 
-
-  const brandName = tenant?.brand_name || 'OwningDubai';
-
   // Show search pill when scrolled on homepage, or always on other pages
   const showSearchPill = (!isHomepage || isScrolled);
 
   return (
     <>
-      {/* Skip to content */}
-      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[70] focus:bg-foreground focus:text-background focus:px-4 focus:py-2 focus:text-xs">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[70] focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:text-xs">
         Skip to content
       </a>
       <motion.header
@@ -54,67 +49,69 @@ export function Header() {
         transition={{ duration: 0.8, delay: 0.2 }}
         className={`fixed left-0 right-0 top-0 z-50 transition-all duration-700 ${
           isScrolled
-            ? 'bg-background/95 backdrop-blur-xl border-b border-border/30'
+            ? 'bg-black/90 backdrop-blur-xl border-b border-white/10'
             : 'bg-transparent'
         }`}
       >
         <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 lg:px-12 h-16 md:h-20">
-          {/* Brand — left on desktop when pill is showing, centered otherwise */}
+          {/* Left — MENU + hamburger */}
+          <button
+            onClick={() => setIsMenuOpen(true)}
+            className="group flex items-center gap-2.5 transition-colors duration-300"
+            aria-label="Open navigation menu"
+          >
+            <div className="flex flex-col gap-[4px]">
+              <span className="block w-[22px] h-[1.5px] bg-white/70 group-hover:bg-white transition-colors duration-300" />
+              <span className="block w-[22px] h-[1.5px] bg-white/70 group-hover:bg-white transition-colors duration-300" />
+            </div>
+            <span className="hidden md:inline text-[12px] font-medium tracking-[0.05em] text-white/70 group-hover:text-white transition-colors uppercase">
+              Menu
+            </span>
+          </button>
+
+          {/* Center — OWNING DUBAI logo */}
           <Link
             to="/"
-            className={`font-serif text-lg md:text-xl font-light tracking-[0.08em] text-foreground hover:opacity-70 transition-all duration-300 ${
-              showSearchPill ? 'relative' : 'absolute left-1/2 -translate-x-1/2'
-            }`}
+            className="absolute left-1/2 -translate-x-1/2 text-[14px] md:text-[16px] font-semibold tracking-[0.25em] text-white hover:opacity-70 transition-opacity duration-300 uppercase whitespace-nowrap"
           >
-            {brandName}
+            OWNING DUBAI
           </Link>
 
-          {/* Search Pill — center */}
-          <AnimatePresence>
-            {showSearchPill && (
-              <motion.button
-                initial={{ opacity: 0, scale: 0.9, y: -10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: -10 }}
-                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                onClick={() => setIsSearchOpen(true)}
-                className="hidden md:flex items-center gap-3 px-5 py-2 border border-border/30 rounded-full bg-background/60 backdrop-blur-sm hover:shadow-md hover:border-border/60 transition-all duration-300 group"
-              >
-                <Search className="w-3.5 h-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
-                <div className="flex items-center gap-0 text-xs text-muted-foreground">
-                  <span className="pr-3 border-r border-border/30">Area</span>
-                  <span className="px-3 border-r border-border/30">Bedrooms</span>
-                  <span className="pl-3">Budget</span>
-                </div>
-              </motion.button>
-            )}
-          </AnimatePresence>
-
-          {/* Mobile search icon + Menu — right */}
+          {/* Right — Search + Currency + CTA */}
           <div className="flex items-center gap-3">
             <CurrencySwitcher />
-            {showSearchPill && isMobile && (
-              <motion.button
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                onClick={() => setIsSearchOpen(true)}
-                className="p-2 -mr-2 text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <Search className="w-4 h-4" />
-              </motion.button>
-            )}
-            <button
-              onClick={() => setIsMenuOpen(true)}
-              className="group p-2 -mr-1 transition-colors duration-300"
-              aria-label="Open navigation menu"
+
+            <AnimatePresence>
+              {showSearchPill && (
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  onClick={() => setIsSearchOpen(true)}
+                  className="p-2 text-white/50 hover:text-white transition-colors"
+                  aria-label="Search"
+                >
+                  <Search className="w-4 h-4" />
+                </motion.button>
+              )}
+            </AnimatePresence>
+
+            {/* CTA button — hidden on mobile */}
+            <Link
+              to="/deal-finder"
+              className="hidden md:flex items-center gap-2 bg-[#1127D2] text-white text-[12px] font-medium tracking-[0.05em] px-3 py-2 rounded-[4px] hover:bg-[#0d1fb0] transition-colors uppercase"
             >
-              <div className="flex flex-col gap-[5px]">
-                <span className="block w-[18px] h-[1.5px] bg-muted-foreground group-hover:bg-foreground transition-colors duration-300 rounded-full" />
-                <span className="block w-[14px] h-[1.5px] bg-muted-foreground group-hover:bg-foreground transition-colors duration-300 rounded-full" />
-              </div>
-            </button>
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+              Personal Shopper
+            </Link>
           </div>
         </div>
+
+        {/* Bottom line */}
+        <div className="mx-6 lg:mx-12 h-px bg-white/10" />
       </motion.header>
 
       <MenuOverlay

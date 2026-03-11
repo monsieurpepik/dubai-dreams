@@ -88,22 +88,22 @@ export const PrivateAdvisorSection = () => {
   };
 
   return (
-    <section ref={ref} className="relative">
+    <section ref={ref} className="relative bg-black">
       <div className="grid grid-cols-1 lg:grid-cols-2">
         {/* Left — Form */}
         <motion.div
           initial={{ opacity: 0, x: -40 }}
           animate={inView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="bg-foreground px-8 py-16 md:px-16 md:py-24 lg:px-20 flex items-center"
+          className="bg-black px-8 py-16 md:px-16 md:py-24 lg:px-20 flex items-center border-r border-white/10"
         >
           <div className="w-full max-w-lg mx-auto lg:mx-0 lg:ml-auto">
-            <h2 className="font-serif text-2xl md:text-3xl lg:text-4xl tracking-[0.15em] uppercase text-background mb-4">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl tracking-[0.05em] uppercase text-white mb-4">
               Private Property
               <br />
               Advisor
             </h2>
-            <p className="text-background/60 text-sm leading-relaxed mb-10 max-w-md">
+            <p className="text-white/70 text-sm leading-relaxed mb-10 max-w-md">
               Share your investment goals and our advisors will curate a personalized selection of Dubai's finest opportunities — delivered privately to your inbox.
             </p>
 
@@ -113,7 +113,7 @@ export const PrivateAdvisorSection = () => {
                   placeholder="Full Name"
                   value={name}
                   onChange={e => setName(e.target.value)}
-                  className="bg-transparent border-background/[0.15] text-background placeholder:text-background/30 focus-visible:ring-background/30 h-12"
+                  className="bg-transparent border-white/20 text-white placeholder:text-white/40 focus-visible:ring-white/30 h-12"
                   required
                   maxLength={100}
                 />
@@ -122,7 +122,7 @@ export const PrivateAdvisorSection = () => {
                   placeholder="Email"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  className="bg-transparent border-background/[0.15] text-background placeholder:text-background/30 focus-visible:ring-background/30 h-12"
+                  className="bg-transparent border-white/20 text-white placeholder:text-white/40 focus-visible:ring-white/30 h-12"
                   required
                   maxLength={255}
                 />
@@ -133,13 +133,13 @@ export const PrivateAdvisorSection = () => {
                 <PhoneInput
                   value={phone}
                   onChange={setPhone}
-                  className="[&_select]:bg-transparent [&_select]:border-background/[0.15] [&_select]:text-background [&_input]:bg-transparent [&_input]:border-background/[0.15] [&_input]:text-background [&_input]:placeholder:text-background/30 [&_input]:h-12 [&_select]:h-12"
+                  className="[&_select]:bg-transparent [&_select]:border-white/20 [&_select]:text-white [&_input]:bg-transparent [&_input]:border-white/20 [&_input]:text-white [&_input]:placeholder:text-white/40 [&_input]:h-12 [&_select]:h-12"
                   placeholder="50 123 4567"
                 />
               </div>
 
               <div>
-                <p className="text-xs uppercase tracking-widest text-background/30 mb-4">
+                <p className="text-xs uppercase tracking-[0.05em] text-white/50 mb-4">
                   Investment Interest
                 </p>
                 <div className="grid grid-cols-2 gap-3">
@@ -151,9 +151,9 @@ export const PrivateAdvisorSection = () => {
                       <Checkbox
                         checked={selectedInterests.includes(interest.id)}
                         onCheckedChange={() => toggleInterest(interest.id)}
-                        className="border-background/30 data-[state=checked]:bg-background data-[state=checked]:text-foreground"
+                        className="border-white/30 data-[state=checked]:bg-[#1127D2] data-[state=checked]:text-white"
                       />
-                      <span className="text-sm text-background/60 group-hover:text-background transition-colors">
+                      <span className="text-sm text-white/70 group-hover:text-white transition-colors">
                         {interest.label}
                       </span>
                     </label>
@@ -165,14 +165,14 @@ export const PrivateAdvisorSection = () => {
                 placeholder="Tell us about your ideal property (optional)"
                 value={message}
                 onChange={e => setMessage(e.target.value)}
-                className="bg-transparent border-background/[0.15] text-background placeholder:text-background/30 focus-visible:ring-background/30 min-h-[80px] resize-none"
+                className="bg-transparent border-white/20 text-white placeholder:text-white/40 focus-visible:ring-white/30 min-h-[80px] resize-none"
                 maxLength={1000}
               />
 
               <Button
                 type="submit"
                 disabled={submitting}
-                className="w-full h-12 bg-background text-foreground hover:bg-background/90 font-serif tracking-widest uppercase text-xs"
+                className="w-full h-12 bg-[#1127D2] text-white hover:opacity-90 tracking-[0.05em] uppercase text-xs"
               >
                 {submitting ? 'Submitting…' : 'Start Your Personalized Search'}
               </Button>
@@ -192,7 +192,7 @@ export const PrivateAdvisorSection = () => {
             alt="Dubai skyline at sunset"
             className="absolute inset-0 w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-foreground/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent" />
         </motion.div>
       </div>
     </section>

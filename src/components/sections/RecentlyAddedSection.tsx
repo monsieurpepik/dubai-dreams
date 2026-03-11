@@ -19,9 +19,9 @@ export function RecentlyAddedSection() {
   if (isLoading || properties.length === 0) return null;
 
   return (
-    <section className="py-20 md:py-28 bg-background border-t border-border/10">
+    <section className="py-20 md:py-28 bg-black border-t border-white/10">
       <div className="container-wide">
-        <h2 className="font-serif text-xl md:text-2xl text-foreground mb-10">
+        <h2 className="text-xl md:text-2xl text-white mb-10">
           Recently added
         </h2>
         <div className="flex gap-6 overflow-x-auto scrollbar-hide pb-4">

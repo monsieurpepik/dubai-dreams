@@ -1,105 +1,55 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Hermès-Level Design System — Restraint, Texture, Confidence */
+/* Owning Dubai — Dark Cinematic Design System */
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --foreground: 0 0% 10%;
-    
-    /* Accent — near-invisible, used once per page */
-    --accent: 0 0% 45%;
-    --accent-foreground: 0 0% 5%;
-    --accent-muted: 0 0% 40%;
-    
+    --background: 0 0% 0%;
+    --foreground: 0 0% 97%;
+
+    /* Accent — Royal Blue from Figma (#1127D2) */
+    --accent: 230 85% 45%;
+    --accent-foreground: 0 0% 97%;
+    --accent-muted: 230 60% 35%;
+
     --gold: 42 45% 50%;
     --gold-muted: 42 30% 40%;
-    
-    --champagne: 40 20% 90%;
-    --champagne-foreground: 30 10% 20%;
-    
-    --silver: 30 5% 50%;
-    --silver-muted: 30 5% 35%;
-    
-    --card: 0 0% 98%;
-    --card-foreground: 0 0% 10%;
-    
-    --popover: 0 0% 98%;
-    --popover-foreground: 0 0% 10%;
-    
-    --primary: 0 0% 8%;
-    --primary-foreground: 0 0% 98%;
-    
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 10%;
-    
-    --muted: 0 0% 94%;
-    --muted-foreground: 0 0% 45%;
-    
-    --destructive: 0 70% 50%;
-    --destructive-foreground: 0 0% 100%;
-    
-    --border: 0 0% 88%;
-    --input: 0 0% 88%;
-    --ring: 0 0% 45%;
-    
-    --radius: 0.75rem;
-    
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 0 0% 30%;
-    --sidebar-primary: 0 0% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 0 0% 95%;
-    --sidebar-accent-foreground: 0 0% 10%;
-    --sidebar-border: 0 0% 90%;
-    --sidebar-ring: 0 0% 45%;
-  }
 
-  .dark {
-    --background: 0 0% 3%;
-    --foreground: 0 0% 95%;
-    
-    /* Pure neutral — no warmth */
-    --accent: 0 0% 60%;
-    --accent-foreground: 0 0% 5%;
-    --accent-muted: 0 0% 50%;
-    
-    --gold: 42 20% 50%;
-    --gold-muted: 42 15% 40%;
-    
     --champagne: 0 0% 12%;
     --champagne-foreground: 0 0% 90%;
-    
+
     --silver: 0 0% 55%;
     --silver-muted: 0 0% 40%;
-    
+
     --card: 0 0% 5%;
-    --card-foreground: 0 0% 95%;
-    
+    --card-foreground: 0 0% 97%;
+
     --popover: 0 0% 5%;
-    --popover-foreground: 0 0% 95%;
-    
-    --primary: 0 0% 95%;
-    --primary-foreground: 0 0% 3%;
-    
+    --popover-foreground: 0 0% 97%;
+
+    --primary: 0 0% 97%;
+    --primary-foreground: 0 0% 0%;
+
     --secondary: 0 0% 7%;
-    --secondary-foreground: 0 0% 95%;
-    
+    --secondary-foreground: 0 0% 97%;
+
     --muted: 0 0% 9%;
-    --muted-foreground: 0 0% 50%;
-    
-    --destructive: 0 45% 45%;
+    --muted-foreground: 0 0% 55%;
+
+    --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 100%;
-    
-    --border: 0 0% 13%;
-    --input: 0 0% 13%;
-    --ring: 0 0% 35%;
-    
-    --sidebar-background: 0 0% 4%;
+
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 230 85% 45%;
+
+    --radius: 0.375rem;
+
+    --sidebar-background: 0 0% 3%;
     --sidebar-foreground: 0 0% 80%;
     --sidebar-primary: 0 0% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
@@ -115,40 +65,25 @@
     @apply border-border;
   }
 
-  /* Accessible focus ring for keyboard navigation */
   *:focus-visible {
     @apply outline-none ring-2 ring-ring/40 ring-offset-2 ring-offset-background;
   }
 
   a, button, [role="button"] {
-    @apply transition-opacity duration-300 ease-out;
+    @apply transition-all duration-300 ease-out;
   }
 
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     letter-spacing: 0;
     overflow-x: hidden;
-  }
-
-  /* Grain texture overlay — tactile, paper-like */
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 9998;
-    opacity: 0.035;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 256px 256px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   /* Smooth scrollbar */
@@ -166,61 +101,63 @@
     background: hsl(var(--muted-foreground) / 0.3);
   }
 
-  /* Typography — Hermès restraint */
+  /* Typography — Clean Extended Sans-Serif */
   h1 {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    @apply text-4xl md:text-6xl lg:text-7xl font-light leading-[1.15];
-    letter-spacing: 0.02em;
+    font-family: 'Inter', sans-serif;
+    @apply text-4xl md:text-6xl lg:text-7xl font-normal leading-[1.15];
+    letter-spacing: -0.01em;
   }
-  
+
   h2 {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    @apply text-3xl md:text-5xl lg:text-6xl font-light leading-[1.15];
-    letter-spacing: 0.02em;
+    font-family: 'Inter', sans-serif;
+    @apply text-2xl md:text-4xl lg:text-5xl font-normal leading-[1.2];
+    letter-spacing: 0;
   }
-  
+
   h3 {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    @apply text-xl md:text-2xl font-light;
-    letter-spacing: 0.01em;
+    font-family: 'Inter', sans-serif;
+    @apply text-xl md:text-2xl font-normal;
+    letter-spacing: 0;
   }
-  
+
   p {
-    @apply text-base leading-relaxed;
-    line-height: 1.85;
+    @apply text-sm leading-relaxed;
+    line-height: 1.7;
+    color: hsl(var(--foreground) / 0.7);
   }
 
   ::selection {
-    background: hsl(var(--foreground) / 0.08);
+    background: hsl(var(--accent) / 0.3);
+    color: white;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply relative bg-foreground text-background px-8 py-4 rounded-xl
-           text-xs font-medium tracking-[0.15em]
-           transition-all duration-300 
-           hover:opacity-70 hover:shadow-md;
+    @apply relative bg-[#1127D2] text-white px-6 py-3 rounded-[4px]
+           text-xs font-medium tracking-[0.05em] uppercase
+           transition-all duration-300
+           hover:bg-[#0d1fb0] hover:shadow-lg;
   }
-  
+
   .btn-outline {
-    @apply relative border border-foreground/20 text-foreground px-8 py-4 rounded-xl
-           text-xs font-medium tracking-[0.15em]
-           transition-all duration-300 
-           hover:opacity-60 hover:shadow-md;
+    @apply relative border border-white/20 text-white px-6 py-3 rounded-[4px]
+           text-xs font-medium tracking-[0.05em] uppercase
+           transition-all duration-300
+           hover:border-white/40 hover:bg-white/5;
   }
-  
+
   .btn-ghost {
-    @apply text-xs text-muted-foreground
-           transition-opacity duration-300 hover:opacity-60;
+    @apply text-xs text-white/50 uppercase tracking-[0.05em]
+           transition-opacity duration-300 hover:text-white/80;
   }
 
   .section-padding {
-    @apply py-20 md:py-28 lg:py-36;
+    @apply py-16 md:py-24 lg:py-32;
   }
-  
+
   .section-padding-lg {
-    @apply py-28 md:py-40 lg:py-52;
+    @apply py-24 md:py-36 lg:py-48;
   }
 
   .container-custom {
@@ -232,33 +169,43 @@
   }
 
   .card-premium {
-    @apply bg-card overflow-hidden rounded-xl transition-all duration-500
-           hover:opacity-90 hover:shadow-md;
+    @apply bg-card overflow-hidden rounded-md transition-all duration-500
+           hover:opacity-90;
   }
 
   .glass {
-    @apply bg-background/80 backdrop-blur-xl;
+    @apply bg-black/40 backdrop-blur-xl border border-white/20;
   }
 
   .glass-dark {
-    @apply bg-black/60 backdrop-blur-xl;
+    @apply bg-black/60 backdrop-blur-xl border border-white/10;
   }
 
   .label-editorial {
-    @apply text-[10px] font-medium tracking-[0.2em] text-muted-foreground;
+    @apply text-[12px] font-medium tracking-[0.05em] uppercase text-white/50;
   }
 
   .divider {
-    @apply w-12 h-px bg-foreground/15;
+    @apply w-full h-px bg-white/10;
+  }
+
+  .divider-short {
+    @apply w-32 h-px bg-white/10;
   }
 
   .image-cinematic {
-    @apply relative overflow-hidden;
+    @apply relative overflow-hidden rounded-md;
   }
 
   .image-cinematic::after {
     content: '';
     @apply absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent;
+  }
+
+  /* Shop Now link style from Figma */
+  .link-shop {
+    @apply flex items-center gap-3 text-[12px] font-medium text-[#f7f8fa]
+           tracking-[0.05em] uppercase transition-opacity hover:opacity-70;
   }
 }
 
@@ -267,7 +214,7 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
@@ -278,7 +225,7 @@
 
   @keyframes slow-zoom {
     from { transform: scale(1); }
-    to { transform: scale(1.02); }
+    to { transform: scale(1.05); }
   }
 
   .animate-fade-in {
@@ -291,7 +238,7 @@
   }
 
   input:focus, textarea:focus {
-    box-shadow: 0 0 0 1px hsl(var(--foreground) / 0.1);
+    box-shadow: 0 0 0 1px hsl(var(--accent) / 0.5);
     transition: box-shadow 0.3s ease;
   }
 
@@ -325,6 +272,6 @@
   }
 
   .glass-filter {
-    @apply bg-background/60 backdrop-blur-2xl border border-border/20;
+    @apply bg-black/60 backdrop-blur-2xl border border-white/10;
   }
 }
