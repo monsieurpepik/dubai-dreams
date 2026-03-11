@@ -1,189 +1,90 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { Phone, Mail } from "lucide-react";
 import { useTenant } from "@/hooks/useTenant";
 import { toast } from "sonner";
 
-const explore = [
-  { label: 'Properties', href: '/properties' },
-  { label: 'Off-Plan', href: '/properties?status=off-plan' },
-  { label: 'Deal Finder', href: '/discover' },
-  { label: 'Saved', href: '/saved' },
-];
-
-const company = [
-  { label: 'Insights', href: '/blog' },
-  { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
-];
-
-const tools = [
-  { label: 'Golden Visa Calculator', href: '/calculator' },
-  { label: 'Market Pulse', href: '/market' },
-  { label: 'AI Deal Finder', href: '/discover' },
-];
-
-const popularSearches = [
-  { label: 'Studios under AED 1M', href: '/properties?priceRange=0-1000000&bedrooms=0' },
-  { label: '3BR in Dubai Marina', href: '/properties?area=dubai-marina&bedrooms=3' },
-  { label: 'Golden Visa Properties', href: '/properties?goldenVisa=true' },
-  { label: 'Waterfront Apartments', href: '/properties?collection=waterfront' },
-  { label: 'Handover 2025', href: '/properties?handover=2025' },
-  { label: 'Off-plan under AED 2M', href: '/properties?priceRange=0-2000000' },
-];
-
-function FooterColumn({ title, links }: { title: string; links: { label: string; href: string }[] }) {
-  return (
-    <div>
-      <h4 className="text-[10px] tracking-[0.2em] text-white/30 uppercase mb-5 font-medium">
-        {title}
-      </h4>
-      <ul className="space-y-2.5">
-        {links.map((link) => (
-          <li key={link.label}>
-            <Link
-              to={link.href}
-              className="text-[13px] text-white/50 hover:text-white transition-colors duration-300"
-            >
-              {link.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
 export function Footer() {
   const { tenant } = useTenant();
-  const brandName = tenant?.brand_name || 'OWNING DUBAI';
-  const contactPhone = tenant?.phone;
   const contactEmail = tenant?.email || 'hello@owningdubai.com';
-  const regulatoryBody = tenant?.regulatory_body;
-  const regulatoryNumber = tenant?.regulatory_number;
   const [email, setEmail] = useState('');
 
   const handleNewsletter = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
-    toast.success('Subscribed successfully');
+    toast.success('Welcome to the list.');
     setEmail('');
   };
 
   return (
     <footer className="bg-black border-t border-white/10">
-      {/* Newsletter Row */}
-      <div className="container-wide py-14 md:py-16 border-b border-white/10">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div>
-            <h3 className="text-xl md:text-2xl text-white font-light">
-              Stay Informed
-            </h3>
-            <p className="text-sm text-white/40 mt-1">
-              Market intelligence and new launches, delivered weekly.
-            </p>
-          </div>
-          <form onSubmit={handleNewsletter} className="flex w-full md:w-auto gap-2">
+      {/* Main footer — centered, Webflow style */}
+      <div className="container-wide py-20 md:py-28">
+        <div className="flex flex-col items-center text-center max-w-xl mx-auto">
+          {/* Brand */}
+          <h3 className="text-[clamp(1.5rem,3vw,2.5rem)] font-bold tracking-[0.3em] text-white uppercase">
+            OWNING DUBAI
+          </h3>
+
+          {/* Tagline — from Webflow */}
+          <p className="mt-4 text-[14px] text-white/30 font-light italic">
+            Inspired by the best city in the world.
+          </p>
+
+          {/* Links — horizontal like Webflow */}
+          <nav className="mt-10 flex flex-wrap items-center justify-center gap-8">
+            <Link to="/properties" className="text-[11px] tracking-[0.2em] text-white/40 hover:text-white transition-colors uppercase">
+              Properties
+            </Link>
+            <Link to="/discover" className="text-[11px] tracking-[0.2em] text-white/40 hover:text-white transition-colors uppercase">
+              Deal Finder
+            </Link>
+            <Link to="/blog" className="text-[11px] tracking-[0.2em] text-white/40 hover:text-white transition-colors uppercase">
+              Insights
+            </Link>
+            <Link to="/about" className="text-[11px] tracking-[0.2em] text-white/40 hover:text-white transition-colors uppercase">
+              About
+            </Link>
+            <Link to="/contact" className="text-[11px] tracking-[0.2em] text-white/40 hover:text-white transition-colors uppercase">
+              Contact
+            </Link>
+          </nav>
+
+          {/* Email signup — minimal */}
+          <form onSubmit={handleNewsletter} className="mt-10 flex w-full max-w-md gap-2">
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              className="flex-1 md:w-64 px-4 py-3 bg-transparent border border-white/20 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-white/40 transition-colors"
+              className="flex-1 px-4 py-3 bg-transparent border border-white/15 text-[13px] text-white placeholder:text-white/30 focus:outline-none focus:border-white/30 transition-colors"
               required
             />
-            <button type="submit" className="bg-[#1127D2] text-white px-6 py-3 rounded-[4px] text-xs font-medium tracking-[0.1em] uppercase hover:opacity-90 transition-opacity whitespace-nowrap">
-              Subscribe
+            <button type="submit" className="px-6 py-3 bg-white text-black text-[11px] font-semibold tracking-[0.15em] uppercase hover:bg-white/90 transition-all">
+              Join
             </button>
           </form>
-        </div>
-      </div>
 
-      {/* Links grid */}
-      <div className="container-wide py-14 md:py-16 border-b border-white/10">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
-          <FooterColumn title="Explore" links={explore} />
-          <FooterColumn title="Company" links={company} />
-          <FooterColumn title="Tools" links={tools} />
-
-          {/* Contact column */}
-          <div>
-            <h4 className="text-[10px] tracking-[0.2em] text-white/30 uppercase mb-5 font-medium">
-              Contact
-            </h4>
-            <ul className="space-y-2.5">
-              {contactPhone && (
-                <li>
-                  <a href={`tel:${contactPhone}`} className="flex items-center gap-2 text-[13px] text-white/50 hover:text-white transition-colors">
-                    <Phone className="w-3.5 h-3.5" />
-                    <span>{contactPhone}</span>
-                  </a>
-                </li>
-              )}
-              <li>
-                <a href={`mailto:${contactEmail}`} className="flex items-center gap-2 text-[13px] text-white/50 hover:text-white transition-colors">
-                  <Mail className="w-3.5 h-3.5" />
-                  <span>{contactEmail}</span>
-                </a>
-              </li>
-            </ul>
-
-            {/* Social */}
-            <div className="flex items-center gap-4 mt-6">
-              <a href="#" className="text-[11px] tracking-[0.1em] text-white/30 hover:text-white transition-colors uppercase">IG</a>
-              <a href="#" className="text-[11px] tracking-[0.1em] text-white/30 hover:text-white transition-colors uppercase">YT</a>
-              <a href="#" className="text-[11px] tracking-[0.1em] text-white/30 hover:text-white transition-colors uppercase">LI</a>
-              <a href="#" className="text-[11px] tracking-[0.1em] text-white/30 hover:text-white transition-colors uppercase">X</a>
-            </div>
+          {/* Social — Webflow style */}
+          <div className="mt-10 flex items-center gap-6">
+            <a href="#" className="text-[11px] tracking-[0.15em] text-white/25 hover:text-white/60 transition-colors uppercase">Instagram</a>
+            <span className="text-white/10">·</span>
+            <a href="#" className="text-[11px] tracking-[0.15em] text-white/25 hover:text-white/60 transition-colors uppercase">YouTube</a>
+            <span className="text-white/10">·</span>
+            <a href="#" className="text-[11px] tracking-[0.15em] text-white/25 hover:text-white/60 transition-colors uppercase">LinkedIn</a>
+            <span className="text-white/10">·</span>
+            <a href="#" className="text-[11px] tracking-[0.15em] text-white/25 hover:text-white/60 transition-colors uppercase">X</a>
           </div>
         </div>
       </div>
 
-      {/* Popular Searches */}
-      <div className="container-wide py-10 border-b border-white/10">
-        <h4 className="text-[10px] tracking-[0.2em] text-white/30 uppercase mb-5 font-medium">
-          Popular Searches
-        </h4>
-        <div className="flex flex-wrap gap-2">
-          {popularSearches.map((search) => (
-            <Link
-              key={search.label}
-              to={search.href}
-              className="px-3.5 py-1.5 text-[11px] text-white/40 border border-white/10 rounded-[4px] hover:text-white/80 hover:border-white/20 transition-colors duration-300"
-            >
-              {search.label}
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* RERA Disclaimer */}
-      <div className="container-wide py-4 border-b border-white/10">
-        <p className="text-[11px] text-white/20 leading-relaxed">
-          Prices and availability are subject to change without notice. All off-plan purchases are regulated by the Dubai Land Department (DLD) and payments are made through DLD-approved escrow accounts. Regulated by the Real Estate Regulatory Agency (RERA).
-        </p>
-      </div>
-
-      {/* Bottom Bar */}
-      <div className="container-wide py-6">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-white/30">
+      {/* Bottom bar */}
+      <div className="border-t border-white/[0.06] py-5">
+        <div className="container-wide flex flex-col md:flex-row items-center justify-between gap-3 text-[10px] text-white/20">
+          <span>&copy; {new Date().getFullYear()} Owning Dubai. All rights reserved.</span>
           <div className="flex items-center gap-6">
-            <span className="text-[14px] text-white font-semibold tracking-[0.25em] uppercase">
-              {brandName}
-            </span>
-            <span>&copy; {new Date().getFullYear()}</span>
-          </div>
-          <div className="flex items-center gap-6">
-            {regulatoryBody && regulatoryNumber && (
-              <span>{regulatoryBody} ORN: {regulatoryNumber}</span>
-            )}
-            <Link to="/privacy" className="hover:text-white transition-colors">
-              Privacy
-            </Link>
-            <Link to="/terms" className="hover:text-white transition-colors">
-              Terms
-            </Link>
-            <span className="text-white/15">Powered by OwningX</span>
+            <Link to="/privacy" className="hover:text-white/40 transition-colors">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-white/40 transition-colors">Terms</Link>
+            <span className="text-white/10">Powered by OwningX</span>
           </div>
         </div>
       </div>
